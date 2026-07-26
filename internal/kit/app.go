@@ -23,6 +23,12 @@ type App struct {
 	approvedLocations map[string]string
 }
 
+// Windows MessageBox trả về "Yes"/"No" dù Wails được truyền nhãn nút tùy chỉnh.
+func confirmedDialogChoice(choice, customConfirmLabel string) bool {
+	choice = strings.TrimSpace(choice)
+	return strings.EqualFold(choice, "yes") || choice == customConfirmLabel
+}
+
 type systemCheck struct {
 	Platform        string `json:"platform"`
 	WingetAvailable bool   `json:"wingetAvailable"`
@@ -316,14 +322,14 @@ func (a *App) confirmInstall(spec commandSpec, installLocation string) (bool, er
 			"\n\nTrình cài đặt có thể bỏ qua vị trí tùy chỉnh nếu package không hỗ trợ."
 	}
 	choice, err := wailsRuntime.MessageDialog(a.ctx, wailsRuntime.MessageDialogOptions{
-		Type:          wailsRuntime.WarningDialog,
+		Type:          wailsRuntime.QuestionDialog,
 		Title:         "Xác nhận cài đặt",
 		Message:       "SetupKit chuẩn bị chạy:\n\n" + line + "\n\n" + detail,
 		Buttons:       []string{"Hủy", "Chạy lệnh winget"},
-		DefaultButton: "Hủy",
+		DefaultButton: "No",
 		CancelButton:  "Hủy",
 	})
-	return choice == "Chạy lệnh winget", err
+	return confirmedDialogChoice(choice, "Chạy lệnh winget"), err
 }
 
 func readProcessStream(reader io.Reader, onChunk func(string)) {

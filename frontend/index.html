@@ -36,6 +36,10 @@
           <span>Gói cài đặt</span>
           <span class="nav-count" id="navQueueCount">0</span>
         </button>
+        <button class="nav-button" data-view="activate" type="button" title="Kích hoạt Windows">
+          <i class="ph ph-key" aria-hidden="true"></i>
+          <span>Kích hoạt</span>
+        </button>
         <button class="nav-button" data-view="logs" type="button" title="Nhật ký">
           <i class="ph ph-terminal-window" aria-hidden="true"></i>
           <span>Nhật ký</span>
@@ -155,7 +159,7 @@
           <section class="selection-dock" id="selectionDock" aria-label="Tóm tắt lựa chọn">
             <div class="selection-summary">
               <span class="selection-summary-icon" aria-hidden="true">
-                <i class="ph ph-package"></i>
+                <i class="ph ph-stack"></i>
               </span>
               <span>
                 <strong id="dockCount">0 ứng dụng đã chọn</strong>
@@ -286,6 +290,106 @@
           </div>
         </section>
 
+        <section class="page" id="page-activate" data-page="activate" data-od-id="activate-page">
+          <div class="page-heading">
+            <h1 tabindex="-1">Kích hoạt Windows</h1>
+            <p>Nhập lệnh PowerShell bên dưới. Chạy trong ứng dụng để xem kết quả, hoặc mở cửa sổ tương tác nếu lệnh cần nhập dữ liệu hay bấm phím.</p>
+          </div>
+
+          <div class="activate-layout">
+            <section class="panel activate-panel" aria-labelledby="activateHeading">
+              <div class="panel-heading">
+                <h2 id="activateHeading">Trạng thái Windows</h2>
+                <button class="button compact" id="activationRefreshBtn" type="button">
+                  <i class="ph ph-arrow-clockwise" aria-hidden="true"></i>
+                  Kiểm tra lại
+                </button>
+              </div>
+
+              <div class="activate-body">
+                <div class="activate-status" id="activationStatus" aria-live="polite">
+                  <span class="activate-status-icon" aria-hidden="true"><i class="ph ph-circle-notch is-spinning"></i></span>
+                  <div class="activate-status-copy">
+                    <strong id="activationStatusText">Đang kiểm tra trạng thái kích hoạt...</strong>
+                    <span id="activationStatusMeta"></span>
+                  </div>
+                </div>
+
+                <div class="activate-warning" id="activationAdminWarning" hidden>
+                  <i class="ph ph-shield-warning" aria-hidden="true"></i>
+                  <span>Kích hoạt cần quyền Administrator. Hãy đóng SetupKit rồi mở lại bằng <strong>Run as administrator</strong>.</span>
+                </div>
+
+                <div class="activate-form">
+                  <div class="command-label">
+                    <span>Lệnh PowerShell</span>
+                    <div class="command-label-actions">
+                      <button class="mini-link icon-link" id="activationToggleVisibility" type="button" aria-pressed="false">
+                        <i class="ph ph-eye" aria-hidden="true"></i>
+                        <span>Hiện lệnh</span>
+                      </button>
+                      <button class="mini-link" id="activationResetCmd" type="button">Khôi phục mặc định</button>
+                    </div>
+                  </div>
+                  <textarea
+                    id="activationCommand"
+                    class="activate-command is-obscured"
+                    rows="3"
+                    autocomplete="off"
+                    autocapitalize="off"
+                    autocorrect="off"
+                    spellcheck="false"
+                    aria-describedby="activationHint"
+                  ></textarea>
+                  <p class="activate-hint" id="activationHint">Ctrl+Enter chạy trong ứng dụng. Lệnh cần nhập dữ liệu hoặc chọn menu hãy mở PowerShell tương tác.</p>
+
+                  <div class="activate-actions">
+                    <button class="button primary full" id="activateBtn" type="button" disabled>
+                      <i class="ph ph-play" aria-hidden="true"></i>
+                      Chạy PowerShell
+                    </button>
+                    <button class="button full" id="activationInteractiveBtn" type="button" disabled>
+                      <i class="ph ph-terminal-window" aria-hidden="true"></i>
+                      Mở tương tác
+                    </button>
+                  </div>
+                </div>
+
+                <div class="activate-output-wrap" id="activationOutputWrap" hidden>
+                  <div class="command-label"><span>Kết quả</span></div>
+                  <pre class="activate-output" id="activationOutput" role="log" aria-live="polite"></pre>
+                </div>
+              </div>
+            </section>
+
+            <aside class="panel policy-aside" aria-label="Lưu ý chạy lệnh">
+              <h2>Lưu ý chạy lệnh</h2>
+              <div class="policy-list">
+                <div class="policy-item">
+                  <i class="ph ph-terminal-window" aria-hidden="true"></i>
+                  <strong>Lệnh của bạn</strong>
+                  <span>Bạn tự nhập và chạy lệnh trực tiếp</span>
+                </div>
+                <div class="policy-item">
+                  <i class="ph ph-wrench" aria-hidden="true"></i>
+                  <strong>PowerShell</strong>
+                  <span>Lệnh được chạy bằng Windows PowerShell</span>
+                </div>
+                <div class="policy-item">
+                  <i class="ph ph-link-break" aria-hidden="true"></i>
+                  <strong>Không lọc lệnh</strong>
+                  <span>Không chặn từ khóa, pipe, chuyển hướng hay URL</span>
+                </div>
+                <div class="policy-item">
+                  <i class="ph ph-hand-palm" aria-hidden="true"></i>
+                  <strong>Có tương tác</strong>
+                  <span>Mở console riêng cho Read-Host, menu và phím bấm</span>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </section>
+
         <section class="page" id="page-logs" data-page="logs" data-od-id="logs-page">
           <div class="page-heading">
             <h1 tabindex="-1">Nhật ký hoạt động</h1>
@@ -366,7 +470,7 @@
       </span>
       <span class="status-sep" aria-hidden="true"></span>
       <span class="status-item" id="statusSelected" title="Ứng dụng đang chọn trong gói cài đặt">
-        <i class="ph ph-package" aria-hidden="true"></i>
+        <i class="ph ph-stack" aria-hidden="true"></i>
         <span id="statusSelectedText">0 đang chọn</span>
       </span>
       <span class="status-sep" aria-hidden="true"></span>
@@ -375,7 +479,7 @@
         <span>Terminal</span>
         <span class="status-terminal-count" id="statusTerminalCount" hidden>0</span>
       </button>
-      <span class="status-version" id="statusVersion">v0.5.0</span>
+      <span class="status-version" id="statusVersion">v0.6.0</span>
     </div>
   </footer>
 

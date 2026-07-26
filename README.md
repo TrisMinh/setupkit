@@ -37,6 +37,7 @@ Cài lại Windows xong thường mất cả buổi mở từng trang web tải 
 - **Chạy thử trước, cài thật sau** — chế độ mặc định chỉ mô phỏng toàn bộ quá trình, máy không thay đổi gì; muốn cài thật phải bật công tắc riêng và xác nhận từng lệnh
 - **Minh bạch từng lệnh** — xem trước chính xác câu lệnh winget của từng app, theo dõi stdout/stderr trực tiếp trong terminal tích hợp khi cài
 - **Thanh trạng thái luôn hiện** dưới cùng: tình trạng winget, số app đã cài, số đang chọn và nút mở terminal nhanh
+- **Kích hoạt Windows** bằng console lệnh sửa được — có sẵn lệnh `slmgr` chính thức, bạn tự sửa key/tham số rồi chạy trực tiếp; chỉ chạy công cụ kích hoạt của Windows, không tải script từ mạng
 - **Chọn nơi cài** cho các package hỗ trợ, mở app hoặc thư mục cài đặt ngay khi cài xong
 - **Xuất hồ sơ JSON** — lưu bộ ứng dụng đang chọn để dựng máy tiếp theo y hệt chỉ trong một lần import
 
@@ -52,8 +53,10 @@ Cài lại Windows xong thường mất cả buổi mở từng trang web tải 
 |:---:|:---:|
 | ![Theo dõi cài đặt](docs/screenshots/install-progress.png) | ![Chi tiết ứng dụng](docs/screenshots/app-detail.png) |
 | *Tiến trình từng app + terminal winget trực tiếp* | *Xem lệnh sẽ chạy trước khi đồng ý* |
-| ![Giao diện tối](docs/screenshots/catalog-dark.png) | ![Bố cục thu gọn](docs/screenshots/compact-layout.png) |
-| *Giao diện tối theo hệ thống* | *Tự thích ứng khi thu nhỏ cửa sổ* |
+| ![Kích hoạt Windows](docs/screenshots/activate.png) | ![Bố cục thu gọn](docs/screenshots/compact-layout.png) |
+| *Kích hoạt Windows bằng key của bạn qua slmgr* | *Tự thích ứng khi thu nhỏ cửa sổ* |
+| ![Giao diện tối](docs/screenshots/catalog-dark.png) | ![Tìm không dấu](docs/screenshots/search-khong-dau.png) |
+| *Giao diện tối theo hệ thống* | *Tìm nhanh, không cần gõ dấu* |
 
 ## Dùng trong 3 bước
 

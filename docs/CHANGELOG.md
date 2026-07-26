@@ -2,6 +2,18 @@
 
 Toàn bộ thay đổi đáng chú ý của SetupKit được ghi tại đây.
 
+## [0.6.0] - 2026-07-26
+
+### Thêm mới
+
+- **Trang Kích hoạt Windows** với console lệnh sửa được — có sẵn lệnh `slmgr` chính thức, bạn sửa key/tham số theo nhu cầu rồi chạy trực tiếp, kết quả hiện ngay trong console. App tự đọc trạng thái kích hoạt hiện tại (phiên bản, đã kích hoạt hay chưa, 5 ký tự cuối của key) và cảnh báo nếu chưa mở bằng quyền Administrator.
+- Console chấp nhận mọi lệnh PowerShell, bao gồm pipe, chuyển hướng, URL và lệnh nhiều dòng; có chế độ mở PowerShell tương tác riêng cho lệnh cần stdin, menu hoặc phím bấm. Lệnh mặc định được che mờ và có nút hiện/ẩn. Vẫn luôn xác nhận thủ công và yêu cầu quyền Administrator trước khi chạy.
+
+### Sửa lỗi
+
+- Icon ở khối "ứng dụng đã chọn" và thanh trạng thái đổi từ `ph-package` (có nét chĩa lên trông như lỗi) sang `ph-stack` cho sạch
+- Khối "ứng dụng đã chọn" bỏ nền kính mờ (`backdrop-filter`) gây vạch góc và lộ nội dung phía sau trên WebView2; nay dùng nền đục
+
 ## [0.5.0] - 2026-07-26
 
 ### Sửa lỗi

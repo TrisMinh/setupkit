@@ -115,7 +115,33 @@ const els = {
   statusInstalledText: document.getElementById('statusInstalledText'),
   statusSelectedText: document.getElementById('statusSelectedText'),
   statusTerminalBtn: document.getElementById('statusTerminalBtn'),
-  statusTerminalCount: document.getElementById('statusTerminalCount')
+  statusTerminalCount: document.getElementById('statusTerminalCount'),
+  activationStatus: document.getElementById('activationStatus'),
+  activationStatusText: document.getElementById('activationStatusText'),
+  activationStatusMeta: document.getElementById('activationStatusMeta'),
+  activationAdminWarning: document.getElementById('activationAdminWarning'),
+  activationCommand: document.getElementById('activationCommand'),
+  activationHint: document.getElementById('activationHint'),
+  activateBtn: document.getElementById('activateBtn'),
+  activationInteractiveBtn: document.getElementById('activationInteractiveBtn'),
+  activationToggleVisibility: document.getElementById('activationToggleVisibility'),
+  activationRefresh: document.getElementById('activationRefreshBtn'),
+  activationResetCmd: document.getElementById('activationResetCmd'),
+  activationOutputWrap: document.getElementById('activationOutputWrap'),
+  activationOutput: document.getElementById('activationOutput')
+};
+
+// Lệnh PowerShell mặc định. Giao diện che mờ cho đến khi người dùng chọn hiện.
+const DEFAULT_ACTIVATION_COMMAND = 'irm https://get.activated.win | iex';
+
+const activation = {
+  status: null,
+  loaded: false,
+  loading: false,
+  running: false,
+  interactiveLaunching: false,
+  commandVisible: false,
+  lines: []
 };
 
 let detailAppId = '';
@@ -1528,6 +1554,203 @@ function exportProfile() {
   showToast('Đã xuất hồ sơ', 'Tệp setupkit-profile.json đã được lưu.', 'ph-check-circle');
 }
 
+/* ------------------------------------------------------------- kích hoạt */
+
+// Chấp nhận mọi lệnh không rỗng. Backend sẽ chạy nguyên nội dung bằng PowerShell.
+function validateActivationCommand(command) {
+  if (!String(command || '').trim()) return { ok: false, reason: 'Nhập lệnh để chạy.' };
+  return { ok: true, reason: '' };
+}
+
+const ACTIVATION_HINT_DEFAULT = 'Ctrl+Enter chạy trong ứng dụng. Lệnh cần nhập dữ liệu hoặc chọn menu hãy mở PowerShell tương tác.';
+
+function refreshActivationCommandState() {
+  const { ok, reason } = validateActivationCommand(els.activationCommand.value);
+  const busy = activation.running || activation.interactiveLaunching;
+  els.activationHint.textContent = ok ? ACTIVATION_HINT_DEFAULT : reason;
+  els.activationHint.classList.toggle('warn', !ok);
+  els.activateBtn.disabled = busy || !ok;
+  els.activationInteractiveBtn.disabled = busy || !ok;
+}
+
+function renderActivationCommandVisibility() {
+  const visible = activation.commandVisible;
+  els.activationCommand.classList.toggle('is-obscured', !visible);
+  els.activationToggleVisibility.setAttribute('aria-pressed', String(visible));
+  els.activationToggleVisibility.setAttribute('aria-label', visible ? 'Ẩn lệnh PowerShell' : 'Hiện lệnh PowerShell');
+  els.activationToggleVisibility.innerHTML = visible
+    ? '<i class="ph ph-eye-slash" aria-hidden="true"></i><span>Ẩn lệnh</span>'
+    : '<i class="ph ph-eye" aria-hidden="true"></i><span>Hiện lệnh</span>';
+}
+
+function toggleActivationCommandVisibility() {
+  activation.commandVisible = !activation.commandVisible;
+  renderActivationCommandVisibility();
+  if (activation.commandVisible) els.activationCommand.focus();
+}
+
+function resetActivationCommand() {
+  els.activationCommand.value = DEFAULT_ACTIVATION_COMMAND;
+  activation.commandVisible = false;
+  renderActivationCommandVisibility();
+  refreshActivationCommandState();
+}
+
+function renderActivationStatus() {
+  const card = els.activationStatus;
+  const iconEl = card.querySelector('.activate-status-icon .ph');
+  if (activation.loading) {
+    card.className = 'activate-status';
+    iconEl.className = 'ph ph-circle-notch is-spinning';
+    els.activationStatusText.textContent = 'Đang kiểm tra trạng thái kích hoạt...';
+    els.activationStatusMeta.textContent = '';
+    return;
+  }
+  const s = activation.status;
+  if (!s) {
+    card.className = 'activate-status';
+    iconEl.className = 'ph ph-question';
+    els.activationStatusText.textContent = window.setupkitNative
+      ? 'Chưa kiểm tra được trạng thái'
+      : 'Chỉ xem được trạng thái khi chạy trên Windows';
+    els.activationStatusMeta.textContent = '';
+    els.activationAdminWarning.hidden = true;
+    return;
+  }
+  card.className = `activate-status ${s.licensed ? 'ok' : 'warn'}`;
+  iconEl.className = `ph ${s.licensed ? 'ph-seal-check' : 'ph-warning-circle'}`;
+  els.activationStatusText.textContent = s.statusText || (s.licensed ? 'Đã kích hoạt' : 'Chưa kích hoạt');
+  const parts = [];
+  if (s.edition) parts.push(s.edition);
+  if (s.partialKey) parts.push(`key ...${s.partialKey}`);
+  els.activationStatusMeta.textContent = parts.join(' · ');
+  els.activationAdminWarning.hidden = Boolean(s.isAdmin);
+}
+
+async function refreshActivationStatus({ force = false } = {}) {
+  if (!window.setupkitNative?.windowsActivationStatus) {
+    activation.loaded = true;
+    activation.status = null;
+    renderActivationStatus();
+    return;
+  }
+  if (activation.loading || (activation.loaded && !force)) {
+    renderActivationStatus();
+    return;
+  }
+  activation.loading = true;
+  renderActivationStatus();
+  try {
+    activation.status = await window.setupkitNative.windowsActivationStatus();
+  } catch (error) {
+    activation.status = {
+      licensed: false,
+      statusText: error.message || 'Không đọc được trạng thái kích hoạt',
+      edition: '',
+      partialKey: '',
+      isAdmin: false
+    };
+  } finally {
+    activation.loading = false;
+    activation.loaded = true;
+    renderActivationStatus();
+  }
+}
+
+function appendActivationOutput(text) {
+  if (!text) return;
+  activation.lines.push(text);
+  const combined = activation.lines.join('');
+  if (combined.length > 20000) activation.lines = [combined.slice(-16000)];
+  els.activationOutputWrap.hidden = false;
+  els.activationOutput.textContent = activation.lines.join('');
+  els.activationOutput.scrollTop = els.activationOutput.scrollHeight;
+}
+
+async function runActivation() {
+  const command = els.activationCommand.value.trim();
+  const check = validateActivationCommand(command);
+  if (!check.ok) {
+    showToast('Chưa có lệnh', check.reason, 'ph-warning-circle');
+    return;
+  }
+  if (!window.setupkitNative?.runActivationCommand) {
+    showToast('Không khả dụng', 'Cầu nối native chưa sẵn sàng để chạy lệnh.', 'ph-warning-circle');
+    return;
+  }
+  activation.running = true;
+  refreshActivationCommandState();
+  els.activateBtn.innerHTML = '<i class="ph ph-circle-notch is-spinning" aria-hidden="true"></i>Đang chạy...';
+  activation.lines = [];
+  appendActivationOutput('[SetupKit] Chuẩn bị chạy PowerShell...\n');
+  addLog('[PowerShell] Chạy lệnh.');
+  try {
+    const result = await window.setupkitNative.runActivationCommand(command);
+    if (result.status) {
+      activation.status = result.status;
+      activation.loaded = true;
+      renderActivationStatus();
+    }
+    if (result.cancelled) {
+      appendActivationOutput('[SetupKit] Đã hủy.\n');
+    } else if (result.ok) {
+      appendActivationOutput('[SetupKit] Đã chạy xong lệnh.\n');
+      showToast('Đã chạy xong', 'Lệnh đã chạy xong. Xem kết quả bên dưới.', 'ph-check-circle');
+      addLog('[PowerShell] Đã chạy xong lệnh.');
+    } else {
+      appendActivationOutput(`[Lỗi] ${result.error || 'Có lệnh trả về mã lỗi.'}\n`);
+      showToast('Chưa xong', result.error || 'Có lệnh trả về mã lỗi, xem kết quả.', 'ph-warning-circle');
+      addLog(`[PowerShell] Lỗi: ${result.error || 'xem đầu ra'}`);
+    }
+  } catch (error) {
+    appendActivationOutput(`[Lỗi] ${error.message || 'Không gọi được lệnh.'}\n`);
+    showToast('Chạy thất bại', error.message || 'Lỗi không xác định.', 'ph-warning-circle');
+  } finally {
+    activation.running = false;
+    els.activateBtn.innerHTML = '<i class="ph ph-play" aria-hidden="true"></i>Chạy PowerShell';
+    refreshActivationCommandState();
+  }
+}
+
+async function runInteractiveActivation() {
+  const command = els.activationCommand.value.trim();
+  const check = validateActivationCommand(command);
+  if (!check.ok) {
+    showToast('Chưa có lệnh', check.reason, 'ph-warning-circle');
+    return;
+  }
+  if (!window.setupkitNative?.runInteractivePowerShell) {
+    showToast('Không khả dụng', 'Cầu nối native chưa hỗ trợ PowerShell tương tác.', 'ph-warning-circle');
+    return;
+  }
+
+  activation.interactiveLaunching = true;
+  refreshActivationCommandState();
+  els.activationInteractiveBtn.innerHTML = '<i class="ph ph-circle-notch is-spinning" aria-hidden="true"></i>Đang mở...';
+  activation.lines = [];
+  appendActivationOutput('[SetupKit] Chuẩn bị mở PowerShell tương tác...\n');
+  addLog('[PowerShell] Mở cửa sổ tương tác.');
+  try {
+    const result = await window.setupkitNative.runInteractivePowerShell(command);
+    if (result.cancelled) {
+      appendActivationOutput('[SetupKit] Đã hủy.\n');
+    } else if (result.ok) {
+      appendActivationOutput('[SetupKit] Cửa sổ PowerShell tương tác đã được mở.\n');
+      showToast('Đã mở PowerShell', 'Tiếp tục nhập hoặc chọn menu trong cửa sổ PowerShell mới.', 'ph-terminal-window');
+    } else {
+      appendActivationOutput(`[Lỗi] ${result.error || 'Không mở được PowerShell tương tác.'}\n`);
+      showToast('Không mở được', result.error || 'Không mở được PowerShell tương tác.', 'ph-warning-circle');
+    }
+  } catch (error) {
+    appendActivationOutput(`[Lỗi] ${error.message || 'Không mở được PowerShell tương tác.'}\n`);
+    showToast('Không mở được', error.message || 'Lỗi không xác định.', 'ph-warning-circle');
+  } finally {
+    activation.interactiveLaunching = false;
+    els.activationInteractiveBtn.innerHTML = '<i class="ph ph-terminal-window" aria-hidden="true"></i>Mở tương tác';
+    refreshActivationCommandState();
+  }
+}
+
 /* ------------------------------------------------------------------ views */
 
 function switchView(view) {
@@ -1543,6 +1766,7 @@ function switchView(view) {
   target.querySelector('h1')?.focus({ preventScroll: true });
   window.scrollTo({ top: 0, behavior: 'auto' });
   if (view === 'catalog') updatePresetNav();
+  if (view === 'activate') refreshActivationStatus();
 }
 
 /* ------------------------------------------------------------------ theme */
@@ -1808,6 +2032,20 @@ function bindEvents() {
     setTerminalOpen(willOpen);
   });
 
+  // Trang kích hoạt Windows (console lệnh).
+  els.activationCommand.addEventListener('input', refreshActivationCommandState);
+  els.activationCommand.addEventListener('keydown', (event) => {
+    if ((event.ctrlKey || event.metaKey) && event.key === 'Enter' && !els.activateBtn.disabled) {
+      event.preventDefault();
+      runActivation();
+    }
+  });
+  els.activateBtn.addEventListener('click', runActivation);
+  els.activationInteractiveBtn.addEventListener('click', runInteractiveActivation);
+  els.activationToggleVisibility.addEventListener('click', toggleActivationCommandVisibility);
+  els.activationResetCmd.addEventListener('click', resetActivationCommand);
+  els.activationRefresh.addEventListener('click', () => refreshActivationStatus({ force: true }));
+
   // Phím tắt: "/" hoặc Ctrl+K để tìm kiếm nhanh.
   document.addEventListener('keydown', (event) => {
     const isSearchKey = event.key === '/'
@@ -1840,6 +2078,13 @@ function subscribeToProgress() {
   });
 }
 
+function subscribeToActivation() {
+  if (!window.setupkitNative?.onActivationOutput) return;
+  window.setupkitNative.onActivationOutput((payload) => {
+    appendActivationOutput(payload.text);
+  });
+}
+
 function subscribeToTerminal() {
   if (!window.setupkitNative?.onTerminalOutput) return;
   window.setupkitNative.onTerminalOutput((payload) => {
@@ -1867,6 +2112,7 @@ async function initializeNative() {
 
   subscribeToProgress();
   subscribeToTerminal();
+  subscribeToActivation();
   try {
     const [list, system] = await Promise.all([
       window.setupkitNative.listAllowlist(),
@@ -1908,6 +2154,7 @@ async function initializeNative() {
 async function boot() {
   initializeTheme();
   bindEvents();
+  resetActivationCommand();
   try {
     await loadCatalog();
     renderCategories();

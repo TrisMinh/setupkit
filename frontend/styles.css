@@ -2110,6 +2110,214 @@ select:focus-visible,
   font-size: 12px;
 }
 
+/* -------------------------------------------------------- trang kích hoạt */
+.activate-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 18px;
+  align-items: start;
+}
+
+.activate-body {
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+}
+
+.activate-status {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface-soft);
+}
+
+.activate-status-icon {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-control);
+  color: var(--text-tertiary);
+  background: var(--surface);
+}
+
+.activate-status-icon .ph {
+  font-size: 22px;
+}
+
+.activate-status.ok .activate-status-icon {
+  color: var(--success);
+  background: var(--success-soft);
+}
+
+.activate-status.warn .activate-status-icon {
+  color: var(--warning);
+  background: var(--warning-soft);
+}
+
+.activate-status-copy {
+  min-width: 0;
+}
+
+.activate-status-copy strong,
+.activate-status-copy span {
+  display: block;
+}
+
+.activate-status-copy strong {
+  font-size: 14px;
+}
+
+.activate-status-copy span {
+  margin-top: 2px;
+  overflow-wrap: anywhere;
+  color: var(--text-tertiary);
+  font-size: 12px;
+}
+
+.activate-warning {
+  display: flex;
+  gap: 9px;
+  padding: 11px 12px;
+  border-radius: var(--radius-control);
+  color: var(--warning);
+  background: var(--warning-soft);
+  font-size: 12px;
+}
+
+.activate-warning .ph {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  font-size: 16px;
+}
+
+.activate-form {
+  display: grid;
+  gap: 8px;
+}
+
+.activate-label {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.activate-command {
+  width: 100%;
+  min-height: 82px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  color: var(--mono-text);
+  background: var(--mono-surface);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.7;
+  white-space: pre;
+  overflow-wrap: normal;
+  overflow-x: auto;
+  resize: vertical;
+  user-select: text;
+  cursor: text;
+  tab-size: 2;
+}
+
+.activate-command:focus-visible {
+  border-color: var(--accent);
+}
+
+.activate-command.is-obscured {
+  color: transparent;
+  text-shadow: 0 0 7px color-mix(in srgb, var(--mono-text) 82%, transparent);
+  caret-color: transparent;
+}
+
+.command-label-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mini-link {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.mini-link:hover {
+  text-decoration: underline;
+}
+
+.mini-link.icon-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mini-link.icon-link .ph {
+  font-size: 13px;
+}
+
+.activate-hint {
+  margin: 2px 0 6px;
+  color: var(--text-tertiary);
+  font-size: 11px;
+}
+
+.activate-hint.warn {
+  color: var(--warning);
+}
+
+.activate-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 8px;
+}
+
+.activate-output-wrap {
+  display: grid;
+  gap: 8px;
+}
+
+.activate-output {
+  min-height: 72px;
+  max-height: 220px;
+  margin: 0;
+  overflow: auto;
+  padding: 12px 14px;
+  border-radius: var(--radius-control);
+  color: var(--mono-text);
+  background: var(--mono-surface);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--mono-text) 28%, transparent) transparent;
+}
+
+.policy-aside {
+  padding: 18px;
+}
+
+.policy-aside h2 {
+  margin: 0 0 14px;
+  font-size: 15px;
+}
+
+.policy-aside .policy-list {
+  grid-template-columns: 1fr;
+}
+
 dialog {
   width: min(520px, calc(100vw - 32px));
   max-height: calc(100dvh - 40px);
@@ -2406,7 +2614,8 @@ dialog::backdrop {
   }
 
   .review-layout,
-  .profile-layout {
+  .profile-layout,
+  .activate-layout {
     grid-template-columns: minmax(0, 1fr) 292px;
   }
 }
@@ -2443,7 +2652,8 @@ dialog::backdrop {
   }
 
   .review-layout,
-  .profile-layout {
+  .profile-layout,
+  .activate-layout {
     grid-template-columns: 1fr;
   }
 
@@ -2502,6 +2712,10 @@ dialog::backdrop {
   }
 
   .policy-list {
+    grid-template-columns: 1fr;
+  }
+
+  .activate-actions {
     grid-template-columns: 1fr;
   }
 

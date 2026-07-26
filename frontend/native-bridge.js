@@ -71,7 +71,11 @@
     runWinget: (packageId) => invoke('RunWinget', packageId),
     openApp: (packageId) => invoke('OpenApp', packageId),
     openAppFolder: (packageId) => invoke('OpenAppFolder', packageId),
+    windowsActivationStatus: () => invoke('WindowsActivationStatus'),
+    runActivationCommand: (command) => invoke('RunActivationCommand', command),
+    runInteractivePowerShell: (command) => invoke('RunInteractivePowerShell', command),
     onInstallProgress: (callback) => subscribe('setupkit:install-progress', callback),
-    onTerminalOutput: (callback) => subscribe('setupkit:terminal-output', callback)
+    onTerminalOutput: (callback) => subscribe('setupkit:terminal-output', callback),
+    onActivationOutput: (callback) => subscribe('setupkit:activation-output', callback)
   });
 })();

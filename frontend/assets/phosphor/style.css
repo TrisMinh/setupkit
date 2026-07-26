@@ -1,7 +1,7 @@
 /*
  * File này được tạo tự động bởi scripts/build-phosphor-subset.js.
  * Đừng sửa tay — hãy sửa scripts/phosphor-full/style.css rồi chạy lại script.
- * 73 / 1530 icon được giữ lại.
+ * 82 / 1530 icon được giữ lại.
  */
 @font-face {
   font-family: "Phosphor";
@@ -84,6 +84,9 @@
 .ph.ph-circle:before {
   content: "\e18a";
 }
+.ph.ph-circle-notch:before {
+  content: "\eb44";
+}
 .ph.ph-cloud:before {
   content: "\e1aa";
 }
@@ -119,6 +122,12 @@
 }
 .ph.ph-export:before {
   content: "\eaf0";
+}
+.ph.ph-eye:before {
+  content: "\e220";
+}
+.ph.ph-eye-slash:before {
+  content: "\e224";
 }
 .ph.ph-file-cpp:before {
   content: "\eb2e";
@@ -180,6 +189,9 @@
 .ph.ph-info:before {
   content: "\e2ce";
 }
+.ph.ph-key:before {
+  content: "\e2d6";
+}
 .ph.ph-link-break:before {
   content: "\e2e4";
 }
@@ -216,14 +228,26 @@
 .ph.ph-plus:before {
   content: "\e3d4";
 }
+.ph.ph-question:before {
+  content: "\e3e8";
+}
+.ph.ph-seal-check:before {
+  content: "\e606";
+}
 .ph.ph-shield-check:before {
   content: "\e40c";
+}
+.ph.ph-shield-warning:before {
+  content: "\e412";
 }
 .ph.ph-sparkle:before {
   content: "\e6a2";
 }
 .ph.ph-squares-four:before {
   content: "\e464";
+}
+.ph.ph-stack:before {
+  content: "\e466";
 }
 .ph.ph-storefront:before {
   content: "\e470";
@@ -251,6 +275,9 @@
 }
 .ph.ph-warning-circle:before {
   content: "\e4e2";
+}
+.ph.ph-wrench:before {
+  content: "\e5d4";
 }
 .ph.ph-x:before {
   content: "\e4f6";
