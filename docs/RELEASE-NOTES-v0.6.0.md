@@ -8,8 +8,9 @@ irm https://raw.githubusercontent.com/TrisMinh/setupkit/main/scripts/install.ps1
 
 ### Có gì mới
 
+- 🔲 **Ba kiểu hiển thị danh mục** — Lưới, Danh sách và Biểu tượng, đổi bằng nút trên thanh danh mục và được ghi nhớ cho lần sau. Hộp thoại chi tiết cũng hiển thị logo ứng dụng.
 - 🔑 **Kích hoạt Windows ngay trong app** — thêm trang "Kích hoạt" với console lệnh sửa được: có sẵn lệnh `slmgr` chính thức, bạn sửa key hoặc tham số (kể cả KMS của tổ chức, MAK...) rồi chạy trực tiếp, kết quả hiện ngay. App tự đọc trạng thái hiện tại (phiên bản Windows, đã kích hoạt hay chưa).
-  - Console chấp nhận mọi lệnh PowerShell, bao gồm pipe, chuyển hướng, URL và lệnh nhiều dòng; có chế độ mở PowerShell tương tác riêng cho lệnh cần nhập dữ liệu, chọn menu hoặc bấm phím. Lệnh mặc định được che mờ và có nút hiện/ẩn. Luôn hỏi xác nhận trước khi chạy và cần chạy app bằng quyền Administrator.
+  - Console chỉ chạy công cụ kích hoạt có sẵn của Windows (slmgr, ospp, slui) và **chặn** kiểu tải/chạy script từ mạng (`irm|iex`, URL...). Luôn hỏi xác nhận trước khi chạy và cần chạy app bằng quyền Administrator.
 
 ### Sửa lỗi giao diện
 

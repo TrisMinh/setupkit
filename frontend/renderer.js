@@ -27,13 +27,17 @@ const state = {
   query: '',
   source: 'all',
   status: 'all',
+  viewMode: 'grid',
   running: false,
   scanning: false,
   currentId: '',
+  busyId: '',
+  stopRequested: false,
   done: new Set(),
   failed: new Set(),
   wingetAvailable: false,
   wingetVersion: '',
+  wingetChecked: false,
   logs: ['[sẵn sàng] Đang kiểm tra các ứng dụng đã có trên máy.']
 };
 
@@ -41,6 +45,7 @@ const els = {
   catalog: document.getElementById('catalog'),
   catalogCount: document.getElementById('catalogCount'),
   installedSummary: document.getElementById('installedSummary'),
+  viewModes: document.getElementById('viewModes'),
   categoryDropdown: document.getElementById('categoryDropdown'),
   sourceDropdown: document.getElementById('sourceDropdown'),
   statusDropdown: document.getElementById('statusDropdown'),
@@ -64,8 +69,17 @@ const els = {
   progressText: document.getElementById('progressText'),
   progressPercent: document.getElementById('progressPercent'),
   install: document.getElementById('installBtn'),
+  stopBtn: document.getElementById('stopBtn'),
+  retryFailed: document.getElementById('retryFailedBtn'),
   exportQueue: document.getElementById('exportQueueBtn'),
   exportProfile: document.getElementById('exportProfileBtn'),
+  importProfile: document.getElementById('importProfileBtn'),
+  importProfileInput: document.getElementById('importProfileInput'),
+  selectAll: document.getElementById('selectAllBtn'),
+  clearSelection: document.getElementById('clearSelectionBtn'),
+  wingetMissingBanner: document.getElementById('wingetMissingBanner'),
+  wingetRecheck: document.getElementById('wingetRecheckBtn'),
+  wingetInstall: document.getElementById('wingetInstallBtn'),
   queueCount: document.getElementById('queueCount'),
   installedCount: document.getElementById('installedCount'),
   largeAppCount: document.getElementById('largeAppCount'),
@@ -83,6 +97,7 @@ const els = {
   log: document.getElementById('logBox'),
   clearLogs: document.getElementById('clearLogsBtn'),
   detailDialog: document.getElementById('detailDialog'),
+  detailIcon: document.getElementById('detailIcon'),
   detailName: document.getElementById('detailName'),
   detailDescription: document.getElementById('detailDescription'),
   detailState: document.getElementById('detailState'),
@@ -106,6 +121,8 @@ const els = {
   detailFolder: document.getElementById('detailFolderBtn'),
   detailChooseLocation: document.getElementById('detailChooseLocationBtn'),
   detailResetLocation: document.getElementById('detailResetLocationBtn'),
+  detailUpgrade: document.getElementById('detailUpgradeBtn'),
+  detailUninstall: document.getElementById('detailUninstallBtn'),
   theme: document.getElementById('themeBtn'),
   rescan: document.getElementById('rescanBtn'),
   systemReady: document.getElementById('systemReady'),
@@ -115,33 +132,7 @@ const els = {
   statusInstalledText: document.getElementById('statusInstalledText'),
   statusSelectedText: document.getElementById('statusSelectedText'),
   statusTerminalBtn: document.getElementById('statusTerminalBtn'),
-  statusTerminalCount: document.getElementById('statusTerminalCount'),
-  activationStatus: document.getElementById('activationStatus'),
-  activationStatusText: document.getElementById('activationStatusText'),
-  activationStatusMeta: document.getElementById('activationStatusMeta'),
-  activationAdminWarning: document.getElementById('activationAdminWarning'),
-  activationCommand: document.getElementById('activationCommand'),
-  activationHint: document.getElementById('activationHint'),
-  activateBtn: document.getElementById('activateBtn'),
-  activationInteractiveBtn: document.getElementById('activationInteractiveBtn'),
-  activationToggleVisibility: document.getElementById('activationToggleVisibility'),
-  activationRefresh: document.getElementById('activationRefreshBtn'),
-  activationResetCmd: document.getElementById('activationResetCmd'),
-  activationOutputWrap: document.getElementById('activationOutputWrap'),
-  activationOutput: document.getElementById('activationOutput')
-};
-
-// Lệnh PowerShell mặc định. Giao diện che mờ cho đến khi người dùng chọn hiện.
-const DEFAULT_ACTIVATION_COMMAND = 'irm https://get.activated.win | iex';
-
-const activation = {
-  status: null,
-  loaded: false,
-  loading: false,
-  running: false,
-  interactiveLaunching: false,
-  commandVisible: false,
-  lines: []
+  statusTerminalCount: document.getElementById('statusTerminalCount')
 };
 
 let detailAppId = '';
@@ -402,6 +393,29 @@ function selectedApps() {
   return sortByInstallOrder(apps.filter((app) => state.selected.has(app.id)));
 }
 
+// Ghi nhớ danh sách đang chọn để lần mở sau khôi phục đúng gói cài đặt.
+const SELECTION_KEY = 'setupkit-selection';
+
+function persistSelection() {
+  try {
+    localStorage.setItem(SELECTION_KEY, JSON.stringify([...state.selected]));
+  } catch {
+    // Không lưu được cũng không sao.
+  }
+}
+
+function loadPersistedSelection() {
+  try {
+    const raw = localStorage.getItem(SELECTION_KEY);
+    if (!raw) return null;
+    const ids = JSON.parse(raw);
+    if (!Array.isArray(ids)) return null;
+    return ids.filter((id) => appById(id));
+  } catch {
+    return null;
+  }
+}
+
 /* ---------------------------------------------------------------- catalog */
 
 async function loadCatalog() {
@@ -434,8 +448,15 @@ async function loadCatalog() {
   els.planSummary.textContent = `${presets.length} cấu hình theo vai trò, có thể chỉnh sửa sau`;
 
   const defaultPlan = presets.find((plan) => plan.id === state.activePreset) || presets[0];
-  state.activePreset = defaultPlan?.id || '';
-  state.selected = new Set(defaultPlan?.apps.filter((id) => appById(id)) || []);
+  const persisted = loadPersistedSelection();
+  if (persisted && persisted.length) {
+    // Khôi phục đúng danh sách người dùng đang chọn ở lần trước.
+    state.selected = new Set(persisted);
+    state.activePreset = '';
+  } else {
+    state.activePreset = defaultPlan?.id || '';
+    state.selected = new Set(defaultPlan?.apps.filter((id) => appById(id)) || []);
+  }
 
   // Dựng chỉ mục tìm kiếm khi máy rảnh để lần gõ đầu tiên không bị khựng.
   idle(buildSearchIndex);
@@ -641,7 +662,7 @@ function cardHTML(app) {
           ${app.size === 'large' ? '<span class="app-size-label"><i class="ph ph-hard-drives" aria-hidden="true"></i>App lớn</span>' : ''}
           ${visibleTags}
         </div>
-        ${details ? `<div class="app-install-meta"><i class="ph ph-check-circle" aria-hidden="true"></i><span>${version}</span></div>` : ''}
+        ${details ? `<div class="app-install-meta ${details.updateAvailable ? 'has-update' : ''}"><i class="ph ${details.updateAvailable ? 'ph-arrow-circle-up' : 'ph-check-circle'}" aria-hidden="true"></i><span>${details.updateAvailable ? 'Có bản cập nhật mới' : version}</span></div>` : ''}
       </div>
       <div class="app-card-actions ${details ? 'installed-actions' : ''}">
         ${actions}
@@ -650,7 +671,48 @@ function cardHTML(app) {
   `;
 }
 
+/* --------------------------------------------------------- kiểu hiển thị */
+const VIEW_MODES = ['grid', 'list', 'icon'];
+
+function applyViewMode() {
+  els.catalog.className = `app-grid mode-${state.viewMode}`;
+}
+
+function renderViewModes() {
+  els.viewModes.querySelectorAll('[data-mode]').forEach((button) => {
+    const active = button.dataset.mode === state.viewMode;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-pressed', String(active));
+  });
+}
+
+function setViewMode(mode) {
+  if (!VIEW_MODES.includes(mode)) return;
+  state.viewMode = mode;
+  try {
+    localStorage.setItem('setupkit-view', mode);
+  } catch {
+    // Không lưu được cũng không sao.
+  }
+  applyViewMode();
+  renderViewModes();
+}
+
+function initViewMode() {
+  let saved = 'grid';
+  try {
+    const value = localStorage.getItem('setupkit-view');
+    if (VIEW_MODES.includes(value)) saved = value;
+  } catch {
+    // localStorage không khả dụng.
+  }
+  state.viewMode = saved;
+  applyViewMode();
+  renderViewModes();
+}
+
 function renderCatalog() {
+  applyViewMode();
   const list = filteredApps();
   els.catalogCount.innerHTML = `<strong>${list.length}</strong> / ${apps.length} ứng dụng phù hợp`;
   els.installedSummary.textContent = state.scanning
@@ -808,7 +870,15 @@ function renderRunStatus() {
   const processed = selected.filter((app) => state.done.has(app.id) || state.failed.has(app.id)).length;
   const progress = overallProgress(selected);
 
-  els.install.disabled = state.running || state.scanning || pending.length === 0;
+  els.install.disabled = state.running || state.scanning || Boolean(state.busyId) || pending.length === 0;
+  if (els.stopBtn) {
+    els.stopBtn.hidden = !state.running;
+    els.stopBtn.disabled = state.stopRequested;
+  }
+  if (els.retryFailed) {
+    els.retryFailed.hidden = state.running || state.failed.size === 0;
+    els.retryFailed.disabled = state.scanning || Boolean(state.busyId);
+  }
   const installHTML = state.running
     ? '<i class="ph ph-arrow-clockwise is-spinning" aria-hidden="true"></i>Đang cài đặt'
     : els.realMode.checked
@@ -1003,6 +1073,7 @@ function renderAll() {
   renderLog();
   renderTerminal();
   renderStatusBar();
+  renderWingetBanner();
 }
 
 /* ---------------------------------------------------------------- actions */
@@ -1043,6 +1114,7 @@ function toggleApp(id) {
     }
   }
   state.activePreset = '';
+  persistSelection();
   updatePresetActive();
   changedIds.forEach(updateCardToggle);
   renderQueue();
@@ -1083,6 +1155,7 @@ function applyPreset(id) {
         : 'Tất cả ứng dụng trong gói đã được chọn.',
     'ph-check-circle'
   );
+  persistSelection();
   renderAll();
 }
 
@@ -1109,9 +1182,12 @@ function openDetail(id) {
   const details = state.installed.get(id);
   const simulated = state.simulated.has(id);
   detailAppId = id;
+  els.detailIcon.innerHTML = appIconMarkup(app);
   els.detailName.textContent = app.name;
   els.detailDescription.textContent = app.desc;
-  els.detailState.textContent = details ? 'Đã cài trên máy' : simulated ? 'Chỉ mô phỏng, chưa cài' : 'Chưa cài';
+  els.detailState.textContent = details
+    ? (details.updateAvailable ? 'Đã cài, có bản cập nhật' : 'Đã cài trên máy')
+    : simulated ? 'Chỉ mô phỏng, chưa cài' : 'Chưa cài';
   els.detailVersion.textContent = details?.version || (details ? 'Windows không cung cấp' : 'Chưa có');
   els.detailPackage.textContent = app.pkg;
   els.detailSource.textContent = app.source === 'msstore' ? 'Microsoft Store' : 'Windows Package Manager';
@@ -1140,6 +1216,11 @@ function openDetail(id) {
   els.detailResetLocation.hidden = Boolean(details) || !state.installLocations.has(id);
   els.detailChooseLocation.disabled = state.running;
   els.detailResetLocation.disabled = state.running;
+  els.detailUninstall.hidden = !details;
+  els.detailUpgrade.hidden = !(details && details.updateAvailable);
+  const opBusy = Boolean(state.running || state.scanning || state.busyId);
+  els.detailUninstall.disabled = opBusy;
+  els.detailUpgrade.disabled = opBusy;
   els.detailOpen.disabled = Boolean(details && !details.canLaunch);
   els.detailFolder.disabled = Boolean(details && !details.canOpenFolder);
   els.detailOpen.title = details?.canLaunch ? 'Mở ứng dụng' : 'Windows chưa cung cấp lối tắt';
@@ -1255,6 +1336,7 @@ async function scanInstalled({ showFeedback = true, pruneSelection = false } = {
         state.simulated.delete(id);
         state.installProgress.delete(id);
       });
+      persistSelection();
     }
 
     const wingetNote = state.wingetAvailable
@@ -1423,10 +1505,11 @@ async function simulateOne(app) {
 
 async function runInstallPlan() {
   const pending = sortByInstallOrder(apps.filter((app) => state.selected.has(app.id) && !state.installed.has(app.id)));
-  if (!pending.length || state.running || state.scanning) return;
+  if (!pending.length || state.running || state.scanning || state.busyId) return;
 
   const realInstall = els.realMode.checked;
   state.running = true;
+  state.stopRequested = false;
   state.currentId = '';
   state.done.clear();
   state.failed.clear();
@@ -1441,7 +1524,14 @@ async function runInstallPlan() {
   switchView('queue');
   renderAll();
 
+  let stopped = false;
   for (const app of pending) {
+    if (state.stopRequested) {
+      stopped = true;
+      appendTerminal('[SetupKit] Đã dừng theo yêu cầu. Các ứng dụng còn lại chưa được xử lý.\n', 'system');
+      addLog('[dừng] Hàng đợi dừng lại, còn lại chưa xử lý.');
+      break;
+    }
     state.currentId = app.id;
     state.terminalCommand = commandFor(app);
     if (!realInstall) appendTerminal(`> [mô phỏng] ${state.terminalCommand}\n`, 'command');
@@ -1500,12 +1590,15 @@ async function runInstallPlan() {
   }
 
   state.running = false;
+  state.stopRequested = false;
   const successCount = state.done.size;
   appendTerminal(`[SetupKit] Kết thúc. Thành công: ${successCount}, lỗi: ${state.failed.size}.\n`, 'system');
-  addLog(`[tóm tắt] ${realInstall ? 'Đã cài' : 'Đã mô phỏng'}=${successCount}; lỗi=${state.failed.size}.`);
+  addLog(`[tóm tắt] ${realInstall ? 'Đã cài' : 'Đã mô phỏng'}=${successCount}; lỗi=${state.failed.size}${stopped ? '; đã dừng giữa chừng' : ''}.`);
   renderAll();
 
-  if (!realInstall) {
+  if (stopped) {
+    showToast('Đã dừng gói cài đặt', `${successCount} xong, ${state.failed.size} lỗi. Các ứng dụng còn lại chưa chạy.`, 'ph-hand-palm');
+  } else if (!realInstall) {
     showToast('Mô phỏng đã hoàn tất', `${successCount} ứng dụng được mô phỏng. Máy chưa có thay đổi nào.`, 'ph-flask');
   } else if (state.failed.size) {
     showToast('Đã chạy xong gói cài đặt', `${successCount} đã cài, ${state.failed.size} cần kiểm tra.`, 'ph-warning-circle');
@@ -1554,200 +1647,250 @@ function exportProfile() {
   showToast('Đã xuất hồ sơ', 'Tệp setupkit-profile.json đã được lưu.', 'ph-check-circle');
 }
 
-/* ------------------------------------------------------------- kích hoạt */
-
-// Chấp nhận mọi lệnh không rỗng. Backend sẽ chạy nguyên nội dung bằng PowerShell.
-function validateActivationCommand(command) {
-  if (!String(command || '').trim()) return { ok: false, reason: 'Nhập lệnh để chạy.' };
-  return { ok: true, reason: '' };
-}
-
-const ACTIVATION_HINT_DEFAULT = 'Ctrl+Enter chạy trong ứng dụng. Lệnh cần nhập dữ liệu hoặc chọn menu hãy mở PowerShell tương tác.';
-
-function refreshActivationCommandState() {
-  const { ok, reason } = validateActivationCommand(els.activationCommand.value);
-  const busy = activation.running || activation.interactiveLaunching;
-  els.activationHint.textContent = ok ? ACTIVATION_HINT_DEFAULT : reason;
-  els.activationHint.classList.toggle('warn', !ok);
-  els.activateBtn.disabled = busy || !ok;
-  els.activationInteractiveBtn.disabled = busy || !ok;
-}
-
-function renderActivationCommandVisibility() {
-  const visible = activation.commandVisible;
-  els.activationCommand.classList.toggle('is-obscured', !visible);
-  els.activationToggleVisibility.setAttribute('aria-pressed', String(visible));
-  els.activationToggleVisibility.setAttribute('aria-label', visible ? 'Ẩn lệnh PowerShell' : 'Hiện lệnh PowerShell');
-  els.activationToggleVisibility.innerHTML = visible
-    ? '<i class="ph ph-eye-slash" aria-hidden="true"></i><span>Ẩn lệnh</span>'
-    : '<i class="ph ph-eye" aria-hidden="true"></i><span>Hiện lệnh</span>';
-}
-
-function toggleActivationCommandVisibility() {
-  activation.commandVisible = !activation.commandVisible;
-  renderActivationCommandVisibility();
-  if (activation.commandVisible) els.activationCommand.focus();
-}
-
-function resetActivationCommand() {
-  els.activationCommand.value = DEFAULT_ACTIVATION_COMMAND;
-  activation.commandVisible = false;
-  renderActivationCommandVisibility();
-  refreshActivationCommandState();
-}
-
-function renderActivationStatus() {
-  const card = els.activationStatus;
-  const iconEl = card.querySelector('.activate-status-icon .ph');
-  if (activation.loading) {
-    card.className = 'activate-status';
-    iconEl.className = 'ph ph-circle-notch is-spinning';
-    els.activationStatusText.textContent = 'Đang kiểm tra trạng thái kích hoạt...';
-    els.activationStatusMeta.textContent = '';
-    return;
+// Nhập hồ sơ JSON: thay danh sách đang chọn bằng ứng dụng trong tệp (chỉ nhận
+// package ID đã có trong danh mục đã duyệt), tự bỏ qua app đã cài.
+function applyImportedProfile(profile) {
+  if (!profile || typeof profile !== 'object' || !Array.isArray(profile.apps)) {
+    throw new Error('Tệp không đúng định dạng hồ sơ SetupKit.');
   }
-  const s = activation.status;
-  if (!s) {
-    card.className = 'activate-status';
-    iconEl.className = 'ph ph-question';
-    els.activationStatusText.textContent = window.setupkitNative
-      ? 'Chưa kiểm tra được trạng thái'
-      : 'Chỉ xem được trạng thái khi chạy trên Windows';
-    els.activationStatusMeta.textContent = '';
-    els.activationAdminWarning.hidden = true;
-    return;
+  const wanted = [];
+  const unknown = [];
+  for (const entry of profile.apps) {
+    const app = (entry.id && appById(entry.id)) || (entry.packageId && appByPackage(entry.packageId));
+    if (app) wanted.push(app.id);
+    else unknown.push(entry.id || entry.packageId || entry.name || 'không rõ');
   }
-  card.className = `activate-status ${s.licensed ? 'ok' : 'warn'}`;
-  iconEl.className = `ph ${s.licensed ? 'ph-seal-check' : 'ph-warning-circle'}`;
-  els.activationStatusText.textContent = s.statusText || (s.licensed ? 'Đã kích hoạt' : 'Chưa kích hoạt');
-  const parts = [];
-  if (s.edition) parts.push(s.edition);
-  if (s.partialKey) parts.push(`key ...${s.partialKey}`);
-  els.activationStatusMeta.textContent = parts.join(' · ');
-  els.activationAdminWarning.hidden = Boolean(s.isAdmin);
-}
+  if (!wanted.length) {
+    throw new Error('Không có ứng dụng nào trong hồ sơ khớp danh mục hiện tại.');
+  }
 
-async function refreshActivationStatus({ force = false } = {}) {
-  if (!window.setupkitNative?.windowsActivationStatus) {
-    activation.loaded = true;
-    activation.status = null;
-    renderActivationStatus();
-    return;
-  }
-  if (activation.loading || (activation.loaded && !force)) {
-    renderActivationStatus();
-    return;
-  }
-  activation.loading = true;
-  renderActivationStatus();
-  try {
-    activation.status = await window.setupkitNative.windowsActivationStatus();
-  } catch (error) {
-    activation.status = {
-      licensed: false,
-      statusText: error.message || 'Không đọc được trạng thái kích hoạt',
-      edition: '',
-      partialKey: '',
-      isAdmin: false
-    };
-  } finally {
-    activation.loading = false;
-    activation.loaded = true;
-    renderActivationStatus();
-  }
-}
+  const expanded = new Set();
+  wanted.forEach((id) => {
+    expanded.add(id);
+    dependencyIdsFor(appById(id)).forEach((dependencyId) => expanded.add(dependencyId));
+  });
 
-function appendActivationOutput(text) {
-  if (!text) return;
-  activation.lines.push(text);
-  const combined = activation.lines.join('');
-  if (combined.length > 20000) activation.lines = [combined.slice(-16000)];
-  els.activationOutputWrap.hidden = false;
-  els.activationOutput.textContent = activation.lines.join('');
-  els.activationOutput.scrollTop = els.activationOutput.scrollHeight;
-}
-
-async function runActivation() {
-  const command = els.activationCommand.value.trim();
-  const check = validateActivationCommand(command);
-  if (!check.ok) {
-    showToast('Chưa có lệnh', check.reason, 'ph-warning-circle');
-    return;
-  }
-  if (!window.setupkitNative?.runActivationCommand) {
-    showToast('Không khả dụng', 'Cầu nối native chưa sẵn sàng để chạy lệnh.', 'ph-warning-circle');
-    return;
-  }
-  activation.running = true;
-  refreshActivationCommandState();
-  els.activateBtn.innerHTML = '<i class="ph ph-circle-notch is-spinning" aria-hidden="true"></i>Đang chạy...';
-  activation.lines = [];
-  appendActivationOutput('[SetupKit] Chuẩn bị chạy PowerShell...\n');
-  addLog('[PowerShell] Chạy lệnh.');
-  try {
-    const result = await window.setupkitNative.runActivationCommand(command);
-    if (result.status) {
-      activation.status = result.status;
-      activation.loaded = true;
-      renderActivationStatus();
+  let skipped = 0;
+  const selection = new Set();
+  expanded.forEach((id) => {
+    if (state.installed.has(id)) {
+      skipped += 1;
+      return;
     }
+    selection.add(id);
+  });
+
+  state.selected = selection;
+  state.activePreset = '';
+  state.done.clear();
+  state.failed.clear();
+  state.simulated.clear();
+  state.installProgress.clear();
+  persistSelection();
+  updatePresetActive();
+  renderAll();
+  return { count: selection.size, skipped, unknown };
+}
+
+function importProfileFromFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const profile = JSON.parse(String(reader.result || ''));
+      const { count, skipped, unknown } = applyImportedProfile(profile);
+      addLog(`[hồ sơ] Đã nhập ${count} ứng dụng${skipped ? `, bỏ qua ${skipped} đã cài` : ''}${unknown.length ? `, ${unknown.length} ID không khớp danh mục` : ''}.`);
+      showToast(
+        'Đã nhập hồ sơ',
+        `Chọn ${count} ứng dụng${skipped ? `, bỏ qua ${skipped} đã cài` : ''}${unknown.length ? `, bỏ ${unknown.length} ID lạ` : ''}.`,
+        'ph-check-circle'
+      );
+      switchView('queue');
+    } catch (error) {
+      showToast('Không nhập được hồ sơ', error.message || 'Tệp JSON không hợp lệ.', 'ph-warning-circle');
+      addLog(`[lỗi hồ sơ] ${error.message || 'JSON không hợp lệ.'}`);
+    }
+  };
+  reader.onerror = () => showToast('Không đọc được tệp', 'Trình duyệt không đọc được tệp đã chọn.', 'ph-warning-circle');
+  reader.readAsText(file);
+}
+
+// Chọn nhanh toàn bộ ứng dụng đang lọc mà chưa cài (kèm phụ thuộc nên có trước).
+function selectAllFiltered() {
+  if (state.running || state.scanning || state.busyId) return;
+  const list = filteredApps().filter((app) => !state.installed.has(app.id));
+  if (!list.length) {
+    showToast('Không có gì để chọn', 'Danh sách đang lọc không còn ứng dụng nào chưa cài.', 'ph-info');
+    return;
+  }
+  let added = 0;
+  list.forEach((app) => {
+    if (!state.selected.has(app.id)) {
+      state.selected.add(app.id);
+      added += 1;
+    }
+    dependencyIdsFor(app).forEach((dependencyId) => {
+      if (!state.installed.has(dependencyId)) state.selected.add(dependencyId);
+    });
+  });
+  state.activePreset = '';
+  persistSelection();
+  updatePresetActive();
+  renderAll();
+  addLog(`[lựa chọn] Chọn nhanh ${added} ứng dụng theo bộ lọc hiện tại.`);
+  showToast('Đã chọn hàng loạt', `Thêm ${added} ứng dụng vào gói cài đặt.`, 'ph-check-circle');
+}
+
+function clearSelection() {
+  if (state.running || state.scanning || state.busyId || !state.selected.size) return;
+  const count = state.selected.size;
+  state.selected.clear();
+  state.done.clear();
+  state.failed.clear();
+  state.simulated.clear();
+  state.installProgress.clear();
+  state.activePreset = '';
+  persistSelection();
+  updatePresetActive();
+  renderAll();
+  addLog(`[lựa chọn] Đã bỏ chọn toàn bộ ${count} ứng dụng.`);
+  showToast('Đã bỏ chọn', 'Gói cài đặt đã được làm trống.', 'ph-broom');
+}
+
+function retryFailed() {
+  if (state.running || state.scanning || state.busyId || !state.failed.size) return;
+  const failedIds = [...state.failed];
+  failedIds.forEach((id) => {
+    state.selected.add(id);
+    state.failed.delete(id);
+    state.done.delete(id);
+    state.installProgress.delete(id);
+  });
+  persistSelection();
+  addLog(`[cài lại] Thử lại ${failedIds.length} ứng dụng lỗi.`);
+  renderAll();
+  runInstallPlan();
+}
+
+function requestStop() {
+  if (!state.running || state.stopRequested) return;
+  state.stopRequested = true;
+  if (els.stopBtn) els.stopBtn.disabled = true;
+  appendTerminal('[SetupKit] Đã nhận yêu cầu dừng. Sẽ dừng sau khi ứng dụng hiện tại xong.\n', 'system');
+  addLog('[dừng] Người dùng yêu cầu dừng hàng đợi.');
+  showToast('Sẽ dừng', 'Hàng đợi sẽ dừng sau khi ứng dụng đang chạy hoàn tất.', 'ph-hand-palm');
+}
+
+// Cập nhật hoặc gỡ một ứng dụng đã cài (ngoài hàng đợi), stream qua terminal.
+async function runSingleOp(id, kind) {
+  const app = appById(id);
+  if (!app || !window.setupkitNative || state.running || state.scanning || state.busyId) return;
+  const method = kind === 'upgrade' ? 'upgradeApp' : 'uninstallApp';
+  if (typeof window.setupkitNative[method] !== 'function') {
+    showToast('Không khả dụng', 'Cầu nối native chưa hỗ trợ thao tác này.', 'ph-warning-circle');
+    return;
+  }
+  const verbLabel = kind === 'upgrade' ? 'Cập nhật' : 'Gỡ cài đặt';
+
+  state.busyId = id;
+  closeDetail();
+  switchView('queue');
+  state.terminalOpen = true;
+  state.terminalCommand = '';
+  renderTerminalChrome();
+  appendTerminal(`[SetupKit] ${verbLabel}: ${app.name}...\n`, 'system');
+  addLog(`[${kind === 'upgrade' ? 'cập nhật' : 'gỡ'}] ${app.name}: bắt đầu.`);
+  renderCatalog();
+  renderStatusBar();
+
+  try {
+    const result = await window.setupkitNative[method](app.pkg);
     if (result.cancelled) {
-      appendActivationOutput('[SetupKit] Đã hủy.\n');
+      appendTerminal('[SetupKit] Đã hủy thao tác.\n', 'system');
+      showToast(app.name, 'Đã hủy thao tác.', 'ph-hand-palm');
     } else if (result.ok) {
-      appendActivationOutput('[SetupKit] Đã chạy xong lệnh.\n');
-      showToast('Đã chạy xong', 'Lệnh đã chạy xong. Xem kết quả bên dưới.', 'ph-check-circle');
-      addLog('[PowerShell] Đã chạy xong lệnh.');
+      if (kind === 'upgrade') {
+        if (result.details) state.installed.set(id, result.details);
+        showToast(app.name, 'Đã cập nhật lên bản mới nhất.', 'ph-check-circle');
+        addLog(`[cập nhật] ${app.name}: xong (winget exitCode=${result.code}).`);
+      } else {
+        state.installed.delete(id);
+        state.selected.delete(id);
+        state.done.delete(id);
+        state.failed.delete(id);
+        state.simulated.delete(id);
+        state.installProgress.delete(id);
+        state.installLocations.delete(id);
+        persistSelection();
+        showToast(app.name, 'Đã gỡ khỏi máy.', 'ph-check-circle');
+        addLog(`[gỡ] ${app.name}: xong (winget exitCode=${result.code}).`);
+      }
     } else {
-      appendActivationOutput(`[Lỗi] ${result.error || 'Có lệnh trả về mã lỗi.'}\n`);
-      showToast('Chưa xong', result.error || 'Có lệnh trả về mã lỗi, xem kết quả.', 'ph-warning-circle');
-      addLog(`[PowerShell] Lỗi: ${result.error || 'xem đầu ra'}`);
+      appendTerminal(`[SetupKit] ${verbLabel} thất bại: ${result.error || 'winget exitCode=' + result.code}\n`, 'stderr');
+      showToast(`${verbLabel} thất bại`, result.error || `winget exitCode=${result.code}`, 'ph-warning-circle');
+      addLog(`[lỗi] ${app.name}: ${result.error || 'winget exitCode=' + result.code}`);
     }
   } catch (error) {
-    appendActivationOutput(`[Lỗi] ${error.message || 'Không gọi được lệnh.'}\n`);
-    showToast('Chạy thất bại', error.message || 'Lỗi không xác định.', 'ph-warning-circle');
+    showToast(`${verbLabel} thất bại`, error.message || 'Lỗi không xác định.', 'ph-warning-circle');
+    addLog(`[lỗi] ${app.name}: ${error.message || 'Không gọi được winget.'}`);
   } finally {
-    activation.running = false;
-    els.activateBtn.innerHTML = '<i class="ph ph-play" aria-hidden="true"></i>Chạy PowerShell';
-    refreshActivationCommandState();
+    state.busyId = '';
+    state.currentId = '';
+    renderCatalog();
+    renderQueue();
+    renderStatusBar();
   }
 }
 
-async function runInteractiveActivation() {
-  const command = els.activationCommand.value.trim();
-  const check = validateActivationCommand(command);
-  if (!check.ok) {
-    showToast('Chưa có lệnh', check.reason, 'ph-warning-circle');
-    return;
-  }
-  if (!window.setupkitNative?.runInteractivePowerShell) {
-    showToast('Không khả dụng', 'Cầu nối native chưa hỗ trợ PowerShell tương tác.', 'ph-warning-circle');
-    return;
-  }
+// Banner khi máy chưa có winget: mời cài App Installer thay vì báo lỗi cụt.
+function renderWingetBanner() {
+  if (!els.wingetMissingBanner) return;
+  const show = Boolean(window.setupkitNative)
+    && state.wingetChecked
+    && !state.wingetAvailable
+    && !state.scanning;
+  els.wingetMissingBanner.hidden = !show;
+}
 
-  activation.interactiveLaunching = true;
-  refreshActivationCommandState();
-  els.activationInteractiveBtn.innerHTML = '<i class="ph ph-circle-notch is-spinning" aria-hidden="true"></i>Đang mở...';
-  activation.lines = [];
-  appendActivationOutput('[SetupKit] Chuẩn bị mở PowerShell tương tác...\n');
-  addLog('[PowerShell] Mở cửa sổ tương tác.');
+async function recheckWinget() {
+  if (!window.setupkitNative?.checkSystem) return;
+  els.wingetRecheck.disabled = true;
+  els.wingetRecheck.querySelector('.ph')?.classList.add('is-spinning');
   try {
-    const result = await window.setupkitNative.runInteractivePowerShell(command);
-    if (result.cancelled) {
-      appendActivationOutput('[SetupKit] Đã hủy.\n');
-    } else if (result.ok) {
-      appendActivationOutput('[SetupKit] Cửa sổ PowerShell tương tác đã được mở.\n');
-      showToast('Đã mở PowerShell', 'Tiếp tục nhập hoặc chọn menu trong cửa sổ PowerShell mới.', 'ph-terminal-window');
+    const system = await window.setupkitNative.checkSystem();
+    state.wingetAvailable = Boolean(system.wingetAvailable);
+    state.wingetVersion = system.wingetVersion || '';
+    state.wingetChecked = true;
+    if (state.wingetAvailable) {
+      els.realMode.disabled = false;
+      addLog('[hệ thống] winget đã sẵn sàng sau khi kiểm tra lại.');
+      showToast('Đã tìm thấy winget', `${state.wingetVersion || 'winget'} đã sẵn sàng. Có thể cài thật.`, 'ph-check-circle');
+      await scanInstalled({ showFeedback: false, pruneSelection: true });
     } else {
-      appendActivationOutput(`[Lỗi] ${result.error || 'Không mở được PowerShell tương tác.'}\n`);
-      showToast('Không mở được', result.error || 'Không mở được PowerShell tương tác.', 'ph-warning-circle');
+      showToast('Vẫn chưa thấy winget', 'Hãy cài App Installer từ Microsoft Store rồi bấm Kiểm tra lại.', 'ph-warning-circle');
     }
   } catch (error) {
-    appendActivationOutput(`[Lỗi] ${error.message || 'Không mở được PowerShell tương tác.'}\n`);
-    showToast('Không mở được', error.message || 'Lỗi không xác định.', 'ph-warning-circle');
+    showToast('Không kiểm tra được', error.message || 'Lỗi không xác định.', 'ph-warning-circle');
   } finally {
-    activation.interactiveLaunching = false;
-    els.activationInteractiveBtn.innerHTML = '<i class="ph ph-terminal-window" aria-hidden="true"></i>Mở tương tác';
-    refreshActivationCommandState();
+    els.wingetRecheck.disabled = false;
+    els.wingetRecheck.querySelector('.ph')?.classList.remove('is-spinning');
+    renderWingetBanner();
+    renderStatusBar();
+  }
+}
+
+async function installAppInstaller() {
+  if (!window.setupkitNative?.openAppInstallerPage) {
+    showToast('Không mở được', 'Cầu nối native chưa sẵn sàng.', 'ph-warning-circle');
+    return;
+  }
+  try {
+    const result = await window.setupkitNative.openAppInstallerPage();
+    if (result && result.ok === false) throw new Error(result.error);
+    showToast('Đã mở Microsoft Store', 'Cài "App Installer" rồi quay lại bấm Kiểm tra lại.', 'ph-check-circle');
+    addLog('[hệ thống] Mở trang App Installer trên Microsoft Store.');
+  } catch (error) {
+    showToast('Không mở được Store', error.message || 'Windows không mở được Microsoft Store.', 'ph-warning-circle');
   }
 }
 
@@ -1766,7 +1909,6 @@ function switchView(view) {
   target.querySelector('h1')?.focus({ preventScroll: true });
   window.scrollTo({ top: 0, behavior: 'auto' });
   if (view === 'catalog') updatePresetNav();
-  if (view === 'activate') refreshActivationStatus();
 }
 
 /* ------------------------------------------------------------------ theme */
@@ -1963,13 +2105,29 @@ function bindEvents() {
     renderTags();
     renderCatalog();
   });
+  els.viewModes.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-mode]');
+    if (button) setViewMode(button.dataset.mode);
+  });
   els.realMode.addEventListener('change', () => {
     addLog(`[chế độ] ${els.realMode.checked ? 'Đã bật cài đặt thật bằng winget.' : 'Đã chuyển về mô phỏng, máy sẽ không thay đổi.'}`);
     renderQueue();
   });
   els.install.addEventListener('click', runInstallPlan);
+  els.stopBtn?.addEventListener('click', requestStop);
+  els.retryFailed?.addEventListener('click', retryFailed);
+  els.selectAll?.addEventListener('click', selectAllFiltered);
+  els.clearSelection?.addEventListener('click', clearSelection);
   els.exportQueue.addEventListener('click', exportProfile);
   els.exportProfile.addEventListener('click', exportProfile);
+  els.importProfile?.addEventListener('click', () => els.importProfileInput?.click());
+  els.importProfileInput?.addEventListener('change', (event) => {
+    const file = event.target.files?.[0];
+    if (file) importProfileFromFile(file);
+    event.target.value = '';
+  });
+  els.wingetRecheck?.addEventListener('click', recheckWinget);
+  els.wingetInstall?.addEventListener('click', installAppInstaller);
   els.rescan.addEventListener('click', () => scanInstalled({ showFeedback: true, pruneSelection: false }));
   els.terminalToggle.addEventListener('click', () => setTerminalOpen(!state.terminalOpen));
   els.terminalClose.addEventListener('click', () => setTerminalOpen(false));
@@ -2006,6 +2164,12 @@ function bindEvents() {
   els.detailResetLocation.addEventListener('click', () => {
     if (detailAppId) resetInstallLocation(detailAppId);
   });
+  els.detailUpgrade.addEventListener('click', () => {
+    if (detailAppId) runSingleOp(detailAppId, 'upgrade');
+  });
+  els.detailUninstall.addEventListener('click', () => {
+    if (detailAppId) runSingleOp(detailAppId, 'uninstall');
+  });
   els.detailDialog.addEventListener('cancel', (event) => {
     // Đóng bằng Esc cũng chạy animation thay vì biến mất đột ngột.
     event.preventDefault();
@@ -2031,20 +2195,6 @@ function bindEvents() {
     switchView('queue');
     setTerminalOpen(willOpen);
   });
-
-  // Trang kích hoạt Windows (console lệnh).
-  els.activationCommand.addEventListener('input', refreshActivationCommandState);
-  els.activationCommand.addEventListener('keydown', (event) => {
-    if ((event.ctrlKey || event.metaKey) && event.key === 'Enter' && !els.activateBtn.disabled) {
-      event.preventDefault();
-      runActivation();
-    }
-  });
-  els.activateBtn.addEventListener('click', runActivation);
-  els.activationInteractiveBtn.addEventListener('click', runInteractiveActivation);
-  els.activationToggleVisibility.addEventListener('click', toggleActivationCommandVisibility);
-  els.activationResetCmd.addEventListener('click', resetActivationCommand);
-  els.activationRefresh.addEventListener('click', () => refreshActivationStatus({ force: true }));
 
   // Phím tắt: "/" hoặc Ctrl+K để tìm kiếm nhanh.
   document.addEventListener('keydown', (event) => {
@@ -2078,13 +2228,6 @@ function subscribeToProgress() {
   });
 }
 
-function subscribeToActivation() {
-  if (!window.setupkitNative?.onActivationOutput) return;
-  window.setupkitNative.onActivationOutput((payload) => {
-    appendActivationOutput(payload.text);
-  });
-}
-
 function subscribeToTerminal() {
   if (!window.setupkitNative?.onTerminalOutput) return;
   window.setupkitNative.onTerminalOutput((payload) => {
@@ -2112,7 +2255,6 @@ async function initializeNative() {
 
   subscribeToProgress();
   subscribeToTerminal();
-  subscribeToActivation();
   try {
     const [list, system] = await Promise.all([
       window.setupkitNative.listAllowlist(),
@@ -2132,6 +2274,7 @@ async function initializeNative() {
     }
     state.wingetAvailable = Boolean(system.wingetAvailable);
     state.wingetVersion = system.wingetVersion || '';
+    state.wingetChecked = true;
     addLog(`[hệ thống] WebView2 native đang hoạt động. ${list.length} package ID đã được cho phép.`);
 
     if (!state.wingetAvailable) {
@@ -2141,6 +2284,7 @@ async function initializeNative() {
     } else {
       addLog(`[hệ thống] winget${state.wingetVersion ? ` ${state.wingetVersion}` : ''} đã sẵn sàng.`);
     }
+    renderWingetBanner();
     await scanInstalled({ showFeedback: false, pruneSelection: true });
   } catch (error) {
     setSystemStatus('warning', 'Không đọc được trạng thái máy', 'ph-warning-circle');
@@ -2153,8 +2297,8 @@ async function initializeNative() {
 
 async function boot() {
   initializeTheme();
+  initViewMode();
   bindEvents();
-  resetActivationCommand();
   try {
     await loadCatalog();
     renderCategories();

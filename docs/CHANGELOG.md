@@ -2,12 +2,38 @@
 
 Toàn bộ thay đổi đáng chú ý của SetupKit được ghi tại đây.
 
+## [0.7.0] - 2026-07-26
+
+### Thêm mới
+
+- **Cập nhật ứng dụng đã cài** — SetupKit tự phát hiện app có bản mới (qua `winget upgrade` khi quét máy), gắn nhãn "Có bản cập nhật mới" trên thẻ và thêm nút **Cập nhật** trong hộp thoại chi tiết. Bấm là chạy `winget upgrade` cho đúng ứng dụng đó, có terminal và tiến trình như khi cài.
+- **Gỡ cài đặt** — nút **Gỡ cài đặt** trong hộp thoại chi tiết chạy `winget uninstall`, hỏi xác nhận trước khi xóa và cập nhật lại trạng thái ngay sau khi xong.
+- **Nhập hồ sơ JSON** — trang Hồ sơ có thêm nút Nhập: chọn tệp hồ sơ đã xuất để áp lại đúng bộ ứng dụng, tự bỏ qua app đã cài và chỉ nhận package ID có trong danh mục đã duyệt.
+- **Chọn nhanh hàng loạt** — nút "Chọn hết" thêm toàn bộ ứng dụng đang lọc mà chưa cài (kèm công cụ nên có trước), nút "Bỏ chọn" làm trống gói trong một bấm.
+- **Ghi nhớ danh sách đang chọn** — gói cài đặt được lưu lại và khôi phục nguyên vẹn ở lần mở app sau.
+- **Cài lại ứng dụng lỗi** — sau khi chạy gói, nút "Cài lại ứng dụng lỗi" thử lại đúng những app thất bại.
+- **Dừng giữa chừng** — nút "Dừng sau ứng dụng hiện tại" dừng hàng đợi một cách an toàn sau khi app đang chạy hoàn tất, không cắt ngang giữa lúc cài.
+- **Máy chưa có winget** — nếu không tìm thấy Windows Package Manager, SetupKit hiện banner mời cài **App Installer** từ Microsoft Store chỉ với một bấm, kèm nút Kiểm tra lại, thay vì báo lỗi cụt.
+- **Tự động build & phát hành (CI)** — thêm GitHub Actions tự build `SetupKit.exe` và tạo Release khi đẩy tag `v*`.
+
+### Gỡ bỏ
+
+- **Gỡ bỏ hoàn toàn trang Kích hoạt Windows** — bỏ cả giao diện (tab Kích hoạt, console lệnh) lẫn phần backend liên quan. SetupKit tập trung vào cài, cập nhật và gỡ ứng dụng.
+
+### Cải thiện
+
+- Ba thao tác winget (cài, cập nhật, gỡ) dùng chung một luồng thực thi: cùng cách stream terminal, suy luận tiến trình và làm mới trạng thái sau khi xong.
+
+### Lưu ý
+
+- File `SetupKit.exe` chưa được ký số (code signing) vì cần chứng chỉ trả phí, nên Windows SmartScreen có thể cảnh báo lần đầu (chọn "More info" rồi "Run anyway"). Bản build CI cũng chưa ký; có thể thêm bước ký khi có chứng chỉ.
+
 ## [0.6.0] - 2026-07-26
 
 ### Thêm mới
 
-- **Trang Kích hoạt Windows** với console lệnh sửa được — có sẵn lệnh `slmgr` chính thức, bạn sửa key/tham số theo nhu cầu rồi chạy trực tiếp, kết quả hiện ngay trong console. App tự đọc trạng thái kích hoạt hiện tại (phiên bản, đã kích hoạt hay chưa, 5 ký tự cuối của key) và cảnh báo nếu chưa mở bằng quyền Administrator.
-- Console chấp nhận mọi lệnh PowerShell, bao gồm pipe, chuyển hướng, URL và lệnh nhiều dòng; có chế độ mở PowerShell tương tác riêng cho lệnh cần stdin, menu hoặc phím bấm. Lệnh mặc định được che mờ và có nút hiện/ẩn. Vẫn luôn xác nhận thủ công và yêu cầu quyền Administrator trước khi chạy.
+- **Ba kiểu hiển thị danh mục** — Lưới (mặc định), Danh sách (gọn, một app mỗi hàng) và Biểu tượng (ô nhỏ tập trung vào logo). Có nút chuyển ngay trên thanh danh mục và lựa chọn được ghi nhớ cho lần mở sau.
+- **Hộp thoại chi tiết hiển thị logo ứng dụng** ngay cạnh tên.
 
 ### Sửa lỗi
 

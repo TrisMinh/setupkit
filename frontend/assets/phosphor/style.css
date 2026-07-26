@@ -1,7 +1,7 @@
 /*
  * File này được tạo tự động bởi scripts/build-phosphor-subset.js.
  * Đừng sửa tay — hãy sửa scripts/phosphor-full/style.css rồi chạy lại script.
- * 82 / 1530 icon được giữ lại.
+ * 81 / 1530 icon được giữ lại.
  */
 @font-face {
   font-family: "Phosphor";
@@ -39,6 +39,9 @@
 .ph.ph-app-window:before {
   content: "\e5da";
 }
+.ph.ph-arrow-circle-up:before {
+  content: "\e030";
+}
 .ph.ph-arrow-clockwise:before {
   content: "\e036";
 }
@@ -53,6 +56,9 @@
 }
 .ph.ph-briefcase:before {
   content: "\e0ee";
+}
+.ph.ph-broom:before {
+  content: "\ec54";
 }
 .ph.ph-browser:before {
   content: "\e0f4";
@@ -83,9 +89,6 @@
 }
 .ph.ph-circle:before {
   content: "\e18a";
-}
-.ph.ph-circle-notch:before {
-  content: "\eb44";
 }
 .ph.ph-cloud:before {
   content: "\e1aa";
@@ -122,12 +125,6 @@
 }
 .ph.ph-export:before {
   content: "\eaf0";
-}
-.ph.ph-eye:before {
-  content: "\e220";
-}
-.ph.ph-eye-slash:before {
-  content: "\e224";
 }
 .ph.ph-file-cpp:before {
   content: "\eb2e";
@@ -174,6 +171,9 @@
 .ph.ph-globe:before {
   content: "\e288";
 }
+.ph.ph-grid-four:before {
+  content: "\e296";
+}
 .ph.ph-hand-palm:before {
   content: "\e57e";
 }
@@ -189,11 +189,11 @@
 .ph.ph-info:before {
   content: "\e2ce";
 }
-.ph.ph-key:before {
-  content: "\e2d6";
-}
 .ph.ph-link-break:before {
   content: "\e2e4";
+}
+.ph.ph-list:before {
+  content: "\e2f0";
 }
 .ph.ph-list-checks:before {
   content: "\eadc";
@@ -228,17 +228,11 @@
 .ph.ph-plus:before {
   content: "\e3d4";
 }
-.ph.ph-question:before {
-  content: "\e3e8";
-}
-.ph.ph-seal-check:before {
-  content: "\e606";
+.ph.ph-selection-all:before {
+  content: "\e746";
 }
 .ph.ph-shield-check:before {
   content: "\e40c";
-}
-.ph.ph-shield-warning:before {
-  content: "\e412";
 }
 .ph.ph-sparkle:before {
   content: "\e6a2";
@@ -270,14 +264,17 @@
 .ph.ph-trash:before {
   content: "\e4a6";
 }
+.ph.ph-trash-simple:before {
+  content: "\e4a8";
+}
+.ph.ph-upload-simple:before {
+  content: "\e4c0";
+}
 .ph.ph-video-camera:before {
   content: "\e4da";
 }
 .ph.ph-warning-circle:before {
   content: "\e4e2";
-}
-.ph.ph-wrench:before {
-  content: "\e5d4";
 }
 .ph.ph-x:before {
   content: "\e4f6";

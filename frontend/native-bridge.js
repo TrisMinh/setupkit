@@ -69,13 +69,12 @@
     chooseInstallLocation: (packageId) => invoke('ChooseInstallLocation', packageId),
     resetInstallLocation: (packageId) => invoke('ResetInstallLocation', packageId),
     runWinget: (packageId) => invoke('RunWinget', packageId),
+    upgradeApp: (packageId) => invoke('UpgradeApp', packageId),
+    uninstallApp: (packageId) => invoke('UninstallApp', packageId),
     openApp: (packageId) => invoke('OpenApp', packageId),
     openAppFolder: (packageId) => invoke('OpenAppFolder', packageId),
-    windowsActivationStatus: () => invoke('WindowsActivationStatus'),
-    runActivationCommand: (command) => invoke('RunActivationCommand', command),
-    runInteractivePowerShell: (command) => invoke('RunInteractivePowerShell', command),
+    openAppInstallerPage: () => invoke('OpenAppInstallerPage'),
     onInstallProgress: (callback) => subscribe('setupkit:install-progress', callback),
-    onTerminalOutput: (callback) => subscribe('setupkit:terminal-output', callback),
-    onActivationOutput: (callback) => subscribe('setupkit:activation-output', callback)
+    onTerminalOutput: (callback) => subscribe('setupkit:terminal-output', callback)
   });
 })();

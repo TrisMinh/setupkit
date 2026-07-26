@@ -23,12 +23,6 @@ type App struct {
 	approvedLocations map[string]string
 }
 
-// Windows MessageBox trả về "Yes"/"No" dù Wails được truyền nhãn nút tùy chỉnh.
-func confirmedDialogChoice(choice, customConfirmLabel string) bool {
-	choice = strings.TrimSpace(choice)
-	return strings.EqualFold(choice, "yes") || choice == customConfirmLabel
-}
-
 type systemCheck struct {
 	Platform        string `json:"platform"`
 	WingetAvailable bool   `json:"wingetAvailable"`
@@ -169,6 +163,75 @@ func buildWingetArgs(packageID string, dryRun bool, installLocation string) (com
 	return commandSpec{Command: "winget", Args: args, DryRun: dryRun}, nil
 }
 
+// wingetVerb phân biệt ba thao tác winget dùng chung một luồng thực thi.
+type wingetVerb string
+
+const (
+	verbInstall   wingetVerb = "install"
+	verbUpgrade   wingetVerb = "upgrade"
+	verbUninstall wingetVerb = "uninstall"
+)
+
+// confirmConfig mô tả hộp thoại xác nhận trước khi chạy winget.
+type confirmConfig struct {
+	Title   string
+	Message string
+	Confirm string
+}
+
+// wingetOperation gói toàn bộ khác biệt giữa install/upgrade/uninstall để
+// executeWinget tái dùng chung luồng chạy lệnh, stream terminal và cập nhật trạng thái.
+type wingetOperation struct {
+	Verb            wingetVerb
+	Spec            commandSpec
+	InstallLocation string
+	Confirm         confirmConfig
+	LaunchPhase     string
+	LaunchMessage   string
+	SuccessPhase    string
+	SuccessMessage  string
+	SuccessLog      string
+	FailPhase       string
+	MarkInstalled   bool
+}
+
+// buildUpgradeArgs dựng lệnh "winget upgrade" cho đúng một package đã duyệt.
+func buildUpgradeArgs(packageID string) (commandSpec, error) {
+	record, err := allowedPackage(packageID)
+	if err != nil {
+		return commandSpec{}, err
+	}
+	args := []string{"upgrade", "--id", packageID, "--exact", "--source", record.Source}
+	if record.Source == "winget" {
+		args = append(args, "--silent")
+	}
+	args = append(
+		args,
+		"--accept-package-agreements",
+		"--accept-source-agreements",
+		"--disable-interactivity",
+	)
+	return commandSpec{Command: "winget", Args: args, DryRun: false}, nil
+}
+
+// buildUninstallArgs dựng lệnh "winget uninstall" cho đúng một package đã duyệt.
+func buildUninstallArgs(packageID string) (commandSpec, error) {
+	record, err := allowedPackage(packageID)
+	if err != nil {
+		return commandSpec{}, err
+	}
+	args := []string{"uninstall", "--id", packageID, "--exact"}
+	if record.Source == "winget" {
+		args = append(args, "--source", record.Source, "--silent")
+	}
+	args = append(
+		args,
+		"--accept-source-agreements",
+		"--disable-interactivity",
+	)
+	return commandSpec{Command: "winget", Args: args, DryRun: false}, nil
+}
+
 func (a *App) BuildCommand(packageID string) (commandSpec, error) {
 	return buildWingetArgs(packageID, true, a.approvedLocation(packageID))
 }
@@ -280,6 +343,15 @@ func (a *App) OpenAppFolder(packageID string) actionResult {
 	return actionResult{OK: true}
 }
 
+// OpenAppInstallerPage mở trang Microsoft Store của App Installer (gói cung cấp
+// winget) để người dùng cài khi máy chưa có Windows Package Manager.
+func (a *App) OpenAppInstallerPage() actionResult {
+	if err := exec.Command("explorer.exe", "ms-windows-store://pdp/?productid=9NBLGGH4NNS1").Start(); err != nil {
+		return actionResult{OK: false, Error: err.Error()}
+	}
+	return actionResult{OK: true, Method: "store"}
+}
+
 func quoteCommandArgument(argument string) string {
 	if !strings.ContainsAny(argument, " \t\"") {
 		return argument
@@ -314,22 +386,16 @@ func (a *App) emitTerminal(packageID, stream, text string) {
 	})
 }
 
-func (a *App) confirmInstall(spec commandSpec, installLocation string) (bool, error) {
-	line := commandLine(spec)
-	detail := "Vị trí cài đặt sẽ do nhà phát hành quyết định. URL tùy ý và script tải ngoài luôn bị chặn."
-	if installLocation != "" {
-		detail = "Yêu cầu cài vào: " + installLocation +
-			"\n\nTrình cài đặt có thể bỏ qua vị trí tùy chỉnh nếu package không hỗ trợ."
-	}
+func (a *App) confirmDialog(cfg confirmConfig) (bool, error) {
 	choice, err := wailsRuntime.MessageDialog(a.ctx, wailsRuntime.MessageDialogOptions{
-		Type:          wailsRuntime.QuestionDialog,
-		Title:         "Xác nhận cài đặt",
-		Message:       "SetupKit chuẩn bị chạy:\n\n" + line + "\n\n" + detail,
-		Buttons:       []string{"Hủy", "Chạy lệnh winget"},
-		DefaultButton: "No",
+		Type:          wailsRuntime.WarningDialog,
+		Title:         cfg.Title,
+		Message:       cfg.Message,
+		Buttons:       []string{"Hủy", cfg.Confirm},
+		DefaultButton: "Hủy",
 		CancelButton:  "Hủy",
 	})
-	return confirmedDialogChoice(choice, "Chạy lệnh winget"), err
+	return choice == cfg.Confirm, err
 }
 
 func readProcessStream(reader io.Reader, onChunk func(string)) {
@@ -345,21 +411,25 @@ func readProcessStream(reader io.Reader, onChunk func(string)) {
 	}
 }
 
-func (a *App) RunWinget(packageID string) installResult {
-	installLocation := a.approvedLocation(packageID)
-	spec, err := buildWingetArgs(packageID, false, installLocation)
-	if err != nil {
-		return installResult{OK: false, Code: -1, Error: err.Error()}
+// inferProgress chọn cách suy luận tiến trình theo loại thao tác winget.
+func inferProgress(output string, previous int, verb wingetVerb) progressInference {
+	if verb == verbUninstall {
+		return inferUninstallProgress(output, previous)
 	}
+	return inferWingetProgress(output, previous)
+}
 
-	a.emitTerminal(packageID, "command", "> "+commandLine(spec)+"\n")
+// executeWinget chạy chung cho install/upgrade/uninstall: xác nhận, stream
+// terminal, suy luận tiến trình, xử lý mã thoát và làm mới trạng thái ứng dụng.
+func (a *App) executeWinget(packageID string, op wingetOperation) installResult {
+	a.emitTerminal(packageID, "command", "> "+commandLine(op.Spec)+"\n")
 	a.emitProgress(packageID, progressInference{
 		Phase:   "Chờ xác nhận",
 		Percent: 3,
 		Message: "Đang chờ người dùng xác nhận lệnh winget.",
 	}, false)
 
-	confirmed, err := a.confirmInstall(spec, installLocation)
+	confirmed, err := a.confirmDialog(op.Confirm)
 	if err != nil {
 		return installResult{OK: false, Code: -1, Error: err.Error()}
 	}
@@ -368,12 +438,12 @@ func (a *App) RunWinget(packageID string) installResult {
 		a.emitProgress(packageID, progressInference{
 			Phase:   "Đã hủy",
 			Percent: 0,
-			Message: "Người dùng đã hủy cài đặt.",
+			Message: "Người dùng đã hủy thao tác.",
 		}, false)
 		return installResult{Cancelled: true}
 	}
 
-	cmd := hiddenCommand(spec.Command, spec.Args...)
+	cmd := hiddenCommand(op.Spec.Command, op.Spec.Args...)
 	stdoutPipe, err := cmd.StdoutPipe()
 	if err != nil {
 		return installResult{OK: false, Code: -1, Error: err.Error()}
@@ -384,9 +454,9 @@ func (a *App) RunWinget(packageID string) installResult {
 	}
 
 	a.emitProgress(packageID, progressInference{
-		Phase:   "Đang khởi chạy winget",
+		Phase:   op.LaunchPhase,
 		Percent: 8,
-		Message: "Đã xác nhận. Đang khởi chạy winget.",
+		Message: op.LaunchMessage,
 	}, false)
 	if err := cmd.Start(); err != nil {
 		a.emitTerminal(packageID, "stderr", "[SetupKit] Không thể khởi chạy winget: "+err.Error()+"\n")
@@ -423,7 +493,7 @@ func (a *App) RunWinget(packageID string) installResult {
 		if len(combinedOutput) > 120000 {
 			combinedOutput = combinedOutput[len(combinedOutput)-120000:]
 		}
-		inference := inferWingetProgress(combinedOutput, currentProgress)
+		inference := inferProgress(combinedOutput, currentProgress, op.Verb)
 		shouldEmit := inference.Percent != currentProgress || inference.Phase != lastPhase
 		currentProgress = inference.Percent
 		lastPhase = inference.Phase
@@ -475,7 +545,7 @@ func (a *App) RunWinget(packageID string) installResult {
 			cleanError = fmt.Sprintf("winget kết thúc với mã %d.", exitCode)
 		}
 		a.emitProgress(packageID, progressInference{
-			Phase:   "Cài đặt thất bại",
+			Phase:   op.FailPhase,
 			Percent: 100,
 			Message: cleanError,
 		}, true)
@@ -495,44 +565,143 @@ func (a *App) RunWinget(packageID string) installResult {
 	a.emitProgress(packageID, progressInference{
 		Phase:   "Đang cập nhật trạng thái",
 		Percent: refreshPercent,
-		Message: "Cài đặt đã xong. Đang quét lại ứng dụng trên máy.",
+		Message: "Thao tác đã xong. Đang quét lại ứng dụng trên máy.",
 	}, false)
 
 	a.ScanInstalled()
 	a.mu.Lock()
-	installedDetails := a.inventoryCache[packageID]
-	if !installedDetails.Installed {
-		installedDetails = packageDetails{
+	details := a.inventoryCache[packageID]
+	if op.MarkInstalled && !details.Installed {
+		details = packageDetails{
 			PackageID:  packageID,
 			Installed:  true,
 			DetectedBy: []string{"winget-install-result"},
 		}
-		a.inventoryCache[packageID] = installedDetails
+		a.inventoryCache[packageID] = details
+	}
+	if !op.MarkInstalled {
+		// Gỡ thành công: đánh dấu chưa cài dù registry còn sót dấu vết.
+		details = packageDetails{
+			PackageID:  packageID,
+			Installed:  false,
+			DetectedBy: []string{"winget-uninstall-result"},
+		}
+		a.inventoryCache[packageID] = details
 	}
 	a.mu.Unlock()
 
 	a.emitProgress(packageID, progressInference{
-		Phase:   "Đã cài đặt",
+		Phase:   op.SuccessPhase,
 		Percent: 100,
-		Message: "Ứng dụng đã được cài đặt thành công.",
+		Message: op.SuccessMessage,
 	}, false)
-	a.emitTerminal(packageID, "success", "[SetupKit] Đã cài đặt và cập nhật trạng thái ứng dụng.\n")
+	a.emitTerminal(packageID, "success", op.SuccessLog)
 
 	var locationHonored *bool
-	if installLocation != "" && installedDetails.InstallDirectory != "" {
-		requested := strings.TrimSuffix(strings.ToLower(filepath.Clean(installLocation)), string(filepath.Separator))
-		actual := strings.ToLower(filepath.Clean(installedDetails.InstallDirectory))
+	if op.InstallLocation != "" && details.InstallDirectory != "" {
+		requested := strings.TrimSuffix(strings.ToLower(filepath.Clean(op.InstallLocation)), string(filepath.Separator))
+		actual := strings.ToLower(filepath.Clean(details.InstallDirectory))
 		honored := actual == requested || strings.HasPrefix(actual, requested+string(filepath.Separator))
 		locationHonored = &honored
 	}
-	public := publicDetails(installedDetails)
+	public := publicDetails(details)
 	return installResult{
 		OK:                true,
 		Code:              exitCode,
 		Stdout:            stdoutText,
 		Stderr:            stderrText,
-		RequestedLocation: installLocation,
+		RequestedLocation: op.InstallLocation,
 		LocationHonored:   locationHonored,
 		Details:           &public,
 	}
+}
+
+// RunWinget cài đặt một package đã duyệt qua winget.
+func (a *App) RunWinget(packageID string) installResult {
+	installLocation := a.approvedLocation(packageID)
+	spec, err := buildWingetArgs(packageID, false, installLocation)
+	if err != nil {
+		return installResult{OK: false, Code: -1, Error: err.Error()}
+	}
+	detail := "Vị trí cài đặt sẽ do nhà phát hành quyết định. URL tùy ý và script tải ngoài luôn bị chặn."
+	if installLocation != "" {
+		detail = "Yêu cầu cài vào: " + installLocation +
+			"\n\nTrình cài đặt có thể bỏ qua vị trí tùy chỉnh nếu package không hỗ trợ."
+	}
+	op := wingetOperation{
+		Verb:            verbInstall,
+		Spec:            spec,
+		InstallLocation: installLocation,
+		Confirm: confirmConfig{
+			Title:   "Xác nhận cài đặt",
+			Message: "SetupKit chuẩn bị chạy:\n\n" + commandLine(spec) + "\n\n" + detail,
+			Confirm: "Chạy lệnh winget",
+		},
+		LaunchPhase:    "Đang khởi chạy winget",
+		LaunchMessage:  "Đã xác nhận. Đang khởi chạy winget.",
+		SuccessPhase:   "Đã cài đặt",
+		SuccessMessage: "Ứng dụng đã được cài đặt thành công.",
+		SuccessLog:     "[SetupKit] Đã cài đặt và cập nhật trạng thái ứng dụng.\n",
+		FailPhase:      "Cài đặt thất bại",
+		MarkInstalled:  true,
+	}
+	return a.executeWinget(packageID, op)
+}
+
+// UpgradeApp cập nhật một package đã cài lên bản mới nhất qua winget.
+func (a *App) UpgradeApp(packageID string) installResult {
+	spec, err := buildUpgradeArgs(packageID)
+	if err != nil {
+		return installResult{OK: false, Code: -1, Error: err.Error()}
+	}
+	record, err := allowedPackage(packageID)
+	if err != nil {
+		return installResult{OK: false, Code: -1, Error: err.Error()}
+	}
+	op := wingetOperation{
+		Verb: verbUpgrade,
+		Spec: spec,
+		Confirm: confirmConfig{
+			Title:   "Xác nhận cập nhật",
+			Message: "SetupKit chuẩn bị cập nhật " + record.Name + ":\n\n" + commandLine(spec) + "\n\nChỉ cập nhật đúng ứng dụng này qua winget.",
+			Confirm: "Cập nhật",
+		},
+		LaunchPhase:    "Đang khởi chạy winget",
+		LaunchMessage:  "Đã xác nhận. Đang khởi chạy winget để cập nhật.",
+		SuccessPhase:   "Đã cập nhật",
+		SuccessMessage: "Ứng dụng đã được cập nhật lên bản mới nhất.",
+		SuccessLog:     "[SetupKit] Đã cập nhật và làm mới trạng thái ứng dụng.\n",
+		FailPhase:      "Cập nhật thất bại",
+		MarkInstalled:  true,
+	}
+	return a.executeWinget(packageID, op)
+}
+
+// UninstallApp gỡ một package đã cài khỏi máy qua winget.
+func (a *App) UninstallApp(packageID string) installResult {
+	spec, err := buildUninstallArgs(packageID)
+	if err != nil {
+		return installResult{OK: false, Code: -1, Error: err.Error()}
+	}
+	record, err := allowedPackage(packageID)
+	if err != nil {
+		return installResult{OK: false, Code: -1, Error: err.Error()}
+	}
+	op := wingetOperation{
+		Verb: verbUninstall,
+		Spec: spec,
+		Confirm: confirmConfig{
+			Title:   "Xác nhận gỡ cài đặt",
+			Message: "SetupKit chuẩn bị gỡ " + record.Name + ":\n\n" + commandLine(spec) + "\n\nThao tác này sẽ xóa ứng dụng khỏi máy.",
+			Confirm: "Gỡ cài đặt",
+		},
+		LaunchPhase:    "Đang khởi chạy winget",
+		LaunchMessage:  "Đã xác nhận. Đang khởi chạy winget để gỡ.",
+		SuccessPhase:   "Đã gỡ cài đặt",
+		SuccessMessage: "Ứng dụng đã được gỡ khỏi máy.",
+		SuccessLog:     "[SetupKit] Đã gỡ cài đặt và làm mới trạng thái.\n",
+		FailPhase:      "Gỡ cài đặt thất bại",
+		MarkInstalled:  false,
+	}
+	return a.executeWinget(packageID, op)
 }

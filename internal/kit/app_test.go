@@ -7,7 +7,6 @@ import (
 	"slices"
 	"strings"
 	"testing"
-	"time"
 )
 
 func catalogBytes(t testing.TB) []byte {
@@ -133,55 +132,5 @@ func TestInventoryNameMatchingDoesNotConfuseVariants(t *testing.T) {
 	}
 	if !namesMatch("Python 3.13.5 (64-bit)", []string{"Python 3.13"}) {
 		t.Fatal("safe version and architecture suffix should match")
-	}
-}
-
-func TestConfirmedDialogChoiceSupportsWindowsAndCustomLabels(t *testing.T) {
-	tests := []struct {
-		choice string
-		want   bool
-	}{
-		{choice: "Yes", want: true},
-		{choice: " yes ", want: true},
-		{choice: "Chạy", want: true},
-		{choice: "No", want: false},
-		{choice: "Hủy", want: false},
-		{choice: "", want: false},
-	}
-
-	for _, tt := range tests {
-		if got := confirmedDialogChoice(tt.choice, "Chạy"); got != tt.want {
-			t.Errorf("confirmedDialogChoice(%q) = %v, want %v", tt.choice, got, tt.want)
-		}
-	}
-}
-
-func TestPowerShellCommandArgsSeparateEmbeddedAndInteractiveModes(t *testing.T) {
-	command := "Write-Output 'ok'"
-	embedded := powerShellCommandArgs(command, false)
-	interactive := powerShellCommandArgs(command, true)
-
-	if !slices.Contains(embedded, "-NonInteractive") || slices.Contains(embedded, "-NoExit") {
-		t.Fatalf("embedded PowerShell has wrong flags: %#v", embedded)
-	}
-	if !slices.Contains(interactive, "-NoExit") || slices.Contains(interactive, "-NonInteractive") {
-		t.Fatalf("interactive PowerShell has wrong flags: %#v", interactive)
-	}
-	if embedded[len(embedded)-2] != "-EncodedCommand" || embedded[len(embedded)-1] != encodePowerShell(command) {
-		t.Fatalf("embedded command is not encoded correctly: %#v", embedded)
-	}
-	if interactive[len(interactive)-2] != "-EncodedCommand" || interactive[len(interactive)-1] != encodePowerShell(command) {
-		t.Fatalf("interactive command is not encoded correctly: %#v", interactive)
-	}
-}
-
-func TestEmbeddedPowerShellRunsPipeline(t *testing.T) {
-	command := "'ok' | ForEach-Object { $_.ToUpperInvariant() }"
-	result := runProcess("powershell.exe", powerShellCommandArgs(command, false), 10*time.Second)
-	if !result.OK {
-		t.Fatalf("PowerShell pipeline failed: code=%d error=%q stderr=%q", result.Code, result.Error, result.Stderr)
-	}
-	if !strings.Contains(result.Stdout, "OK") {
-		t.Fatalf("PowerShell pipeline returned unexpected output: %q", result.Stdout)
 	}
 }

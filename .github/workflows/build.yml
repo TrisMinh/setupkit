@@ -1,0 +1,95 @@
+name: Build & Release
+
+# Tự build SetupKit.exe khi đẩy tag "v*" (vd. v0.7.0) và đính kèm vào GitHub Release.
+# Cũng chạy được thủ công qua nút "Run workflow" để kiểm tra build.
+#
+# LƯU Ý về chữ ký số (code signing): file exe KHÔNG được ký số vì cần chứng chỉ
+# trả phí (Authenticode/EV). Vì vậy Windows SmartScreen có thể hiện cảnh báo lần
+# đầu ("More info" -> "Run anyway"). Muốn ký, thêm chứng chỉ vào Secrets và một
+# bước signtool trước bước Release. Xem docs/CHANGELOG.md.
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25'
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build catalog + phosphor subset + validate
+        shell: pwsh
+        run: |
+          node scripts/build-catalog.js
+          node scripts/build-phosphor-subset.js
+          node scripts/validate-project.js
+
+      - name: Generate Windows resource (icon + manifest)
+        shell: pwsh
+        run: |
+          $iconScript = 'scripts/generate-app-icon.ps1'
+          if (Test-Path $iconScript) {
+            powershell -NoProfile -ExecutionPolicy Bypass -File $iconScript
+          } else {
+            Write-Host 'Khong tim thay generate-app-icon.ps1 - build khong kem icon tuy chinh.'
+          }
+          $rsrcArgs = @('-arch', 'amd64', '-manifest', 'build/windows/app.manifest', '-o', 'rsrc_windows_amd64.syso')
+          $ico = 'build/windows/icon.ico'
+          if (Test-Path $ico) { $rsrcArgs += @('-ico', $ico) }
+          & go run github.com/akavel/rsrc@v0.10.2 $rsrcArgs
+
+      - name: Go test
+        run: go test ./...
+
+      - name: Build SetupKit.exe
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path release -Force | Out-Null
+          go build -tags 'desktop,production' -trimpath -ldflags '-w -s -H windowsgui' -o release/SetupKit.exe .
+          $exe = Get-Item release/SetupKit.exe
+          Write-Host ('Built {0:N2} MB: {1}' -f ($exe.Length / 1MB), $exe.FullName)
+
+      - name: Package zip
+        shell: pwsh
+        run: |
+          $items = @('release/SetupKit.exe', 'README.md')
+          foreach ($extra in @('docs/CATALOG.md', 'docs/DEVELOPER-WORKSTATION-PLAN.md')) {
+            if (Test-Path $extra) { $items += $extra }
+          }
+          Compress-Archive -LiteralPath $items -DestinationPath release/SetupKit-win-x64.zip -Force
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: SetupKit-win-x64
+          path: |
+            release/SetupKit.exe
+            release/SetupKit-win-x64.zip
+          if-no-files-found: error
+
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release/SetupKit.exe
+            release/SetupKit-win-x64.zip
+          generate_release_notes: true
+          fail_on_unmatched_files: true

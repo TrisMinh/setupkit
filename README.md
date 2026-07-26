@@ -33,13 +33,17 @@ Cài lại Windows xong thường mất cả buổi mở từng trang web tải 
 
 - **440 ứng dụng hợp pháp** từ Windows Package Manager và Microsoft Store — đủ từ trình duyệt, IDE, runtime, database, DevOps tool đến app chat, game launcher; chia 15 nhóm với 34 tag lọc nhanh
 - **24 Workstation plan theo vai trò** — Developer Core, Web Frontend, Node.js Backend, Python & AI, Designer, Gaming, Văn phòng... Chọn một plan là có ngay danh sách công cụ được sắp đúng thứ tự cài: nền tảng trước, IDE sau
-- **Tự biết máy bạn đã có gì** — quét winget, Registry, Start Menu và shortcut để đánh dấu app đã cài, kèm phiên bản và thư mục cài đặt; app đã có sẽ không bị cài lại
+- **Cài cả gói một lần** — chọn nhiều app rồi cài tuần tự, theo dõi tiến trình từng cái; có thể **dừng giữa chừng** và **cài lại đúng những app lỗi**
+- **Cập nhật và gỡ ngay trong app** — SetupKit tự phát hiện app có bản mới và đánh dấu trên thẻ; mở chi tiết là **Cập nhật** hoặc **Gỡ cài đặt** bằng winget, luôn xác nhận trước
+- **Tự biết máy bạn đã có gì** — quét winget, Registry, Start Menu và shortcut để đánh dấu app đã cài, kèm phiên bản, thư mục cài đặt và app nào đang có bản cập nhật; app đã có sẽ không bị cài lại
+- **Chọn nhanh, nhớ lựa chọn** — "Chọn hết" theo bộ lọc hiện tại hoặc "Bỏ chọn" chỉ một bấm; gói đang chọn được ghi nhớ cho lần mở sau
+- **Xuất và nhập hồ sơ JSON** — lưu bộ ứng dụng đang chọn thành một hồ sơ, rồi nhập lại để dựng máy tiếp theo y hệt
+- **Ba kiểu hiển thị** — Lưới, Danh sách hoặc Biểu tượng, tùy cách bạn thích duyệt; lựa chọn được ghi nhớ
 - **Chạy thử trước, cài thật sau** — chế độ mặc định chỉ mô phỏng toàn bộ quá trình, máy không thay đổi gì; muốn cài thật phải bật công tắc riêng và xác nhận từng lệnh
 - **Minh bạch từng lệnh** — xem trước chính xác câu lệnh winget của từng app, theo dõi stdout/stderr trực tiếp trong terminal tích hợp khi cài
 - **Thanh trạng thái luôn hiện** dưới cùng: tình trạng winget, số app đã cài, số đang chọn và nút mở terminal nhanh
-- **Activate Office legit**
+- **Chưa có winget cũng không sao** — nếu máy thiếu Windows Package Manager, SetupKit mời cài App Installer từ Microsoft Store chỉ với một bấm
 - **Chọn nơi cài** cho các package hỗ trợ, mở app hoặc thư mục cài đặt ngay khi cài xong
-- **Xuất hồ sơ JSON** — lưu bộ ứng dụng đang chọn để dựng máy tiếp theo y hệt chỉ trong một lần import
 
 ## Ảnh màn hình
 
@@ -53,10 +57,10 @@ Cài lại Windows xong thường mất cả buổi mở từng trang web tải 
 |:---:|:---:|
 | ![Theo dõi cài đặt](docs/screenshots/install-progress.png) | ![Chi tiết ứng dụng](docs/screenshots/app-detail.png) |
 | *Tiến trình từng app + terminal winget trực tiếp* | *Xem lệnh sẽ chạy trước khi đồng ý* |
-| ![Activate Office legit](docs/screenshots/activate.png) | ![Bố cục thu gọn](docs/screenshots/compact-layout.png) |
-| *Activate Office legit* | *Tự thích ứng khi thu nhỏ cửa sổ* |
-| ![Giao diện tối](docs/screenshots/catalog-dark.png) | ![Tìm không dấu](docs/screenshots/search-khong-dau.png) |
-| *Giao diện tối theo hệ thống* | *Tìm nhanh, không cần gõ dấu* |
+| ![Cập nhật và gỡ](docs/screenshots/app-detail-installed.png) | ![Kiểu biểu tượng](docs/screenshots/view-icon.png) |
+| *Cập nhật hoặc gỡ app đã cài ngay trong chi tiết* | *Kiểu hiển thị biểu tượng (còn có Lưới và Danh sách)* |
+| ![Giao diện tối](docs/screenshots/catalog-dark.png) | ![Bố cục thu gọn](docs/screenshots/compact-layout.png) |
+| *Giao diện tối theo hệ thống* | *Tự co gọn khi thu nhỏ cửa sổ* |
 
 ## Dùng trong 3 bước
 

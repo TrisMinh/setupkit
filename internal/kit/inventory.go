@@ -54,6 +54,7 @@ type packageDetails struct {
 	AppID            string   `json:"-"`
 	CanLaunch        bool     `json:"canLaunch"`
 	CanOpenFolder    bool     `json:"canOpenFolder"`
+	UpdateAvailable  bool     `json:"updateAvailable"`
 	DetectedBy       []string `json:"detectedBy"`
 }
 
@@ -64,6 +65,7 @@ type publicPackageDetails struct {
 	InstallDirectory string   `json:"installDirectory"`
 	CanLaunch        bool     `json:"canLaunch"`
 	CanOpenFolder    bool     `json:"canOpenFolder"`
+	UpdateAvailable  bool     `json:"updateAvailable"`
 	DetectedBy       []string `json:"detectedBy"`
 }
 
@@ -336,6 +338,7 @@ func resolvePackageDetails(
 	packageID string,
 	record packageRecord,
 	wingetOutput string,
+	upgradeOutput string,
 	inventory []inventoryRecord,
 ) packageDetails {
 	hints := record.MatchNames
@@ -404,6 +407,8 @@ func resolvePackageDetails(
 	}
 	version := firstNonEmpty(versions)
 	wingetDetected := wingetPackageListed(wingetOutput, packageID)
+	installed := wingetDetected || len(matches) > 0
+	updateAvailable := installed && wingetPackageListed(upgradeOutput, packageID)
 
 	detectedBy := make([]string, 0, 4)
 	if wingetDetected {
@@ -421,13 +426,14 @@ func resolvePackageDetails(
 
 	return packageDetails{
 		PackageID:        packageID,
-		Installed:        wingetDetected || len(matches) > 0,
+		Installed:        installed,
 		Version:          version,
 		InstallDirectory: installDirectory,
 		Target:           launchTarget,
 		AppID:            appID,
 		CanLaunch:        launchTarget != "" || appID != "",
 		CanOpenFolder:    installDirectory != "",
+		UpdateAvailable:  updateAvailable,
 		DetectedBy:       detectedBy,
 	}
 }
@@ -440,18 +446,27 @@ func publicDetails(details packageDetails) publicPackageDetails {
 		InstallDirectory: details.InstallDirectory,
 		CanLaunch:        details.CanLaunch,
 		CanOpenFolder:    details.CanOpenFolder,
+		UpdateAvailable:  details.UpdateAvailable,
 		DetectedBy:       details.DetectedBy,
 	}
 }
 
 func scanInstalledApps() (inventoryResult, map[string]packageDetails) {
 	wingetChannel := make(chan processResult, 1)
+	upgradeChannel := make(chan processResult, 1)
 	inventoryChannel := make(chan processResult, 1)
 
 	go func() {
 		wingetChannel <- runProcess(
 			"winget",
 			[]string{"list", "--accept-source-agreements", "--disable-interactivity"},
+			30*time.Second,
+		)
+	}()
+	go func() {
+		upgradeChannel <- runProcess(
+			"winget",
+			[]string{"upgrade", "--accept-source-agreements", "--disable-interactivity"},
 			30*time.Second,
 		)
 	}()
@@ -464,14 +479,16 @@ func scanInstalledApps() (inventoryResult, map[string]packageDetails) {
 	}()
 
 	wingetResult := <-wingetChannel
+	upgradeResult := <-upgradeChannel
 	systemResult := <-inventoryChannel
 	wingetOutput := wingetResult.Stdout + "\n" + wingetResult.Stderr
+	upgradeOutput := upgradeResult.Stdout + "\n" + upgradeResult.Stderr
 	records := parseInventoryJSON(systemResult.Stdout)
 
 	detailsMap := make(map[string]packageDetails, len(allowlist))
 	apps := make([]publicPackageDetails, 0, len(allowlist))
 	for _, packageID := range allowlistIDs() {
-		details := resolvePackageDetails(packageID, allowlist[packageID], wingetOutput, records)
+		details := resolvePackageDetails(packageID, allowlist[packageID], wingetOutput, upgradeOutput, records)
 		detailsMap[packageID] = details
 		apps = append(apps, publicDetails(details))
 	}
@@ -552,6 +569,45 @@ func inferWingetProgress(output string, previous int) progressInference {
 		strings.Contains(lower, "cài đặt thành công") {
 		percent = 100
 		phase = "Cài đặt thành công"
+	}
+
+	message := phase
+	lines := strings.Split(clean, "\n")
+	for index := len(lines) - 1; index >= 0; index-- {
+		line := strings.TrimSpace(lines[index])
+		if line == "" || strings.Trim(line, `-\|/`) == "" {
+			continue
+		}
+		message = line
+		break
+	}
+
+	return progressInference{
+		Percent: min(100, percent),
+		Phase:   phase,
+		Message: message,
+	}
+}
+
+func inferUninstallProgress(output string, previous int) progressInference {
+	clean := stripTerminalNoise(output)
+	lower := strings.ToLower(clean)
+	percent := previous
+	phase := "Đang gỡ cài đặt"
+
+	if strings.Contains(lower, "found ") || strings.Contains(lower, "tìm thấy") {
+		percent = max(percent, 30)
+	}
+	if strings.Contains(lower, "starting package uninstall") ||
+		strings.Contains(lower, "uninstalling") ||
+		strings.Contains(lower, "đang gỡ") {
+		percent = max(percent, 60)
+	}
+	if strings.Contains(lower, "successfully uninstalled") ||
+		strings.Contains(lower, "uninstalled successfully") ||
+		strings.Contains(lower, "gỡ cài đặt thành công") {
+		percent = 100
+		phase = "Đã gỡ cài đặt"
 	}
 
 	message := phase

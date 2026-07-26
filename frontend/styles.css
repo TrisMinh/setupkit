@@ -1055,12 +1055,147 @@ select:focus-visible,
   font-weight: 650;
 }
 
+.catalog-meta-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+/* Bộ chuyển kiểu hiển thị: Lưới / Danh sách / Biểu tượng. */
+.view-modes {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+}
+
+.view-mode-btn {
+  width: 30px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 7px;
+  color: var(--text-tertiary);
+  background: transparent;
+  transition:
+    background 150ms var(--ease),
+    color 150ms var(--ease);
+}
+
+.view-mode-btn:hover {
+  color: var(--text);
+  background: var(--surface-hover);
+}
+
+.view-mode-btn.active {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.view-mode-btn .ph {
+  font-size: 16px;
+}
+
 .app-grid {
   display: grid;
   /* Tự xếp 3-4 app/hàng trên màn rộng, co dần còn 1 khi cửa sổ hẹp.
      min(300px, 100%) chống tràn ngang khi cửa sổ nhỏ hơn 300px. */
   grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
   gap: 10px;
+}
+
+/* --- Dạng danh sách: một app mỗi hàng, gọn chiều cao, bỏ mô tả/tag. --- */
+.app-grid.mode-list {
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.mode-list .app-card {
+  min-height: 0;
+  contain-intrinsic-size: 62px;
+  padding: 10px 14px;
+}
+
+.mode-list .app-desc,
+.mode-list .app-meta-row,
+.mode-list .app-install-meta {
+  display: none;
+}
+
+/* --- Dạng biểu tượng: nhiều ô nhỏ, icon to, tên ở dưới. --- */
+.app-grid.mode-icon {
+  grid-template-columns: repeat(auto-fill, minmax(min(146px, 100%), 1fr));
+  gap: 10px;
+}
+
+.mode-icon .app-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  min-height: 0;
+  contain-intrinsic-size: 150px;
+  padding: 16px 12px 14px;
+  text-align: center;
+}
+
+.mode-icon .app-icon {
+  width: 54px;
+  height: 54px;
+}
+
+.mode-icon .app-icon .ph {
+  font-size: 28px;
+}
+
+.mode-icon .app-logo {
+  width: 33px;
+  height: 33px;
+}
+
+.mode-icon .app-info {
+  width: 100%;
+  min-width: 0;
+}
+
+.mode-icon .app-name-row {
+  justify-content: center;
+}
+
+.mode-icon .app-name {
+  display: -webkit-box;
+  overflow: hidden;
+  line-height: 1.3;
+  white-space: normal;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.mode-icon .app-desc,
+.mode-icon .app-meta-row,
+.mode-icon .app-install-meta,
+.mode-icon .source-label {
+  display: none;
+}
+
+.mode-icon .app-card-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 7px;
+}
+
+.mode-icon .app-card-actions.installed-actions {
+  grid-template-columns: none;
+}
+
+.mode-icon .app-card-actions.installed-actions .detail-button {
+  grid-column: auto;
 }
 
 .app-card {
@@ -2110,214 +2245,6 @@ select:focus-visible,
   font-size: 12px;
 }
 
-/* -------------------------------------------------------- trang kích hoạt */
-.activate-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 300px;
-  gap: 18px;
-  align-items: start;
-}
-
-.activate-body {
-  display: grid;
-  gap: 16px;
-  padding: 18px;
-}
-
-.activate-status {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  padding: 14px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
-  background: var(--surface-soft);
-}
-
-.activate-status-icon {
-  width: 40px;
-  height: 40px;
-  flex: 0 0 auto;
-  display: grid;
-  place-items: center;
-  border-radius: var(--radius-control);
-  color: var(--text-tertiary);
-  background: var(--surface);
-}
-
-.activate-status-icon .ph {
-  font-size: 22px;
-}
-
-.activate-status.ok .activate-status-icon {
-  color: var(--success);
-  background: var(--success-soft);
-}
-
-.activate-status.warn .activate-status-icon {
-  color: var(--warning);
-  background: var(--warning-soft);
-}
-
-.activate-status-copy {
-  min-width: 0;
-}
-
-.activate-status-copy strong,
-.activate-status-copy span {
-  display: block;
-}
-
-.activate-status-copy strong {
-  font-size: 14px;
-}
-
-.activate-status-copy span {
-  margin-top: 2px;
-  overflow-wrap: anywhere;
-  color: var(--text-tertiary);
-  font-size: 12px;
-}
-
-.activate-warning {
-  display: flex;
-  gap: 9px;
-  padding: 11px 12px;
-  border-radius: var(--radius-control);
-  color: var(--warning);
-  background: var(--warning-soft);
-  font-size: 12px;
-}
-
-.activate-warning .ph {
-  flex: 0 0 auto;
-  margin-top: 1px;
-  font-size: 16px;
-}
-
-.activate-form {
-  display: grid;
-  gap: 8px;
-}
-
-.activate-label {
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.activate-command {
-  width: 100%;
-  min-height: 82px;
-  padding: 12px 14px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-control);
-  color: var(--mono-text);
-  background: var(--mono-surface);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  line-height: 1.7;
-  white-space: pre;
-  overflow-wrap: normal;
-  overflow-x: auto;
-  resize: vertical;
-  user-select: text;
-  cursor: text;
-  tab-size: 2;
-}
-
-.activate-command:focus-visible {
-  border-color: var(--accent);
-}
-
-.activate-command.is-obscured {
-  color: transparent;
-  text-shadow: 0 0 7px color-mix(in srgb, var(--mono-text) 82%, transparent);
-  caret-color: transparent;
-}
-
-.command-label-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.mini-link {
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--accent);
-  font: inherit;
-  font-size: 11px;
-  font-weight: 650;
-}
-
-.mini-link:hover {
-  text-decoration: underline;
-}
-
-.mini-link.icon-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.mini-link.icon-link .ph {
-  font-size: 13px;
-}
-
-.activate-hint {
-  margin: 2px 0 6px;
-  color: var(--text-tertiary);
-  font-size: 11px;
-}
-
-.activate-hint.warn {
-  color: var(--warning);
-}
-
-.activate-actions {
-  display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-  gap: 8px;
-}
-
-.activate-output-wrap {
-  display: grid;
-  gap: 8px;
-}
-
-.activate-output {
-  min-height: 72px;
-  max-height: 220px;
-  margin: 0;
-  overflow: auto;
-  padding: 12px 14px;
-  border-radius: var(--radius-control);
-  color: var(--mono-text);
-  background: var(--mono-surface);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  line-height: 1.6;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  overscroll-behavior: contain;
-  scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--mono-text) 28%, transparent) transparent;
-}
-
-.policy-aside {
-  padding: 18px;
-}
-
-.policy-aside h2 {
-  margin: 0 0 14px;
-  font-size: 15px;
-}
-
-.policy-aside .policy-list {
-  grid-template-columns: 1fr;
-}
-
 dialog {
   width: min(520px, calc(100vw - 32px));
   max-height: calc(100dvh - 40px);
@@ -2392,8 +2319,39 @@ dialog::backdrop {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 0 18px;
+  padding: 10px 18px;
   border-bottom: 1px solid var(--border);
+}
+
+.dialog-head-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.dialog-icon {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--accent);
+  background: #ffffff;
+}
+
+.dialog-icon .ph {
+  font-size: 23px;
+}
+
+.dialog-icon .app-logo {
+  width: 26px;
+  height: 26px;
+  display: block;
+  object-fit: contain;
 }
 
 .dialog-title {
@@ -2614,8 +2572,7 @@ dialog::backdrop {
   }
 
   .review-layout,
-  .profile-layout,
-  .activate-layout {
+  .profile-layout {
     grid-template-columns: minmax(0, 1fr) 292px;
   }
 }
@@ -2652,8 +2609,7 @@ dialog::backdrop {
   }
 
   .review-layout,
-  .profile-layout,
-  .activate-layout {
+  .profile-layout {
     grid-template-columns: 1fr;
   }
 
@@ -2712,10 +2668,6 @@ dialog::backdrop {
   }
 
   .policy-list {
-    grid-template-columns: 1fr;
-  }
-
-  .activate-actions {
     grid-template-columns: 1fr;
   }
 
@@ -3049,5 +3001,140 @@ dialog::backdrop {
 @media (prefers-reduced-transparency: reduce) {
   dialog::backdrop {
     backdrop-filter: none;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   v0.7.0: cập nhật / gỡ cài đặt, chọn hàng loạt, nhập hồ sơ, banner winget
+   ------------------------------------------------------------------------- */
+
+/* Nút "Cập nhật" trong hộp thoại chi tiết. */
+.button.update {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.button.update:hover {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 20%, var(--surface));
+}
+
+/* Badge "có bản cập nhật" trên thẻ ứng dụng đã cài. */
+.app-install-meta.has-update {
+  color: var(--accent);
+}
+
+/* Nhóm nút chọn nhanh trên thanh danh mục. */
+.catalog-meta-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.bulk-actions {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.bulk-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  background: var(--surface);
+  font-size: 12px;
+  font-weight: 600;
+  transition:
+    background 150ms var(--ease),
+    border-color 150ms var(--ease),
+    color 150ms var(--ease);
+}
+
+.bulk-button:hover {
+  border-color: var(--border-strong);
+  color: var(--text);
+  background: var(--surface-hover);
+}
+
+.bulk-button .ph {
+  font-size: 15px;
+}
+
+/* Ghi chú nhỏ dưới nút nhập hồ sơ. */
+.export-note {
+  margin-top: 10px;
+  color: var(--text-tertiary);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* Banner khi máy chưa có winget: mời cài App Installer. */
+.winget-missing-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  border: 1px solid color-mix(in srgb, var(--warning) 40%, var(--border));
+  border-radius: var(--radius-card);
+  background: var(--warning-soft);
+}
+
+.winget-missing-icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  color: var(--warning);
+  background: color-mix(in srgb, var(--warning) 18%, transparent);
+}
+
+.winget-missing-icon .ph {
+  font-size: 22px;
+}
+
+.winget-missing-copy {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.winget-missing-copy strong {
+  color: var(--text);
+  font-size: 14px;
+}
+
+.winget-missing-copy span {
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+.winget-missing-actions {
+  flex: 0 0 auto;
+  display: inline-flex;
+  gap: 8px;
+}
+
+@media (max-width: 720px) {
+  .winget-missing-banner {
+    flex-wrap: wrap;
+  }
+
+  .winget-missing-actions {
+    width: 100%;
+  }
+
+  .winget-missing-actions .button {
+    flex: 1 1 0;
   }
 }
