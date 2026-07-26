@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"io/fs"
 	"log"
 
 	"github.com/wailsapp/wails/v2"
@@ -14,8 +15,17 @@ import (
 // The web UI is embedded directly in the native executable. WebView2 is shared
 // with Windows instead of bundling Chromium as Electron does.
 //
-//go:embed index.html styles.css renderer.js native-bridge.js theme-init.js catalog.json assets
-var webAssets embed.FS
+//go:embed all:frontend
+var embeddedFrontend embed.FS
+
+// frontendAssets trả về cây file web với frontend/ làm thư mục gốc.
+func frontendAssets() fs.FS {
+	assets, err := fs.Sub(embeddedFrontend, "frontend")
+	if err != nil {
+		log.Fatal(err)
+	}
+	return assets
+}
 
 // systemPrefersDark đọc theme hệ thống để cửa sổ không chớp màu sáng
 // trong lúc WebView2 khởi động khi người dùng đang ở dark mode.
@@ -53,7 +63,7 @@ func main() {
 		MinHeight:        680,
 		BackgroundColour: background,
 		AssetServer: &assetserver.Options{
-			Assets: webAssets,
+			Assets: frontendAssets(),
 		},
 		OnStartup: app.startup,
 		Bind: []interface{}{

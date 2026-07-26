@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-label="SetupKit">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f1512"/>
+      <stop offset="0.55" stop-color="#14211a"/>
+      <stop offset="1" stop-color="#1b3226"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.22" cy="0.5" r="0.55">
+      <stop offset="0" stop-color="#2C7A68" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#2C7A68" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="icon" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#35907B"/>
+      <stop offset="1" stop-color="#24614F"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="300" fill="url(#bg)"/>
+  <rect width="1200" height="300" fill="url(#glow)"/>
+
+  <!-- Icon SetupKit: khối hộp wireframe trên nền bo góc -->
+  <g transform="translate(96,66) scale(0.6563)">
+    <rect x="12" y="12" width="232" height="232" rx="54" fill="url(#icon)"/>
+    <g stroke="#ffffff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <polyline points="128,61 183,93 128,126 73,93 128,61"/>
+      <polyline points="73,93 73,160 128,193 183,160 183,93"/>
+      <line x1="128" y1="126" x2="128" y2="193"/>
+    </g>
+  </g>
+
+  <g font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+    <text x="310" y="148" font-size="72" font-weight="700" fill="#eef5f0" letter-spacing="-1.5">SetupKit</text>
+    <text x="312" y="196" font-size="26" fill="#a7b8ad">Dựng máy Windows mới trong vài phút — chọn plan, bấm cài, xong.</text>
+
+    <!-- Chips -->
+    <g font-size="18" font-weight="600">
+      <rect x="312" y="222" width="176" height="38" rx="19" fill="#213829" stroke="#2f5240"/>
+      <text x="400" y="247" text-anchor="middle" fill="#8fd0b2">440 ứng dụng</text>
+
+      <rect x="500" y="222" width="196" height="38" rx="19" fill="#213829" stroke="#2f5240"/>
+      <text x="598" y="247" text-anchor="middle" fill="#8fd0b2">winget + Store</text>
+
+      <rect x="708" y="222" width="252" height="38" rx="19" fill="#213829" stroke="#2f5240"/>
+      <text x="834" y="247" text-anchor="middle" fill="#8fd0b2">1 file EXE · không cài đặt</text>
+    </g>
+  </g>
+</svg>

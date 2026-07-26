@@ -482,7 +482,7 @@ function riskFor(candidate) {
 }
 
 function logoFor(id) {
-  const directory = path.join(projectRoot, 'assets', 'apps');
+  const directory = path.join(projectRoot, 'frontend', 'assets', 'apps');
   for (const extension of ['svg', 'png', 'ico', 'webp']) {
     const filename = `${id}.${extension}`;
     if (fs.existsSync(path.join(directory, filename))) return filename;
@@ -946,7 +946,7 @@ const catalog = {
 };
 
 fs.writeFileSync(
-  path.join(projectRoot, 'catalog.json'),
+  path.join(projectRoot, 'frontend', 'catalog.json'),
   `${JSON.stringify(catalog, null, 2)}\n`
 );
 

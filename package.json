@@ -1,6 +1,6 @@
 {
   "name": "setupkit",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Lightweight Windows developer workstation builder with a verified app catalog.",
   "private": true,
   "type": "commonjs",
@@ -8,7 +8,7 @@
     "catalog:verify": "node scripts/check-winget-candidates.js && node scripts/check-winget-expansion.js",
     "catalog:build": "node scripts/build-catalog.js",
     "icons:fetch": "node scripts/fetch-app-icons.js",
-    "validate": "npm run catalog:build && node scripts/build-phosphor-subset.js && node --check renderer.js && node --check theme-init.js && node scripts/validate-project.js",
+    "validate": "npm run catalog:build && node scripts/build-phosphor-subset.js && node --check frontend/renderer.js && node --check frontend/theme-init.js && node scripts/validate-project.js",
     "test": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-native.ps1 -TestOnly",
     "package:win": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-native.ps1"
   }

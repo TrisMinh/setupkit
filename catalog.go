@@ -27,7 +27,7 @@ type catalogDocument struct {
 	Apps          []catalogAppRecord `json:"apps"`
 }
 
-//go:embed catalog.json
+//go:embed frontend/catalog.json
 var embeddedCatalog []byte
 
 var allowlist = loadAllowlist()

@@ -379,7 +379,7 @@ const binaryIcons = {
   }
 };
 
-const outputDirectory = path.join(__dirname, '..', 'assets', 'apps');
+const outputDirectory = path.join(__dirname, '..', 'frontend', 'assets', 'apps');
 
 async function download(url) {
   const response = await fetch(url, {

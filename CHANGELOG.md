@@ -2,6 +2,19 @@
 
 Toàn bộ thay đổi đáng chú ý của SetupKit được ghi tại đây.
 
+## [0.4.1] - 2026-07-26
+
+### Thay đổi
+
+- Tái cấu trúc dự án theo bố cục chuẩn Wails: toàn bộ giao diện web (index.html, renderer.js, styles.css, catalog.json, assets) chuyển vào `frontend/`, gốc dự án gọn và dễ đọc hơn
+- Ba dropdown lọc (danh mục, nguồn, tình trạng) chuyển từ `<select>` hệ điều hành sang component tùy chỉnh: đồng bộ theme sáng/tối, đánh dấu mục đang chọn, điều khiển đầy đủ bằng bàn phím (mũi tên, Enter, Esc, Home/End)
+- Thêm `install.ps1` - cài SetupKit bằng một dòng lệnh PowerShell, tự tải bản mới nhất từ GitHub Releases và tạo shortcut
+- README viết lại với banner, tập trung vào tính năng; mô tả About của repo dùng tiếng Việt có dấu kèm topics
+
+### Sửa lỗi
+
+- Ô tìm kiếm hiển thị hai nút xóa (nút xóa mặc định của WebView2 trùng với nút của app)
+
 ## [0.4.0] - 2026-07-26
 
 Bản tối ưu lớn: sửa 10 lỗi giao diện/hành vi, render thông minh hơn, thêm animation nhẹ toàn CSS và cải thiện trải nghiệm — exe vẫn ~12 MB, không thêm thư viện nào.

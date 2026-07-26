@@ -640,8 +640,7 @@ select:focus-visible,
   pointer-events: none;
 }
 
-.search-field input,
-.toolbar select {
+.search-field input {
   width: 100%;
   height: 44px;
   border: 1px solid var(--border);
@@ -652,6 +651,16 @@ select:focus-visible,
 
 .search-field input {
   padding: 0 42px;
+}
+
+/* Ẩn nút xóa mặc định của Chromium - app đã có nút xóa riêng. */
+.search-field input::-webkit-search-cancel-button,
+.search-field input::-webkit-search-decoration,
+.search-field input::-webkit-search-results-button,
+.search-field input::-webkit-search-results-decoration {
+  display: none;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .search-field input::placeholder {
@@ -689,8 +698,121 @@ select:focus-visible,
   transform: none;
 }
 
-.toolbar select {
-  padding: 0 36px 0 13px;
+/* Dropdown tùy chỉnh - thay cho <select> gốc để đồng bộ theme sáng/tối. */
+.dropdown {
+  position: relative;
+  min-width: 0;
+}
+
+.dropdown-toggle {
+  width: 100%;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 11px 0 13px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  color: var(--text);
+  background: var(--surface);
+  transition:
+    background 150ms var(--ease),
+    border-color 150ms var(--ease);
+}
+
+.dropdown-toggle:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-hover);
+}
+
+.dropdown.open .dropdown-toggle {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+}
+
+.dropdown-value {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 14px;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropdown-toggle .dropdown-caret {
+  flex: 0 0 auto;
+  color: var(--text-tertiary);
+  font-size: 14px;
+  transition: transform 200ms var(--ease-out);
+}
+
+.dropdown.open .dropdown-caret {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 30;
+  min-width: 100%;
+  max-height: 324px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 6px;
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  transform-origin: top center;
+  animation: dropdown-in 150ms var(--ease-out);
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-5px) scale(0.98);
+  }
+}
+
+.dropdown-option {
+  width: 100%;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  background: transparent;
+  font-size: 13px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.dropdown-option:hover,
+.dropdown-option.focused {
+  color: var(--text);
+  background: var(--surface-hover);
+}
+
+.dropdown-option.selected {
+  color: var(--accent);
+  background: var(--accent-soft);
+  font-weight: 650;
+}
+
+.dropdown-option .ph-check {
+  margin-left: auto;
+  font-size: 14px;
+  visibility: hidden;
+}
+
+.dropdown-option.selected .ph-check {
+  visibility: visible;
 }
 
 .tag-filter-section {

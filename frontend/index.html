@@ -122,27 +122,9 @@
                   <i class="ph ph-x" aria-hidden="true"></i>
                 </button>
               </div>
-              <div>
-                <label class="sr-only" for="categorySelect">Danh mục</label>
-                <select id="categorySelect" aria-label="Lọc theo danh mục"></select>
-              </div>
-              <div>
-                <label class="sr-only" for="sourceSelect">Nguồn cài đặt</label>
-                <select id="sourceSelect" aria-label="Lọc theo nguồn cài đặt">
-                  <option value="all">Tất cả nguồn</option>
-                  <option value="winget">Chỉ winget</option>
-                  <option value="msstore">Chỉ Microsoft Store</option>
-                </select>
-              </div>
-              <div>
-                <label class="sr-only" for="statusSelect">Tình trạng cài đặt</label>
-                <select id="statusSelect" aria-label="Lọc theo tình trạng cài đặt">
-                  <option value="all">Mọi tình trạng</option>
-                  <option value="installed">Đã cài trên máy</option>
-                  <option value="available">Chưa cài</option>
-                  <option value="selected">Đang chọn</option>
-                </select>
-              </div>
+              <div class="dropdown" id="categoryDropdown" data-dropdown-label="Lọc theo danh mục"></div>
+              <div class="dropdown" id="sourceDropdown" data-dropdown-label="Lọc theo nguồn cài đặt"></div>
+              <div class="dropdown" id="statusDropdown" data-dropdown-label="Lọc theo tình trạng cài đặt"></div>
             </div>
 
             <div class="tag-filter-section" aria-labelledby="tagFilterHeading">

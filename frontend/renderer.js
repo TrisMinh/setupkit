@@ -41,9 +41,9 @@ const els = {
   catalog: document.getElementById('catalog'),
   catalogCount: document.getElementById('catalogCount'),
   installedSummary: document.getElementById('installedSummary'),
-  category: document.getElementById('categorySelect'),
-  source: document.getElementById('sourceSelect'),
-  status: document.getElementById('statusSelect'),
+  categoryDropdown: document.getElementById('categoryDropdown'),
+  sourceDropdown: document.getElementById('sourceDropdown'),
+  statusDropdown: document.getElementById('statusDropdown'),
   tagFilterBar: document.getElementById('tagFilterBar'),
   tagReset: document.getElementById('tagResetBtn'),
   activeFilterSummary: document.getElementById('activeFilterSummary'),
@@ -114,6 +114,161 @@ const els = {
 
 let detailAppId = '';
 let dialogClosing = false;
+
+/* ------------------------------------------------------------- dropdown */
+
+// Dropdown tùy chỉnh thay cho <select> gốc: đồng bộ theme, điều khiển được
+// bằng bàn phím (mũi tên, Enter, Esc, Home/End) và đóng khi bấm ra ngoài.
+const openDropdowns = new Set();
+
+function createDropdown(container, { options, value, onChange }) {
+  const label = container.dataset.dropdownLabel || '';
+  let items = [...options];
+  let current = value;
+  let focusIndex = -1;
+
+  const toggle = document.createElement('button');
+  toggle.type = 'button';
+  toggle.className = 'dropdown-toggle';
+  toggle.setAttribute('aria-haspopup', 'listbox');
+  toggle.setAttribute('aria-expanded', 'false');
+  if (label) toggle.setAttribute('aria-label', label);
+
+  const valueEl = document.createElement('span');
+  valueEl.className = 'dropdown-value';
+  const caret = document.createElement('i');
+  caret.className = 'ph ph-caret-down dropdown-caret';
+  caret.setAttribute('aria-hidden', 'true');
+  toggle.append(valueEl, caret);
+
+  const menu = document.createElement('div');
+  menu.className = 'dropdown-menu';
+  menu.setAttribute('role', 'listbox');
+  if (label) menu.setAttribute('aria-label', label);
+  menu.hidden = true;
+
+  container.append(toggle, menu);
+
+  const labelFor = (val) => items.find((item) => item.value === val)?.label || '';
+
+  function renderMenu() {
+    menu.innerHTML = '';
+    items.forEach((item, index) => {
+      const option = document.createElement('button');
+      option.type = 'button';
+      option.className = 'dropdown-option';
+      option.setAttribute('role', 'option');
+      option.dataset.value = item.value;
+      option.classList.toggle('selected', item.value === current);
+      option.classList.toggle('focused', index === focusIndex);
+      option.setAttribute('aria-selected', String(item.value === current));
+      const text = document.createElement('span');
+      text.textContent = item.label;
+      const check = document.createElement('i');
+      check.className = 'ph ph-check';
+      check.setAttribute('aria-hidden', 'true');
+      option.append(text, check);
+      option.addEventListener('click', () => {
+        select(item.value);
+        close();
+        toggle.focus();
+      });
+      menu.appendChild(option);
+    });
+  }
+
+  function updateToggle() {
+    valueEl.textContent = labelFor(current);
+    toggle.title = label ? `${label}: ${labelFor(current)}` : labelFor(current);
+  }
+
+  function select(next, { silent = false } = {}) {
+    if (next === current) return;
+    current = next;
+    updateToggle();
+    if (!silent) onChange(current);
+  }
+
+  function open() {
+    if (!menu.hidden) return;
+    openDropdowns.forEach((other) => other.close());
+    focusIndex = Math.max(0, items.findIndex((item) => item.value === current));
+    renderMenu();
+    menu.hidden = false;
+    container.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+    openDropdowns.add(api);
+    menu.querySelector('.focused')?.scrollIntoView({ block: 'nearest' });
+  }
+
+  function close() {
+    if (menu.hidden) return;
+    menu.hidden = true;
+    container.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+    openDropdowns.delete(api);
+  }
+
+  function moveFocus(delta) {
+    if (menu.hidden) {
+      open();
+      return;
+    }
+    focusIndex = (focusIndex + delta + items.length) % items.length;
+    menu.querySelectorAll('.dropdown-option').forEach((option, index) => {
+      option.classList.toggle('focused', index === focusIndex);
+    });
+    menu.querySelector('.focused')?.scrollIntoView({ block: 'nearest' });
+  }
+
+  toggle.addEventListener('click', () => {
+    if (menu.hidden) open();
+    else close();
+  });
+  container.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowDown') { event.preventDefault(); moveFocus(1); }
+    else if (event.key === 'ArrowUp') { event.preventDefault(); moveFocus(-1); }
+    else if (event.key === 'Home' && !menu.hidden) { event.preventDefault(); moveFocus(-focusIndex); }
+    else if (event.key === 'End' && !menu.hidden) { event.preventDefault(); moveFocus(items.length - 1 - focusIndex); }
+    else if ((event.key === 'Enter' || event.key === ' ') && !menu.hidden) {
+      event.preventDefault();
+      const item = items[focusIndex];
+      if (item) select(item.value);
+      close();
+      toggle.focus();
+    } else if (event.key === 'Escape' && !menu.hidden) {
+      event.stopPropagation();
+      close();
+      toggle.focus();
+    }
+  });
+
+  const api = {
+    get value() { return current; },
+    set(next, opts) { select(next, opts); },
+    setOptions(nextItems) {
+      items = [...nextItems];
+      if (!items.some((item) => item.value === current)) current = items[0]?.value;
+      updateToggle();
+      if (!menu.hidden) renderMenu();
+    },
+    close
+  };
+  updateToggle();
+  return api;
+}
+
+// Đóng dropdown khi bấm ra ngoài.
+document.addEventListener('pointerdown', (event) => {
+  if (!openDropdowns.size) return;
+  if (!event.target.closest('.dropdown')) {
+    openDropdowns.forEach((dropdown) => dropdown.close());
+  }
+});
+
+let categoryDropdown = null;
+let sourceDropdown = null;
+let statusDropdown = null;
 
 /* ---------------------------------------------------------------- helpers */
 
@@ -316,13 +471,11 @@ function filteredApps() {
 /* -------------------------------------------------------------- renderers */
 
 function renderCategories() {
-  els.category.innerHTML = [
-    '<option value="all">Tất cả danh mục</option>',
-    ...catalogCategories.map((category) => (
-      `<option value="${escapeHtml(category.id)}">${escapeHtml(category.name)}</option>`
-    ))
-  ].join('');
-  els.category.value = state.category;
+  categoryDropdown?.setOptions([
+    { value: 'all', label: 'Tất cả danh mục' },
+    ...catalogCategories.map((category) => ({ value: category.id, label: category.name }))
+  ]);
+  categoryDropdown?.set(state.category, { silent: true });
 }
 
 function renderTags() {
@@ -876,9 +1029,9 @@ function clearFilters() {
   state.source = 'all';
   state.status = 'all';
   els.search.value = '';
-  els.category.value = state.category;
-  els.source.value = state.source;
-  els.status.value = state.status;
+  categoryDropdown?.set('all', { silent: true });
+  sourceDropdown?.set('all', { silent: true });
+  statusDropdown?.set('all', { silent: true });
   renderTags();
   renderCatalog();
 }
@@ -1500,9 +1653,38 @@ function bindEvents() {
     els.search.focus();
     renderCatalog();
   });
-  els.category.addEventListener('change', (event) => {
-    state.category = event.target.value;
-    renderCatalog();
+  categoryDropdown = createDropdown(els.categoryDropdown, {
+    options: [{ value: 'all', label: 'Tất cả danh mục' }],
+    value: state.category,
+    onChange: (value) => {
+      state.category = value;
+      renderCatalog();
+    }
+  });
+  sourceDropdown = createDropdown(els.sourceDropdown, {
+    options: [
+      { value: 'all', label: 'Tất cả nguồn' },
+      { value: 'winget', label: 'Chỉ winget' },
+      { value: 'msstore', label: 'Chỉ Microsoft Store' }
+    ],
+    value: state.source,
+    onChange: (value) => {
+      state.source = value;
+      renderCatalog();
+    }
+  });
+  statusDropdown = createDropdown(els.statusDropdown, {
+    options: [
+      { value: 'all', label: 'Mọi tình trạng' },
+      { value: 'installed', label: 'Đã cài trên máy' },
+      { value: 'available', label: 'Chưa cài' },
+      { value: 'selected', label: 'Đang chọn' }
+    ],
+    value: state.status,
+    onChange: (value) => {
+      state.status = value;
+      renderCatalog();
+    }
   });
   els.tagFilterBar.addEventListener('click', (event) => {
     const button = event.target.closest('[data-tag]');
@@ -1519,15 +1701,6 @@ function bindEvents() {
     renderTags();
     renderCatalog();
   });
-  els.source.addEventListener('change', (event) => {
-    state.source = event.target.value;
-    renderCatalog();
-  });
-  els.status.addEventListener('change', (event) => {
-    state.status = event.target.value;
-    renderCatalog();
-  });
-
   els.realMode.addEventListener('change', () => {
     addLog(`[chế độ] ${els.realMode.checked ? 'Đã bật cài đặt thật bằng winget.' : 'Đã chuyển về mô phỏng, máy sẽ không thay đổi.'}`);
     renderQueue();

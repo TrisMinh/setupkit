@@ -1,7 +1,7 @@
 /*
  * File này được tạo tự động bởi scripts/build-phosphor-subset.js.
  * Đừng sửa tay — hãy sửa scripts/phosphor-full/style.css rồi chạy lại script.
- * 72 / 1530 icon được giữ lại.
+ * 73 / 1530 icon được giữ lại.
  */
 @font-face {
   font-family: "Phosphor";
@@ -56,6 +56,9 @@
 }
 .ph.ph-browser:before {
   content: "\e0f4";
+}
+.ph.ph-caret-down:before {
+  content: "\e136";
 }
 .ph.ph-caret-left:before {
   content: "\e138";

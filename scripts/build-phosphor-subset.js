@@ -13,8 +13,9 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const projectRoot = path.join(__dirname, '..');
+const frontendRoot = path.join(projectRoot, 'frontend');
 const fullCssPath = path.join(__dirname, 'phosphor-full', 'style.css');
-const outputPath = path.join(projectRoot, 'assets', 'phosphor', 'style.css');
+const outputPath = path.join(frontendRoot, 'assets', 'phosphor', 'style.css');
 
 const fullCss = fs.readFileSync(fullCssPath, 'utf8');
 
@@ -36,10 +37,10 @@ const scanText = (text) => {
   }
 };
 
-scanText(fs.readFileSync(path.join(projectRoot, 'index.html'), 'utf8'));
-scanText(fs.readFileSync(path.join(projectRoot, 'renderer.js'), 'utf8'));
+scanText(fs.readFileSync(path.join(frontendRoot, 'index.html'), 'utf8'));
+scanText(fs.readFileSync(path.join(frontendRoot, 'renderer.js'), 'utf8'));
 
-const catalog = JSON.parse(fs.readFileSync(path.join(projectRoot, 'catalog.json'), 'utf8'));
+const catalog = JSON.parse(fs.readFileSync(path.join(frontendRoot, 'catalog.json'), 'utf8'));
 const addIconField = (item) => {
   if (item?.icon?.startsWith('ph-')) used.add(item.icon.slice(3));
 };
@@ -63,4 +64,4 @@ const rules = [...used]
 const banner = `/*\n * File này được tạo tự động bởi scripts/build-phosphor-subset.js.\n * Đừng sửa tay — hãy sửa scripts/phosphor-full/style.css rồi chạy lại script.\n * ${used.size} / ${iconMap.size} icon được giữ lại.\n */\n`;
 
 fs.writeFileSync(outputPath, `${banner}${header}\n\n${rules}\n`);
-console.log(`Đã tạo assets/phosphor/style.css với ${used.size}/${iconMap.size} icon.`);
+console.log(`Đã tạo frontend/assets/phosphor/style.css với ${used.size}/${iconMap.size} icon.`);

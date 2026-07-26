@@ -2,10 +2,11 @@ const fs = require('fs');
 const path = require('path');
 
 const projectRoot = path.join(__dirname, '..');
-const html = fs.readFileSync(path.join(projectRoot, 'index.html'), 'utf8');
-const renderer = fs.readFileSync(path.join(projectRoot, 'renderer.js'), 'utf8');
-const styles = fs.readFileSync(path.join(projectRoot, 'styles.css'), 'utf8');
-const catalog = JSON.parse(fs.readFileSync(path.join(projectRoot, 'catalog.json'), 'utf8'));
+const frontendRoot = path.join(projectRoot, 'frontend');
+const html = fs.readFileSync(path.join(frontendRoot, 'index.html'), 'utf8');
+const renderer = fs.readFileSync(path.join(frontendRoot, 'renderer.js'), 'utf8');
+const styles = fs.readFileSync(path.join(frontendRoot, 'styles.css'), 'utf8');
+const catalog = JSON.parse(fs.readFileSync(path.join(frontendRoot, 'catalog.json'), 'utf8'));
 
 function unique(values) {
   return new Set(values);
@@ -24,7 +25,7 @@ if (missingDOMIDs.size) {
 }
 
 const missingLogos = catalog.apps.filter((app) => (
-  app.logo && !fs.existsSync(path.join(projectRoot, 'assets', 'apps', app.logo))
+  app.logo && !fs.existsSync(path.join(frontendRoot, 'assets', 'apps', app.logo))
 ));
 if (missingLogos.length) {
   throw new Error(`Catalog references missing logos: ${missingLogos.map((app) => app.logo).join(', ')}`);

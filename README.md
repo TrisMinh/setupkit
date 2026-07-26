@@ -1,105 +1,106 @@
 <div align="center">
 
-# 📦 SetupKit
+<img src="docs/banner.svg" alt="SetupKit" width="1000">
 
-**Dựng máy Windows mới trong một buổi cà phê — 440 ứng dụng đã xác minh, cài bằng winget, an toàn tuyệt đối.**
+**Máy Windows mới tinh? Chọn một plan theo công việc của bạn, bấm cài, và đi pha ly cà phê.**
 
 ![Windows 10/11](https://img.shields.io/badge/Windows%2010%2F11-x64-0078D4?logo=windows&logoColor=white)
-![WebView2 native](https://img.shields.io/badge/WebView2-native%20%7C%20~12%20MB-2ea44f)
-![Wails v2](https://img.shields.io/badge/Wails-v2-DF0000)
+![Kích thước](https://img.shields.io/badge/1%20file%20EXE-~12%20MB-2ea44f)
+![Nguồn cài đặt](https://img.shields.io/badge/nguồn-winget%20%2B%20Microsoft%20Store-5c2d91)
 ![License](https://img.shields.io/badge/license-MIT-blue)
-
-<img src="docs/screenshots/catalog-light.png" alt="SetupKit - danh mục ứng dụng" width="900">
 
 </div>
 
 ---
 
-## SetupKit là gì?
+## Cài đặt
 
-Máy Windows mới tinh (hoặc vừa cài lại) luôn kèm theo một buổi chiều mở 20 tab trình duyệt để tải từng bộ cài. SetupKit thay việc đó bằng **một file EXE duy nhất ~12 MB**: chọn một Workstation plan theo vai trò (Developer, Designer, Gaming...), xem trước từng lệnh, bấm cài, và theo dõi tiến trình từng ứng dụng ngay trong app.
+**Cách 1 — một dòng lệnh** (mở PowerShell, dán vào, Enter):
 
-Không Electron, không thư mục runtime 300 MB — SetupKit dùng **WebView2 có sẵn của Windows** (qua [Wails v2](https://wails.io)), nên mở lên là chạy ngay cả trên máy vừa active.
+```powershell
+irm https://raw.githubusercontent.com/TrisMinh/setupkit/main/install.ps1 | iex
+```
 
-## Tính năng
+Lệnh này tải bản mới nhất từ Releases, đặt vào thư mục ứng dụng của bạn, tạo shortcut ở Start Menu + Desktop và mở app luôn.
 
-- **440 ứng dụng hợp pháp** từ WinGet và Microsoft Store, chia 15 nhóm, 34 tag, kèm 309 logo đóng gói cục bộ
-- **24 Workstation plan** theo vai trò: chọn một plan là có ngay bộ công cụ được sắp đúng thứ tự nền tảng → runtime → build tool → IDE
-- **Tự quét máy** qua winget, Registry, Start Menu và shortcut để biết app nào đã cài (kèm phiên bản, thư mục cài đặt)
-- **Tìm kiếm không cần gõ dấu** — "trinh duyet", "may ao" vẫn ra đúng kết quả; phím tắt `/` hoặc `Ctrl+K`
-- **Chế độ chạy thử mặc định**: mô phỏng toàn bộ quá trình cài mà không đụng gì tới máy
-- **Terminal tích hợp**: xem command, stdout, stderr và mã thoát của winget theo thời gian thực
-- **Chọn thư mục cài riêng** cho từng package hỗ trợ `--location`
-- Sau khi cài: mở app, xem phiên bản, mở thư mục cài đặt ngay trong SetupKit
-- **Xuất hồ sơ JSON** để dùng lại cấu hình cho máy tiếp theo
-- Giao diện sáng/tối theo hệ thống, animation nhẹ toàn CSS, tôn trọng cài đặt giảm chuyển động của Windows
+**Cách 2 — tải thủ công:** lấy `SetupKit.exe` từ [**Releases**](../../releases/latest) và mở. Không cần cài đặt, không cần runtime nào khác.
+
+> Windows 11 có sẵn WebView2. Windows 10 nếu thiếu, SetupKit sẽ tự đề nghị cài Evergreen Runtime chính thức của Microsoft.
+
+## SetupKit làm được gì?
+
+Cài lại Windows xong thường mất cả buổi mở từng trang web tải từng bộ cài. SetupKit gói toàn bộ việc đó vào một app:
+
+- **440 ứng dụng hợp pháp** từ Windows Package Manager và Microsoft Store — đủ từ trình duyệt, IDE, runtime, database, DevOps tool đến app chat, game launcher; chia 15 nhóm với 34 tag lọc nhanh
+- **24 Workstation plan theo vai trò** — Developer Core, Web Frontend, Node.js Backend, Python & AI, Designer, Gaming, Văn phòng... Chọn một plan là có ngay danh sách công cụ được sắp đúng thứ tự cài: nền tảng trước, IDE sau
+- **Tự biết máy bạn đã có gì** — quét winget, Registry, Start Menu và shortcut để đánh dấu app đã cài, kèm phiên bản và thư mục cài đặt; app đã có sẽ không bị cài lại
+- **Chạy thử trước, cài thật sau** — chế độ mặc định chỉ mô phỏng toàn bộ quá trình, máy không thay đổi gì; muốn cài thật phải bật công tắc riêng và xác nhận từng lệnh
+- **Minh bạch từng lệnh** — xem trước chính xác câu lệnh winget của từng app, theo dõi stdout/stderr trực tiếp trong terminal tích hợp khi cài
+- **Chọn nơi cài** cho các package hỗ trợ, mở app hoặc thư mục cài đặt ngay khi cài xong
+- **Xuất hồ sơ JSON** — lưu bộ ứng dụng đang chọn để dựng máy tiếp theo y hệt chỉ trong một lần import
 
 ## Ảnh màn hình
 
-| | |
-|:---:|:---:|
-| ![Dark mode](docs/screenshots/catalog-dark.png) | ![Tìm kiếm không dấu](docs/screenshots/search-khong-dau.png) |
-| *Giao diện tối* | *Tìm "trinh duyet" không cần dấu* |
-| ![Chi tiết ứng dụng](docs/screenshots/app-detail.png) | ![Tiến trình cài đặt](docs/screenshots/install-progress.png) |
-| *Xem lệnh winget trước khi chạy* | *Theo dõi cài đặt + terminal trực tiếp* |
-
 <div align="center">
-<img src="docs/screenshots/compact-layout.png" alt="Bố cục thu gọn" width="560">
+<img src="docs/screenshots/catalog-light.png" alt="Danh mục 440 ứng dụng với workstation plans" width="900">
 
-*Bố cục tự thích ứng khi thu nhỏ cửa sổ*
+*Chọn Workstation plan theo vai trò, hoặc tự lọc trong 440 ứng dụng*
 </div>
 
-## Cài đặt
+| | |
+|:---:|:---:|
+| ![Theo dõi cài đặt](docs/screenshots/install-progress.png) | ![Chi tiết ứng dụng](docs/screenshots/app-detail.png) |
+| *Tiến trình từng app + terminal winget trực tiếp* | *Xem lệnh sẽ chạy trước khi đồng ý* |
+| ![Giao diện tối](docs/screenshots/catalog-dark.png) | ![Bố cục thu gọn](docs/screenshots/compact-layout.png) |
+| *Giao diện tối theo hệ thống* | *Tự thích ứng khi thu nhỏ cửa sổ* |
 
-Tải **`SetupKit.exe`** từ [Releases](../../releases/latest) và mở — không cần cài đặt.
+## Dùng trong 3 bước
 
-> Windows 11 có sẵn WebView2. Trên Windows 10 thiếu WebView2, SetupKit sẽ tự đề nghị tải Evergreen Runtime chính thức của Microsoft.
+1. **Chọn** — bấm một Workstation plan hoặc tự tick từng app trong danh mục
+2. **Xem lại** — sang tab Gói cài đặt, kiểm tra danh sách và lệnh của từng app; chạy thử nếu muốn chắc chắn
+3. **Cài** — bật "Cài đặt thật", bấm nút và xác nhận; SetupKit chạy winget tuần tự, báo tiến trình từng app và đánh dấu app cài xong
 
-## Cơ chế an toàn
+## An toàn là mặc định
 
-SetupKit được thiết kế để **không thể** trở thành công cụ tải phần mềm lạ:
+SetupKit được thiết kế để **không thể** bị lợi dụng thành công cụ tải phần mềm lạ:
 
-- Package ID bị giới hạn bằng **allowlist nhúng trong binary** (`catalog.go`) — không nhận ID tùy ý, không URL ngoài, không script tải về
-- Chỉ hai nguồn được hỗ trợ: `winget` và `msstore`
-- Mặc định luôn ở **chế độ chạy thử**; cài thật yêu cầu bật công tắc riêng **và** xác nhận từng lệnh qua hộp thoại hệ thống
-- Mọi lệnh hiển thị đầy đủ trước khi chạy; thư mục tùy chỉnh chỉ lấy từ hộp thoại chọn thư mục của Windows
-- Sau khi cài, SetupKit quét lại để xác nhận trạng thái thật trên máy
+| Lớp bảo vệ | Cụ thể |
+|---|---|
+| Allowlist nhúng trong binary | Chỉ chấp nhận package ID có trong catalog đã kiểm chứng — không URL ngoài, không script tải về, không installer thủ công |
+| Hai nguồn duy nhất | `winget` và `msstore`, đều là kho chính thức có kiểm duyệt của Microsoft |
+| Chạy thử mặc định | Mô phỏng không đụng tới máy; cài thật cần bật công tắc **và** xác nhận từng lệnh qua hộp thoại hệ thống |
+| Lệnh minh bạch | Mọi lệnh hiển thị đầy đủ trước khi chạy, output ghi lại nguyên văn trong terminal |
+| Xác minh sau cài | Quét lại máy để xác nhận trạng thái thật, không tin kết quả suông |
 
 ## Build từ mã nguồn
 
-Yêu cầu: [Go 1.25+](https://go.dev/dl/), [Node.js LTS](https://nodejs.org) (chỉ dùng cho script build catalog, app không cần Node khi chạy).
+Yêu cầu [Go 1.25+](https://go.dev/dl/) và [Node.js LTS](https://nodejs.org) (Node chỉ dùng lúc build, app chạy không cần).
 
 ```powershell
-npm run package:win
+npm run package:win     # validate + test + build -> release/SetupKit.exe
+npm run validate        # chỉ kiểm tra catalog, JS, icon, DOM
 ```
 
-Script sẽ validate catalog, cắt bộ icon Phosphor còn đúng phần đang dùng, tạo icon/manifest Windows, chạy `go test` rồi xuất hai artifact vào `release/`: `SetupKit.exe` và `SetupKit-win-x64.zip`.
+Hoặc double-click `BUILD-SETUPKIT.cmd` ở thư mục cha.
 
-Các lệnh hữu ích khác:
-
-```powershell
-npm run validate        # kiểm tra catalog + JS + icon + DOM mà không build
-npm run catalog:build   # sinh lại catalog.json từ scripts/build-catalog.js
-```
-
-## Kiến trúc
+## Cấu trúc dự án
 
 ```
 setupkit-app/
-├── main.go              # Wails bootstrap, theme nền cửa sổ theo dark mode
-├── app.go               # API native: chạy winget, chọn thư mục, mở app
-├── inventory.go         # Quét winget + Registry + Start Menu + shortcut
-├── catalog.go           # Allowlist nhúng, fail-fast nếu catalog sai
-├── index.html           # UI (embed vào exe cùng renderer.js, styles.css)
-├── renderer.js          # Toàn bộ logic UI - vanilla JS, không framework
-├── theme-init.js        # Áp theme trước khi CSS render (chống chớp trắng)
-├── catalog.json         # 440 app - SINH TỰ ĐỘNG, sửa build-catalog.js thay vì file này
-├── assets/              # 309 logo SVG + bộ icon Phosphor đã cắt gọn
-└── scripts/             # build-native.ps1, build-catalog.js, publish-github.ps1...
+├── main.go / app.go / inventory.go / catalog.go   # backend Go (Wails v2)
+├── frontend/                                      # toàn bộ giao diện web (embed vào exe)
+│   ├── index.html · renderer.js · styles.css
+│   ├── catalog.json                               # 440 app - file SINH TỰ ĐỘNG
+│   └── assets/                                    # 309 logo SVG + icon Phosphor
+├── scripts/                                       # build catalog, icon, đóng gói, publish
+├── docs/                                          # tài liệu catalog, ảnh, release notes
+└── build/                                         # manifest + tài nguyên Windows
 ```
 
-Frontend gọi Go qua binding của Wails (`window.go.main.App`), bọc trong `native-bridge.js` để UI không phụ thuộc framework desktop. Sự kiện tiến trình cài đẩy về UI qua `EventsEmit`.
+Muốn thêm/sửa ứng dụng trong catalog: sửa `scripts/build-catalog.js` rồi chạy `npm run catalog:build` — đừng sửa tay `frontend/catalog.json`.
 
 ## Giấy phép
 
-[MIT](LICENSE) — logo các ứng dụng thuộc về chủ sở hữu tương ứng (nguồn [Simple Icons](https://simpleicons.org)), icon giao diện từ [Phosphor Icons](https://phosphoricons.com).
+Phát hành theo giấy phép [MIT](LICENSE). Lịch sử thay đổi ở [CHANGELOG.md](CHANGELOG.md).
+
+Logo các ứng dụng thuộc về chủ sở hữu tương ứng (nguồn [Simple Icons](https://simpleicons.org)); icon giao diện từ [Phosphor Icons](https://phosphoricons.com).
