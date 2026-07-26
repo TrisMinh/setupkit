@@ -138,9 +138,12 @@ if ($LASTEXITCODE -ne 0) {
   }
   if ($LASTEXITCODE -ne 0) { throw 'Tạo release thất bại.' }
 } else {
-  Write-Host "[SetupKit] Release $Tag đã tồn tại - cập nhật file đính kèm..."
+  Write-Host "[SetupKit] Release $Tag đã tồn tại - cập nhật file đính kèm và ghi chú..."
   gh release upload $Tag @assets --clobber
   if ($LASTEXITCODE -ne 0) { throw 'Upload file release thất bại.' }
+  if (Test-Path $notesFile) {
+    gh release edit $Tag --title "SetupKit $Tag" --notes-file $notesFile | Out-Null
+  }
 }
 
 Write-Host ''

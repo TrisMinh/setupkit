@@ -1,3 +1,7 @@
+// SetupKit - dựng máy Windows mới với catalog ứng dụng đã xác minh.
+//
+// File này chỉ làm nhiệm vụ bootstrap: nhúng frontend, nạp catalog và
+// khởi động cửa sổ Wails. Toàn bộ logic nằm trong internal/kit.
 package main
 
 import (
@@ -5,57 +9,42 @@ import (
 	"io/fs"
 	"log"
 
+	"setupkit/internal/kit"
+
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
-	"golang.org/x/sys/windows/registry"
 )
 
-// The web UI is embedded directly in the native executable. WebView2 is shared
-// with Windows instead of bundling Chromium as Electron does.
+// Giao diện web được nhúng thẳng vào exe. WebView2 dùng chung với Windows
+// thay vì đóng gói cả Chromium như Electron.
 //
 //go:embed all:frontend
 var embeddedFrontend embed.FS
 
-// frontendAssets trả về cây file web với frontend/ làm thư mục gốc.
-func frontendAssets() fs.FS {
+func main() {
+	// Catalog chỉ có một bản duy nhất nằm trong frontend nhúng.
+	catalogRaw, err := embeddedFrontend.ReadFile("frontend/catalog.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+	kit.InitCatalog(catalogRaw)
+
 	assets, err := fs.Sub(embeddedFrontend, "frontend")
 	if err != nil {
 		log.Fatal(err)
 	}
-	return assets
-}
 
-// systemPrefersDark đọc theme hệ thống để cửa sổ không chớp màu sáng
-// trong lúc WebView2 khởi động khi người dùng đang ở dark mode.
-func systemPrefersDark() bool {
-	key, err := registry.OpenKey(
-		registry.CURRENT_USER,
-		`Software\Microsoft\Windows\CurrentVersion\Themes\Personalize`,
-		registry.QUERY_VALUE,
-	)
-	if err != nil {
-		return false
-	}
-	defer key.Close()
-	value, _, err := key.GetIntegerValue("AppsUseLightTheme")
-	if err != nil {
-		return false
-	}
-	return value == 0
-}
+	app := kit.NewApp()
 
-func main() {
-	app := NewApp()
-
-	// Trùng với --bg trong styles.css cho từng theme.
+	// Trùng với --bg trong styles.css cho từng theme để không chớp màu khi mở.
 	background := &options.RGBA{R: 243, G: 245, B: 247, A: 1}
-	if systemPrefersDark() {
+	if kit.SystemPrefersDark() {
 		background = &options.RGBA{R: 16, G: 21, B: 18, A: 1}
 	}
 
-	err := wails.Run(&options.App{
+	err = wails.Run(&options.App{
 		Title:            "SetupKit",
 		Width:            1360,
 		Height:           900,
@@ -63,9 +52,9 @@ func main() {
 		MinHeight:        680,
 		BackgroundColour: background,
 		AssetServer: &assetserver.Options{
-			Assets: frontendAssets(),
+			Assets: assets,
 		},
-		OnStartup: app.startup,
+		OnStartup: app.Startup,
 		Bind: []interface{}{
 			app,
 		},

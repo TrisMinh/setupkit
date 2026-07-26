@@ -18,7 +18,7 @@
 **Cách 1 — một dòng lệnh** (mở PowerShell, dán vào, Enter):
 
 ```powershell
-irm https://raw.githubusercontent.com/TrisMinh/setupkit/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/TrisMinh/setupkit/main/scripts/install.ps1 | iex
 ```
 
 Lệnh này tải bản mới nhất từ Releases, đặt vào thư mục ứng dụng của bạn, tạo shortcut ở Start Menu + Desktop và mở app luôn.
@@ -87,20 +87,21 @@ Hoặc double-click `BUILD-SETUPKIT.cmd` ở thư mục cha.
 
 ```
 setupkit-app/
-├── main.go / app.go / inventory.go / catalog.go   # backend Go (Wails v2)
-├── frontend/                                      # toàn bộ giao diện web (embed vào exe)
+├── main.go            # bootstrap: nhúng frontend, nạp catalog, mở cửa sổ Wails
+├── internal/kit/      # toàn bộ logic Go: chạy winget, quét máy, allowlist
+├── frontend/          # toàn bộ giao diện web (embed vào exe)
 │   ├── index.html · renderer.js · styles.css
-│   ├── catalog.json                               # 440 app - file SINH TỰ ĐỘNG
-│   └── assets/                                    # 309 logo SVG + icon Phosphor
-├── scripts/                                       # build catalog, icon, đóng gói, publish
-├── docs/                                          # tài liệu catalog, ảnh, release notes
-└── build/                                         # manifest + tài nguyên Windows
+│   ├── catalog.json   # 440 app - file SINH TỰ ĐỘNG
+│   └── assets/        # 309 logo SVG + icon Phosphor
+├── scripts/           # build catalog, icon, đóng gói, publish, install.ps1
+├── docs/              # CHANGELOG, tài liệu catalog, ảnh, release notes
+└── build/             # manifest + tài nguyên Windows
 ```
 
 Muốn thêm/sửa ứng dụng trong catalog: sửa `scripts/build-catalog.js` rồi chạy `npm run catalog:build` — đừng sửa tay `frontend/catalog.json`.
 
 ## Giấy phép
 
-Phát hành theo giấy phép [MIT](LICENSE). Lịch sử thay đổi ở [CHANGELOG.md](CHANGELOG.md).
+Phát hành theo giấy phép [MIT](LICENSE). Lịch sử thay đổi ở [CHANGELOG](docs/CHANGELOG.md).
 
 Logo các ứng dụng thuộc về chủ sở hữu tương ứng (nguồn [Simple Icons](https://simpleicons.org)); icon giao diện từ [Phosphor Icons](https://phosphoricons.com).

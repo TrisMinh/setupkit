@@ -12,7 +12,7 @@ Một file `SetupKit.exe` duy nhất (~12 MB), mở là chạy. Windows 11 dùng
 
 ### Sửa 10 lỗi
 
-Icon nhóm CLI trống, dialog che mất nút khi nội dung dài, nút "Mở ứng dụng" chạy nhầm file .ico, không bỏ được app đã cài khỏi gói, Enter trong dialog làm dialog tự đóng, double-click tự hủy lựa chọn, crash khi tìm kiếm lúc catalog chưa tải xong, spinner giật, và nhiều lỗi nhỏ khác — chi tiết trong [CHANGELOG.md](../CHANGELOG.md).
+Icon nhóm CLI trống, dialog che mất nút khi nội dung dài, nút "Mở ứng dụng" chạy nhầm file .ico, không bỏ được app đã cài khỏi gói, Enter trong dialog làm dialog tự đóng, double-click tự hủy lựa chọn, crash khi tìm kiếm lúc catalog chưa tải xong, spinner giật, và nhiều lỗi nhỏ khác — chi tiết trong [CHANGELOG.md](CHANGELOG.md).
 
 ### Cài đặt
 

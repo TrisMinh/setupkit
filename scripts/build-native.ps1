@@ -37,6 +37,25 @@ try {
     }
   }
 
+  # Dọn file cũ sau đợt tái cấu trúc v0.4.1 (chỉ xóa khi bản mới đã tồn tại).
+  $legacyPairs = @(
+    @{ Old = 'app.go';            New = 'internal\kit\app.go' },
+    @{ Old = 'app_test.go';       New = 'internal\kit\app_test.go' },
+    @{ Old = 'catalog.go';        New = 'internal\kit\catalog.go' },
+    @{ Old = 'inventory.go';      New = 'internal\kit\inventory.go' },
+    @{ Old = 'CHANGELOG.md';      New = 'docs\CHANGELOG.md' },
+    @{ Old = 'install.ps1';       New = 'scripts\install.ps1' }
+  )
+  foreach ($pair in $legacyPairs) {
+    $oldPath = Join-Path $projectRoot $pair.Old
+    if ((Test-Path $oldPath) -and (Test-Path (Join-Path $projectRoot $pair.New))) {
+      Remove-Item -LiteralPath $oldPath -Force -ErrorAction SilentlyContinue
+      Write-Output "Đã dọn bản cũ ở gốc: $($pair.Old)"
+    }
+  }
+  # package-lock.json rỗng, dự án không có npm dependency.
+  Remove-Item -LiteralPath (Join-Path $projectRoot 'package-lock.json') -Force -ErrorAction SilentlyContinue
+
   & node (Join-Path $PSScriptRoot 'build-catalog.js')
   if ($LASTEXITCODE -ne 0) {
     throw 'Catalog validation failed.'
