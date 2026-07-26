@@ -72,6 +72,9 @@ if (-not (Test-Path '.git')) {
   git init -b main | Out-Null
   Write-Host '[SetupKit] Đã tạo git repo (nhánh main).'
 }
+# Dọn bố cục trước khi commit để các file bị di dời/xóa được ghi nhận vào git.
+& powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'tidy-layout.ps1')
+if ($LASTEXITCODE -ne 0) { throw 'Không thể dọn bố cục dự án.' }
 git add -A
 $pending = git status --porcelain
 if ($pending) {

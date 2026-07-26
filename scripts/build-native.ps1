@@ -15,46 +15,10 @@ if (-not $go) {
 
 Push-Location $projectRoot
 try {
-  # Di trú bố cục cũ: file web từng nằm ở gốc dự án, nay thuộc frontend/.
-  # - Nếu frontend/ chưa có bản tương ứng -> di chuyển từ gốc vào.
-  # - Nếu frontend/ đã có -> xóa bản thừa ở gốc.
-  $frontendDir = Join-Path $projectRoot 'frontend'
-  New-Item -ItemType Directory -Path $frontendDir -Force | Out-Null
-  $webEntries = @(
-    'index.html', 'renderer.js', 'native-bridge.js',
-    'theme-init.js', 'styles.css', 'catalog.json', 'assets'
-  )
-  foreach ($entry in $webEntries) {
-    $legacyPath = Join-Path $projectRoot $entry
-    if (-not (Test-Path $legacyPath)) { continue }
-    $newPath = Join-Path $frontendDir $entry
-    if (Test-Path $newPath) {
-      Remove-Item -LiteralPath $legacyPath -Recurse -Force -ErrorAction SilentlyContinue
-      Write-Output "Đã dọn bản cũ ở gốc: $entry"
-    } else {
-      Move-Item -LiteralPath $legacyPath -Destination $newPath
-      Write-Output "Đã chuyển vào frontend/: $entry"
-    }
+  & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'tidy-layout.ps1')
+  if ($LASTEXITCODE -ne 0) {
+    throw 'Không thể dọn bố cục dự án.'
   }
-
-  # Dọn file cũ sau đợt tái cấu trúc v0.4.1 (chỉ xóa khi bản mới đã tồn tại).
-  $legacyPairs = @(
-    @{ Old = 'app.go';            New = 'internal\kit\app.go' },
-    @{ Old = 'app_test.go';       New = 'internal\kit\app_test.go' },
-    @{ Old = 'catalog.go';        New = 'internal\kit\catalog.go' },
-    @{ Old = 'inventory.go';      New = 'internal\kit\inventory.go' },
-    @{ Old = 'CHANGELOG.md';      New = 'docs\CHANGELOG.md' },
-    @{ Old = 'install.ps1';       New = 'scripts\install.ps1' }
-  )
-  foreach ($pair in $legacyPairs) {
-    $oldPath = Join-Path $projectRoot $pair.Old
-    if ((Test-Path $oldPath) -and (Test-Path (Join-Path $projectRoot $pair.New))) {
-      Remove-Item -LiteralPath $oldPath -Force -ErrorAction SilentlyContinue
-      Write-Output "Đã dọn bản cũ ở gốc: $($pair.Old)"
-    }
-  }
-  # package-lock.json rỗng, dự án không có npm dependency.
-  Remove-Item -LiteralPath (Join-Path $projectRoot 'package-lock.json') -Force -ErrorAction SilentlyContinue
 
   & node (Join-Path $PSScriptRoot 'build-catalog.js')
   if ($LASTEXITCODE -ne 0) {
