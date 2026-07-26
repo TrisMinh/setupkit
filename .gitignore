@@ -1,0 +1,19 @@
+# Local build toolchains and caches
+.tooling/
+node_modules/
+
+# Release outputs
+release/
+rsrc_windows_amd64.syso
+
+# Generated build resources (recreated by build-native.ps1)
+build/windows/icon.ico
+build/appicon.png
+
+# Legacy Electron outputs (not part of the native release)
+dist/
+installer/
+installer-release/
+
+# Local QA captures
+_qa-*

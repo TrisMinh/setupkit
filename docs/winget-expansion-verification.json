@@ -1,0 +1,2633 @@
+{
+  "verifiedAt": "2026-07-26T08:34:29.723Z",
+  "policy": "legitimate-packages-from-winget-community-repository",
+  "wingetSource": "winget",
+  "valid": [
+    {
+      "name": "VSCodium",
+      "pkg": "VSCodium.VSCodium",
+      "category": "IDE & Code",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Pulsar",
+      "pkg": "Pulsar-Edit.Pulsar",
+      "category": "IDE & Code",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Apache NetBeans",
+      "pkg": "Apache.NetBeans",
+      "category": "IDE & Code",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "CLion",
+      "pkg": "JetBrains.CLion",
+      "category": "IDE & Code",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "GoLand",
+      "pkg": "JetBrains.GoLand",
+      "category": "IDE & Code",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "PhpStorm",
+      "pkg": "JetBrains.PhpStorm",
+      "category": "IDE & Code",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "RubyMine",
+      "pkg": "JetBrains.RubyMine",
+      "category": "IDE & Code",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "RustRover",
+      "pkg": "JetBrains.RustRover",
+      "category": "IDE & Code",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Visual Studio 2022 Professional",
+      "pkg": "Microsoft.VisualStudio.2022.Professional",
+      "category": "IDE & Code",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Visual Studio 2022 Enterprise",
+      "pkg": "Microsoft.VisualStudio.2022.Enterprise",
+      "category": "IDE & Code",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Visual Studio 2022 Build Tools",
+      "pkg": "Microsoft.VisualStudio.2022.BuildTools",
+      "category": "IDE & Code",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Code::Blocks",
+      "pkg": "CodeBlocks.CodeBlocks",
+      "category": "IDE & Code",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "CodeLite",
+      "pkg": "CodeLite.CodeLite",
+      "category": "IDE & Code",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Geany",
+      "pkg": "Geany.Geany",
+      "category": "IDE & Code",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "GNU Emacs",
+      "pkg": "GNU.Emacs",
+      "category": "IDE & Code",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Helix",
+      "pkg": "Helix.Helix",
+      "category": "IDE & Code",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Kate",
+      "pkg": "KDE.Kate",
+      "category": "IDE & Code",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Spyder",
+      "pkg": "Spyder.Spyder",
+      "category": "IDE & Code",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "RStudio Desktop",
+      "pkg": "Posit.RStudio",
+      "category": "IDE & Code",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Dev-C++",
+      "pkg": "Embarcadero.Dev-C++",
+      "category": "IDE & Code",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Lapce",
+      "pkg": "Lapce.Lapce",
+      "category": "IDE & Code",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Node.js Current",
+      "pkg": "OpenJS.NodeJS",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Python 3.12",
+      "pkg": "Python.Python.3.12",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Python 3.11",
+      "pkg": "Python.Python.3.11",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Python 3.10",
+      "pkg": "Python.Python.3.10",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Temurin JDK 17",
+      "pkg": "EclipseAdoptium.Temurin.17.JDK",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Temurin JDK 11",
+      "pkg": "EclipseAdoptium.Temurin.11.JDK",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Temurin JDK 8",
+      "pkg": "EclipseAdoptium.Temurin.8.JDK",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Microsoft OpenJDK 21",
+      "pkg": "Microsoft.OpenJDK.21",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Amazon Corretto JDK 21",
+      "pkg": "Amazon.Corretto.21.JDK",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Azul Zulu JDK 21",
+      "pkg": "Azul.Zulu.21.JDK",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "PHP 8.3",
+      "pkg": "PHP.PHP.8.3",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "PHP 8.2",
+      "pkg": "PHP.PHP.8.2",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Ruby with DevKit 3.3",
+      "pkg": "RubyInstallerTeam.RubyWithDevKit.3.3",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Erlang OTP",
+      "pkg": "Erlang.ErlangOTP",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Lua",
+      "pkg": "DEVCOM.Lua",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Strawberry Perl",
+      "pkg": "StrawberryPerl.StrawberryPerl",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Scala",
+      "pkg": "VirtusLab.ScalaCLI",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": ".NET Runtime 8",
+      "pkg": "Microsoft.DotNet.Runtime.8",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": ".NET Desktop Runtime 8",
+      "pkg": "Microsoft.DotNet.DesktopRuntime.8",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "ASP.NET Core Runtime 8",
+      "pkg": "Microsoft.DotNet.AspNetCore.8",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Visual C++ Redistributable x64",
+      "pkg": "Microsoft.VCRedist.2015+.x64",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Visual C++ Redistributable x86",
+      "pkg": "Microsoft.VCRedist.2015+.x86",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Juliaup",
+      "pkg": "Julialang.Juliaup",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Rtools",
+      "pkg": "RProject.Rtools",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "fnm",
+      "pkg": "Schniz.fnm",
+      "category": "Build & Package",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "NVS",
+      "pkg": "jasongin.nvs",
+      "category": "Build & Package",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "mise",
+      "pkg": "jdx.mise",
+      "category": "Build & Package",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "NuGet CLI",
+      "pkg": "Microsoft.NuGet",
+      "category": "Build & Package",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "GitVersion",
+      "pkg": "GitTools.GitVersion",
+      "category": "Build & Package",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Task",
+      "pkg": "Task.Task",
+      "category": "Build & Package",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Sccache",
+      "pkg": "Mozilla.sccache",
+      "category": "Build & Package",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Alacritty",
+      "pkg": "Alacritty.Alacritty",
+      "category": "Terminal & Git",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Tabby",
+      "pkg": "Eugeny.Tabby",
+      "category": "Terminal & Git",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "ConEmu",
+      "pkg": "Maximus5.ConEmu",
+      "category": "Terminal & Git",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "MobaXterm",
+      "pkg": "Mobatek.MobaXterm",
+      "category": "Terminal & Git",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Starship",
+      "pkg": "Starship.Starship",
+      "category": "Terminal & Git",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Git LFS",
+      "pkg": "GitHub.GitLFS",
+      "category": "Terminal & Git",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Fork",
+      "pkg": "Fork.Fork",
+      "category": "Terminal & Git",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "SmartGit",
+      "pkg": "Syntevo.SmartGit",
+      "category": "Terminal & Git",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Git Extensions",
+      "pkg": "GitExtensionsTeam.GitExtensions",
+      "category": "Terminal & Git",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Beyond Compare",
+      "pkg": "ScooterSoftware.BeyondCompare.5",
+      "category": "Terminal & Git",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "eza",
+      "pkg": "eza-community.eza",
+      "category": "CLI",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "dust",
+      "pkg": "bootandy.dust",
+      "category": "CLI",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "bottom",
+      "pkg": "Clement.bottom",
+      "category": "CLI",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "tealdeer",
+      "pkg": "dbrgn.tealdeer",
+      "category": "CLI",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "hyperfine",
+      "pkg": "sharkdp.hyperfine",
+      "category": "CLI",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "sd",
+      "pkg": "chmln.sd",
+      "category": "CLI",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "delta",
+      "pkg": "dandavison.delta",
+      "category": "CLI",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Fastfetch",
+      "pkg": "Fastfetch-cli.Fastfetch",
+      "category": "CLI",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "lsd",
+      "pkg": "lsd-rs.lsd",
+      "category": "CLI",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "xh",
+      "pkg": "ducaale.xh",
+      "category": "CLI",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Ruff",
+      "pkg": "astral-sh.ruff",
+      "category": "CLI",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Gsudo",
+      "pkg": "gerardog.gsudo",
+      "category": "CLI",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Duf",
+      "pkg": "muesli.duf",
+      "category": "CLI",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Procs",
+      "pkg": "dalance.procs",
+      "category": "CLI",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "HTTPie",
+      "pkg": "HTTPie.HTTPie",
+      "category": "CLI",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Docker CLI",
+      "pkg": "Docker.DockerCLI",
+      "category": "DevOps & Cloud",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Podman",
+      "pkg": "RedHat.Podman",
+      "category": "DevOps & Cloud",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "k3d",
+      "pkg": "k3d.k3d",
+      "category": "DevOps & Cloud",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "GitHub Actions act",
+      "pkg": "nektos.act",
+      "category": "DevOps & Cloud",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Azure Developer CLI",
+      "pkg": "Microsoft.Azd",
+      "category": "DevOps & Cloud",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "AWS SAM CLI",
+      "pkg": "Amazon.SAM-CLI",
+      "category": "DevOps & Cloud",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "ngrok",
+      "pkg": "Ngrok.Ngrok",
+      "category": "DevOps & Cloud",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Heroku CLI",
+      "pkg": "Heroku.HerokuCLI",
+      "category": "DevOps & Cloud",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "flyctl",
+      "pkg": "Fly-io.flyctl",
+      "category": "DevOps & Cloud",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "DigitalOcean doctl",
+      "pkg": "DigitalOcean.Doctl",
+      "category": "DevOps & Cloud",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Kustomize",
+      "pkg": "Kubernetes.kustomize",
+      "category": "DevOps & Cloud",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "HashiCorp Consul",
+      "pkg": "Hashicorp.Consul",
+      "category": "DevOps & Cloud",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "HashiCorp Nomad",
+      "pkg": "Hashicorp.Nomad",
+      "category": "DevOps & Cloud",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "HashiCorp Boundary",
+      "pkg": "Hashicorp.Boundary",
+      "category": "DevOps & Cloud",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "OpenLens",
+      "pkg": "MuhammedKalkan.OpenLens",
+      "category": "DevOps & Cloud",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "DevPod",
+      "pkg": "LoftLabs.DevPod",
+      "category": "DevOps & Cloud",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Multipass",
+      "pkg": "Canonical.Multipass",
+      "category": "DevOps & Cloud",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Laragon",
+      "pkg": "LeNgocKhoa.Laragon",
+      "category": "DevOps & Cloud",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "HeidiSQL",
+      "pkg": "HeidiSQL.HeidiSQL",
+      "category": "Database & API",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "MariaDB Server",
+      "pkg": "MariaDB.Server",
+      "category": "Database & API",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "MySQL Server",
+      "pkg": "Oracle.MySQL",
+      "category": "Database & API",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "MySQL Shell",
+      "pkg": "Oracle.MySQLShell",
+      "category": "Database & API",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "MongoDB Server",
+      "pkg": "MongoDB.Server",
+      "category": "Database & API",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Neo4j Desktop",
+      "pkg": "Neo4j.Neo4jDesktop",
+      "category": "Database & API",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "DbGate",
+      "pkg": "JanProchazka.dbgate",
+      "category": "Database & API",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "NoSQLBooster",
+      "pkg": "NoSQLBooster.NoSQLBooster",
+      "category": "Database & API",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "DuckDB CLI",
+      "pkg": "DuckDB.cli",
+      "category": "Database & API",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "PostgreSQL 16",
+      "pkg": "PostgreSQL.PostgreSQL.16",
+      "category": "Database & API",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "PostgreSQL 15",
+      "pkg": "PostgreSQL.PostgreSQL.15",
+      "category": "Database & API",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "SQLite CLI",
+      "pkg": "SQLite.SQLite",
+      "category": "Database & API",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "MongoDB Shell",
+      "pkg": "MongoDB.Shell",
+      "category": "Database & API",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Claude",
+      "pkg": "Anthropic.Claude",
+      "category": "AI lập trình",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Perplexity",
+      "pkg": "Perplexity.Perplexity",
+      "category": "AI lập trình",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Claude Code",
+      "pkg": "Anthropic.ClaudeCode",
+      "category": "AI lập trình",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "GitHub Copilot CLI",
+      "pkg": "GitHub.Copilot",
+      "category": "AI lập trình",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Microsoft AI Shell",
+      "pkg": "Microsoft.AIShell",
+      "category": "AI lập trình",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Chatbox",
+      "pkg": "Bin-Huang.Chatbox",
+      "category": "AI lập trình",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Chatbox Community Edition",
+      "pkg": "Bin-Huang.Chatbox.CommunityEdition",
+      "category": "AI lập trình",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Msty",
+      "pkg": "CloudStack.Msty",
+      "category": "AI lập trình",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Msty CPU",
+      "pkg": "CloudStack.Msty.CPU",
+      "category": "AI lập trình",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "GPT4All",
+      "pkg": "nomic.gpt4all",
+      "category": "AI lập trình",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Cherry Studio",
+      "pkg": "kangfenmao.CherryStudio",
+      "category": "AI lập trình",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "ChatALL",
+      "pkg": "AI-Shifu.ChatALL",
+      "category": "AI lập trình",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Lemonade Server",
+      "pkg": "AMD.LemonadeServer",
+      "category": "AI lập trình",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Qoder",
+      "pkg": "Alibaba.Qoder",
+      "category": "AI lập trình",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Backyard AI",
+      "pkg": "AhoyLabs.BackyardAI",
+      "category": "AI lập trình",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Nmap",
+      "pkg": "Insecure.Nmap",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "WireGuard",
+      "pkg": "WireGuard.WireGuard",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Proton VPN",
+      "pkg": "Proton.ProtonVPN",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Mullvad VPN",
+      "pkg": "MullvadVPN.MullvadVPN",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "NordVPN",
+      "pkg": "NordSecurity.NordVPN",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Windscribe",
+      "pkg": "Windscribe.Windscribe",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "ZeroTier One",
+      "pkg": "ZeroTier.ZeroTierOne",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Termius",
+      "pkg": "Termius.Termius",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Angry IP Scanner",
+      "pkg": "angryziber.AngryIPScanner",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Advanced IP Scanner",
+      "pkg": "Famatech.AdvancedIPScanner",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Burp Suite Community",
+      "pkg": "PortSwigger.BurpSuite.Community",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "OWASP ZAP",
+      "pkg": "ZAP.ZAP",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "VeraCrypt",
+      "pkg": "IDRIX.VeraCrypt",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Cryptomator",
+      "pkg": "Cryptomator.Cryptomator",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Malwarebytes",
+      "pkg": "Malwarebytes.Malwarebytes",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Mozilla Thunderbird",
+      "pkg": "Mozilla.Thunderbird",
+      "category": "Office & Công việc",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Joplin",
+      "pkg": "Joplin.Joplin",
+      "category": "Office & Công việc",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Standard Notes",
+      "pkg": "StandardNotes.StandardNotes",
+      "category": "Office & Công việc",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Simplenote",
+      "pkg": "Automattic.Simplenote",
+      "category": "Office & Công việc",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Anytype",
+      "pkg": "AnyAssociation.Anytype",
+      "category": "Office & Công việc",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "AppFlowy",
+      "pkg": "AppFlowy.AppFlowy",
+      "category": "Office & Công việc",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Zettlr",
+      "pkg": "Zettlr.Zettlr",
+      "category": "Office & Công việc",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "MarkText",
+      "pkg": "MarkText.MarkText",
+      "category": "Office & Công việc",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Zotero",
+      "pkg": "DigitalScholar.Zotero",
+      "category": "Office & Công việc",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "calibre",
+      "pkg": "calibre.calibre",
+      "category": "Office & Công việc",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "SumatraPDF",
+      "pkg": "SumatraPDF.SumatraPDF",
+      "category": "Office & Công việc",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Foxit PDF Reader",
+      "pkg": "Foxit.FoxitReader",
+      "category": "Office & Công việc",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "PDFgear",
+      "pkg": "PDFgear.PDFgear",
+      "category": "Office & Công việc",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Okular",
+      "pkg": "KDE.Okular",
+      "category": "Office & Công việc",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Xournal++",
+      "pkg": "Xournal++.Xournal++",
+      "category": "Office & Công việc",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Mendeley Reference Manager",
+      "pkg": "Elsevier.MendeleyReferenceManager",
+      "category": "Office & Công việc",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "ClickUp",
+      "pkg": "ClickUp.ClickUp",
+      "category": "Office & Công việc",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Evernote",
+      "pkg": "Evernote.Evernote",
+      "category": "Office & Công việc",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Freeplane",
+      "pkg": "Freeplane.Freeplane",
+      "category": "Office & Công việc",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "XMind",
+      "pkg": "Xmind.Xmind",
+      "category": "Office & Công việc",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Element",
+      "pkg": "Element.Element",
+      "category": "Liên lạc & Xã hội",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "WeChat",
+      "pkg": "Tencent.WeChat",
+      "category": "Liên lạc & Xã hội",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Mattermost",
+      "pkg": "Mattermost.MattermostDesktop",
+      "category": "Liên lạc & Xã hội",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Zulip",
+      "pkg": "Zulip.Zulip",
+      "category": "Liên lạc & Xã hội",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Rocket.Chat",
+      "pkg": "RocketChat.RocketChat",
+      "category": "Liên lạc & Xã hội",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Guilded",
+      "pkg": "Guilded.Guilded",
+      "category": "Liên lạc & Xã hội",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Cisco Webex",
+      "pkg": "Cisco.Webex",
+      "category": "Liên lạc & Xã hội",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Ferdium",
+      "pkg": "Ferdium.Ferdium",
+      "category": "Liên lạc & Xã hội",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Rambox",
+      "pkg": "Rambox.Rambox",
+      "category": "Liên lạc & Xã hội",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "KakaoTalk",
+      "pkg": "Kakao.KakaoTalk",
+      "category": "Liên lạc & Xã hội",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Microsoft Edge",
+      "pkg": "Microsoft.Edge",
+      "category": "Trình duyệt",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Chromium",
+      "pkg": "Hibbiki.Chromium",
+      "category": "Trình duyệt",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "LibreWolf",
+      "pkg": "LibreWolf.LibreWolf",
+      "category": "Trình duyệt",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Waterfox",
+      "pkg": "Waterfox.Waterfox",
+      "category": "Trình duyệt",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Floorp",
+      "pkg": "Ablaze.Floorp",
+      "category": "Trình duyệt",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Mullvad Browser",
+      "pkg": "MullvadVPN.MullvadBrowser",
+      "category": "Trình duyệt",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Pale Moon",
+      "pkg": "MoonchildProductions.PaleMoon",
+      "category": "Trình duyệt",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Yandex Browser",
+      "pkg": "Yandex.Browser",
+      "category": "Trình duyệt",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "DuckDuckGo Browser",
+      "pkg": "DuckDuckGo.DesktopBrowser",
+      "category": "Trình duyệt",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Maxthon",
+      "pkg": "Maxthon.Maxthon",
+      "category": "Trình duyệt",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Ungoogled Chromium",
+      "pkg": "eloston.ungoogled-chromium",
+      "category": "Trình duyệt",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "WinRAR",
+      "pkg": "RARLab.WinRAR",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "PeaZip",
+      "pkg": "Giorgiotani.Peazip",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "NanaZip",
+      "pkg": "M2Team.NanaZip",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Bandizip",
+      "pkg": "Bandisoft.Bandizip",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Files",
+      "pkg": "FilesCommunity.Files",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Directory Opus",
+      "pkg": "GPSoftware.DirectoryOpus",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "FreeCommander XE",
+      "pkg": "MarekJasinski.FreeCommanderXE",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Ditto",
+      "pkg": "Ditto.Ditto",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "CopyQ",
+      "pkg": "hluk.CopyQ",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "GlazeWM",
+      "pkg": "glzr-io.glazewm",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Lively Wallpaper",
+      "pkg": "rocksdanister.LivelyWallpaper",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "TranslucentTB",
+      "pkg": "CharlesMilette.TranslucentTB",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Twinkle Tray",
+      "pkg": "xanderfrangos.twinkletray",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Monitorian",
+      "pkg": "emoacht.Monitorian",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "HWiNFO",
+      "pkg": "REALiX.HWiNFO",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "CPU-Z",
+      "pkg": "CPUID.CPU-Z",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "GPU-Z",
+      "pkg": "TechPowerUp.GPU-Z",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "HWMonitor",
+      "pkg": "CPUID.HWMonitor",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "CrystalDiskMark",
+      "pkg": "CrystalDewWorld.CrystalDiskMark",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Ventoy",
+      "pkg": "Ventoy.Ventoy",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "balenaEtcher",
+      "pkg": "Balena.Etcher",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Raspberry Pi Imager",
+      "pkg": "RaspberryPiFoundation.RaspberryPiImager",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "DevToys",
+      "pkg": "DevToys-app.DevToys",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "ScreenToGif",
+      "pkg": "NickeManarin.ScreenToGif",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "PicPick",
+      "pkg": "NGWIN.PicPick",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Revo Uninstaller",
+      "pkg": "RevoUninstaller.RevoUninstaller",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Geek Uninstaller",
+      "pkg": "GeekUninstaller.GeekUninstaller",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "TeraCopy",
+      "pkg": "CodeSector.TeraCopy",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "WPD",
+      "pkg": "WPD.WPD",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Display Driver Uninstaller",
+      "pkg": "Wagnardsoft.DisplayDriverUninstaller",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Fan Control",
+      "pkg": "Rem0o.FanControl",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "UNIGINE Heaven Benchmark",
+      "pkg": "Unigine.HeavenBenchmark",
+      "category": "Tiện ích",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Adobe Creative Cloud",
+      "pkg": "Adobe.CreativeCloud",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Paint.NET",
+      "pkg": "dotPDN.PaintDotNet",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "ImageMagick",
+      "pkg": "ImageMagick.ImageMagick",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "FFmpeg",
+      "pkg": "Gyan.FFmpeg",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Kdenlive",
+      "pkg": "KDE.Kdenlive",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Shotcut",
+      "pkg": "Meltytech.Shotcut",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "OpenShot",
+      "pkg": "OpenShot.OpenShot",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Canva",
+      "pkg": "Canva.Canva",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "darktable",
+      "pkg": "darktable.darktable",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "RawTherapee",
+      "pkg": "RawTherapee.RawTherapee",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "LMMS",
+      "pkg": "LMMS.LMMS",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "REAPER",
+      "pkg": "Cockos.REAPER",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "MKVToolNix",
+      "pkg": "MoritzBunkus.MKVToolNix",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "MediaInfo",
+      "pkg": "MediaArea.MediaInfo.GUI",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Kodi",
+      "pkg": "XBMCFoundation.Kodi",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "MPC-HC",
+      "pkg": "clsid2.mpc-hc",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "PotPlayer",
+      "pkg": "Daum.PotPlayer",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "foobar2000",
+      "pkg": "PeterPawlowski.foobar2000",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Plex",
+      "pkg": "Plex.Plex",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Apple iTunes",
+      "pkg": "Apple.iTunes",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "TIDAL",
+      "pkg": "TIDALMusicAS.TIDAL",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Deezer",
+      "pkg": "Deezer.Deezer",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "AIMP",
+      "pkg": "AIMP.AIMP",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Audacious",
+      "pkg": "Audacious.MediaPlayer",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Screenpresso",
+      "pkg": "Learnpulse.Screenpresso",
+      "category": "Thiết kế & Media",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "GOG Galaxy",
+      "pkg": "GOG.Galaxy",
+      "category": "Game & Game Dev",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "EA app",
+      "pkg": "ElectronicArts.EADesktop",
+      "category": "Game & Game Dev",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Ubisoft Connect",
+      "pkg": "Ubisoft.Connect",
+      "category": "Game & Game Dev",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "itch",
+      "pkg": "ItchIo.Itch",
+      "category": "Game & Game Dev",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Heroic Games Launcher",
+      "pkg": "HeroicGamesLauncher.HeroicGamesLauncher",
+      "category": "Game & Game Dev",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Playnite",
+      "pkg": "Playnite.Playnite",
+      "category": "Game & Game Dev",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Prism Launcher",
+      "pkg": "PrismLauncher.PrismLauncher",
+      "category": "Game & Game Dev",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "CurseForge",
+      "pkg": "Overwolf.CurseForge",
+      "category": "Game & Game Dev",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Minecraft Launcher",
+      "pkg": "Mojang.MinecraftLauncher",
+      "category": "Game & Game Dev",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Roblox",
+      "pkg": "Roblox.Roblox",
+      "category": "Game & Game Dev",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "osu!",
+      "pkg": "ppy.osu",
+      "category": "Game & Game Dev",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Blockbench",
+      "pkg": "JannisX11.Blockbench",
+      "category": "Game & Game Dev",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "GDevelop",
+      "pkg": "GDevelop.GDevelop",
+      "category": "Game & Game Dev",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Godot Mono",
+      "pkg": "GodotEngine.GodotEngine.Mono",
+      "category": "Game & Game Dev",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "GameMaker",
+      "pkg": "YoYoGames.GameMaker.Studio.2",
+      "category": "Game & Game Dev",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    }
+  ],
+  "invalid": [
+    {
+      "name": "Eclipse IDE for Java",
+      "pkg": "EclipseFoundation.EclipseIDEforJavaDevelopers",
+      "category": "IDE & Code",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Aqua",
+      "pkg": "JetBrains.Aqua",
+      "category": "IDE & Code",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Qt Creator",
+      "pkg": "QtProject.QtCreator",
+      "category": "IDE & Code",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Vim",
+      "pkg": "Vim.Vim",
+      "category": "IDE & Code",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Lite XL",
+      "pkg": "LiteXL.LiteXL",
+      "category": "IDE & Code",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Elixir",
+      "pkg": "Elixir.Elixir",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Nim",
+      "pkg": "Nim.Nim",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "GHCup",
+      "pkg": "GHCup.GHCup",
+      "category": "Ngôn ngữ & Runtime",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Ccache",
+      "pkg": "ccache.ccache",
+      "category": "Build & Package",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "xmake",
+      "pkg": "xmake-io.xmake",
+      "category": "Build & Package",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Premake",
+      "pkg": "Premake.Premake",
+      "category": "Build & Package",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Conan",
+      "pkg": "JesseJara.Conan",
+      "category": "Build & Package",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "vcpkg",
+      "pkg": "Microsoft.Vcpkg",
+      "category": "Build & Package",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Hyper",
+      "pkg": "Hyper.Hyper",
+      "category": "Terminal & Git",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Cmder",
+      "pkg": "Cmder.Cmder",
+      "category": "Terminal & Git",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Meld",
+      "pkg": "GNOME.Meld",
+      "category": "Terminal & Git",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "tokei",
+      "pkg": "XAMPPRocky.tokei",
+      "category": "CLI",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "watchexec",
+      "pkg": "watchexec.watchexec",
+      "category": "CLI",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "pre-commit",
+      "pkg": "pre-commit.pre-commit",
+      "category": "CLI",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Broot",
+      "pkg": "Canop.broot",
+      "category": "CLI",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Trippy",
+      "pkg": "FujiApple852.trippy",
+      "category": "CLI",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "nerdctl",
+      "pkg": "containerd.nerdctl",
+      "category": "DevOps & Cloud",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "GitLab CLI",
+      "pkg": "GitLab.glab",
+      "category": "DevOps & Cloud",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Vercel CLI",
+      "pkg": "Vercel.Vercel",
+      "category": "DevOps & Cloud",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Netlify CLI",
+      "pkg": "Netlify.NetlifyCLI",
+      "category": "DevOps & Cloud",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Dagger",
+      "pkg": "Dagger.Dagger",
+      "category": "DevOps & Cloud",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Argo CD CLI",
+      "pkg": "ArgoCD.ArgoCD",
+      "category": "DevOps & Cloud",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Skaffold",
+      "pkg": "Google.Skaffold",
+      "category": "DevOps & Cloud",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Tilt",
+      "pkg": "TiltDev.Tilt",
+      "category": "DevOps & Cloud",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Telepresence",
+      "pkg": "TelepresenceIO.Telepresence2",
+      "category": "DevOps & Cloud",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "OpenShift CLI",
+      "pkg": "RedHat.OpenShift-CLI",
+      "category": "DevOps & Cloud",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Azure Data Studio",
+      "pkg": "Microsoft.AzureDataStudio",
+      "category": "Database & API",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Robo 3T",
+      "pkg": "Studio3T.Robo3T",
+      "category": "Database & API",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "ClickHouse",
+      "pkg": "ClickHouse.ClickHouse",
+      "category": "Database & API",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "InfluxDB",
+      "pkg": "InfluxData.InfluxDB",
+      "category": "Database & API",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Grafana",
+      "pkg": "GrafanaLabs.Grafana",
+      "category": "Database & API",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Prometheus",
+      "pkg": "Prometheus.Prometheus",
+      "category": "Database & API",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Redis for Windows",
+      "pkg": "tporadowski.Redis",
+      "category": "Database & API",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "GPT4All",
+      "pkg": "Nomic.GPT4All",
+      "category": "AI lập trình",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Msty",
+      "pkg": "Msty.Msty",
+      "category": "AI lập trình",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Cherry Studio",
+      "pkg": "CherryHQ.CherryStudio",
+      "category": "AI lập trình",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Pinokio",
+      "pkg": "Pinokio.Pinokio",
+      "category": "AI lập trình",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Stability Matrix",
+      "pkg": "LykosAI.StabilityMatrix",
+      "category": "AI lập trình",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Chatbox",
+      "pkg": "ChatboxAI.Chatbox",
+      "category": "AI lập trình",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Pieces for Developers",
+      "pkg": "MeshIntelligentTechnologies.PiecesOS",
+      "category": "AI lập trình",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "SoftEther VPN",
+      "pkg": "SoftEtherVPN.SoftEtherVPN",
+      "category": "Mạng & Bảo mật",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Royal TS",
+      "pkg": "RoyalApps.RoyalTS",
+      "category": "Mạng & Bảo mật",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Ghidra",
+      "pkg": "Ghidra.Ghidra",
+      "category": "Mạng & Bảo mật",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Hashcat",
+      "pkg": "Hashcat.Hashcat",
+      "category": "Mạng & Bảo mật",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Proxifier",
+      "pkg": "Initex.Proxifier",
+      "category": "Mạng & Bảo mật",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "RustDesk",
+      "pkg": "RustDesk.RustDesk",
+      "category": "Mạng & Bảo mật",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "OpenSSH Beta",
+      "pkg": "Microsoft.OpenSSH.Beta",
+      "category": "Mạng & Bảo mật",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Cyberduck",
+      "pkg": "iterate.Cyberduck",
+      "category": "Mạng & Bảo mật",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "AFFiNE",
+      "pkg": "toeverything.AFFiNE",
+      "category": "Office & Công việc",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Typora",
+      "pkg": "Typora.Typora",
+      "category": "Office & Công việc",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Linear",
+      "pkg": "Linear.Linear",
+      "category": "Office & Công việc",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Trello",
+      "pkg": "Trello.Trello",
+      "category": "Office & Công việc",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Microsoft To Do",
+      "pkg": "Microsoft.ToDo",
+      "category": "Office & Công việc",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "MindManager",
+      "pkg": "Corel.MindManager",
+      "category": "Office & Công việc",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Viber",
+      "pkg": "Viber.Viber",
+      "category": "Liên lạc & Xã hội",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "LINE",
+      "pkg": "LINE.LINE",
+      "category": "Liên lạc & Xã hội",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Franz",
+      "pkg": "Franz.Franz",
+      "category": "Liên lạc & Xã hội",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "UniGetUI",
+      "pkg": "MartiCliment.UniGetUI",
+      "category": "Tiện ích",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Double Commander",
+      "pkg": "Alexx2000.DoubleCommander",
+      "category": "Tiện ích",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "OneCommander",
+      "pkg": "OneCommander.OneCommander",
+      "category": "Tiện ích",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "ueli",
+      "pkg": "oliverschwendener.ueli",
+      "category": "Tiện ích",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Keypirinha",
+      "pkg": "Keypirinha.Keypirinha",
+      "category": "Tiện ích",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Microsoft PC Manager",
+      "pkg": "Microsoft.PCManager",
+      "category": "Tiện ích",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Winaero Tweaker",
+      "pkg": "Winaero.WinaeroTweaker",
+      "category": "Tiện ích",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "LosslessCut",
+      "pkg": "mifi.lossless-cut",
+      "category": "Thiết kế & Media",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "DaVinci Resolve",
+      "pkg": "BlackmagicDesign.DaVinciResolve",
+      "category": "Thiết kế & Media",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Amazon Music",
+      "pkg": "Amazon.AmazonMusic",
+      "category": "Thiết kế & Media",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "MusicBee",
+      "pkg": "MusicBee.MusicBee",
+      "category": "Thiết kế & Media",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Tiled",
+      "pkg": "ThorbjornLindeijer.Tiled",
+      "category": "Game & Game Dev",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "LDtk",
+      "pkg": "DeepnightGames.LDtk",
+      "category": "Game & Game Dev",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Defold",
+      "pkg": "Defold.Defold",
+      "category": "Game & Game Dev",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    },
+    {
+      "name": "Google Play Games",
+      "pkg": "Google.PlayGames.Beta",
+      "category": "Game & Game Dev",
+      "ok": false,
+      "code": 2316632084,
+      "error": "No package found matching input criteria."
+    }
+  ]
+}

@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'self'; style-src 'self'; font-src 'self' data:; img-src 'self' data:; script-src 'self'; object-src 'none'; base-uri 'none';"
+  >
+  <title>SetupKit</title>
+  <script src="./theme-init.js"></script>
+  <link rel="preload" href="./assets/phosphor/Phosphor.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="./assets/phosphor/style.css">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell" data-od-id="desktop-app-shell">
+    <aside class="sidebar" data-od-id="navigation-sidebar">
+      <div class="brand" data-od-id="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <i class="ph ph-package"></i>
+        </span>
+        <span class="brand-copy">
+          <span class="brand-name">SetupKit</span>
+          <span class="brand-subtitle">Thiết lập máy an toàn</span>
+        </span>
+      </div>
+
+      <nav class="nav" aria-label="Điều hướng chính">
+        <button class="nav-button active" data-view="catalog" type="button" title="Ứng dụng">
+          <i class="ph ph-squares-four" aria-hidden="true"></i>
+          <span>Ứng dụng</span>
+        </button>
+        <button class="nav-button" data-view="queue" type="button" title="Gói cài đặt">
+          <i class="ph ph-list-checks" aria-hidden="true"></i>
+          <span>Gói cài đặt</span>
+          <span class="nav-count" id="navQueueCount">0</span>
+        </button>
+        <button class="nav-button" data-view="logs" type="button" title="Nhật ký">
+          <i class="ph ph-terminal-window" aria-hidden="true"></i>
+          <span>Nhật ký</span>
+        </button>
+        <button class="nav-button" data-view="profile" type="button" title="Hồ sơ">
+          <i class="ph ph-floppy-disk" aria-hidden="true"></i>
+          <span>Hồ sơ</span>
+        </button>
+      </nav>
+
+      <section class="sidebar-safety" aria-label="Chính sách an toàn">
+        <div class="safety-title">
+          <i class="ph ph-shield-check" aria-hidden="true"></i>
+          Nguồn đã xác minh
+        </div>
+        <p>Chỉ tạo lệnh từ danh sách đã duyệt. Không tải script hay bộ cài từ URL lạ.</p>
+      </section>
+
+      <div class="sidebar-footer">
+        <span>440 ứng dụng</span>
+        <span>winget + Store</span>
+      </div>
+    </aside>
+
+    <main class="main" data-od-id="main-app-area">
+      <div class="main-inner">
+        <header class="app-header">
+          <div class="system-ready" id="systemReady" role="status">
+            <i class="ph ph-check-circle" aria-hidden="true"></i>
+            Hệ thống sẵn sàng
+          </div>
+          <div class="header-actions">
+            <button class="icon-button" id="rescanBtn" type="button" aria-label="Quét lại ứng dụng đã cài" title="Quét lại ứng dụng">
+              <i class="ph ph-arrow-clockwise" aria-hidden="true"></i>
+            </button>
+            <button class="icon-button" id="themeBtn" type="button" aria-label="Đổi giao diện" title="Đổi giao diện">
+              <i class="ph ph-moon" aria-hidden="true"></i>
+            </button>
+          </div>
+        </header>
+
+        <section class="page active" id="page-catalog" data-page="catalog" data-od-id="catalog-page">
+          <div class="page-heading">
+            <h1 tabindex="-1">Dựng workstation theo công việc</h1>
+            <p>Chọn plan theo vai trò hoặc lọc đúng công cụ, runtime và ứng dụng bạn cần.</p>
+          </div>
+
+          <section class="preset-section" aria-labelledby="presetHeading">
+            <div class="section-heading">
+              <h2 id="presetHeading">Workstation plans</h2>
+              <div class="heading-tools">
+                <span id="planSummary">Đang tải workstation plan</span>
+                <button class="scroll-btn" id="presetPrev" type="button" aria-label="Cuộn danh sách plan sang trái" hidden>
+                  <i class="ph ph-caret-left" aria-hidden="true"></i>
+                </button>
+                <button class="scroll-btn" id="presetNext" type="button" aria-label="Cuộn danh sách plan sang phải" hidden>
+                  <i class="ph ph-caret-right" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+            <div class="preset-list" id="presetList" data-od-id="preset-list">
+              <div class="skeleton-card preset"></div>
+              <div class="skeleton-card preset"></div>
+              <div class="skeleton-card preset"></div>
+              <div class="skeleton-card preset"></div>
+            </div>
+          </section>
+
+          <section aria-labelledby="catalogHeading">
+            <h2 class="sr-only" id="catalogHeading">Kho ứng dụng</h2>
+            <div class="toolbar" data-od-id="catalog-toolbar">
+              <div class="search-field">
+                <label class="sr-only" for="searchInput">Tìm ứng dụng</label>
+                <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+                <input
+                  id="searchInput"
+                  type="search"
+                  placeholder="Tìm app, runtime, publisher, package ID... (phím /)"
+                  autocomplete="off"
+                  spellcheck="false"
+                  autocapitalize="off"
+                >
+                <button class="search-clear" id="searchClear" type="button" aria-label="Xóa từ khóa" title="Xóa từ khóa">
+                  <i class="ph ph-x" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div>
+                <label class="sr-only" for="categorySelect">Danh mục</label>
+                <select id="categorySelect" aria-label="Lọc theo danh mục"></select>
+              </div>
+              <div>
+                <label class="sr-only" for="sourceSelect">Nguồn cài đặt</label>
+                <select id="sourceSelect" aria-label="Lọc theo nguồn cài đặt">
+                  <option value="all">Tất cả nguồn</option>
+                  <option value="winget">Chỉ winget</option>
+                  <option value="msstore">Chỉ Microsoft Store</option>
+                </select>
+              </div>
+              <div>
+                <label class="sr-only" for="statusSelect">Tình trạng cài đặt</label>
+                <select id="statusSelect" aria-label="Lọc theo tình trạng cài đặt">
+                  <option value="all">Mọi tình trạng</option>
+                  <option value="installed">Đã cài trên máy</option>
+                  <option value="available">Chưa cài</option>
+                  <option value="selected">Đang chọn</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="tag-filter-section" aria-labelledby="tagFilterHeading">
+              <div class="tag-filter-heading">
+                <span id="tagFilterHeading">Lọc nhanh theo tag</span>
+                <button class="tag-reset-button" id="tagResetBtn" type="button" hidden>
+                  Xóa tag
+                </button>
+              </div>
+              <div class="tag-filter-bar" id="tagFilterBar" aria-label="Tag ứng dụng"></div>
+              <div class="active-filter-summary" id="activeFilterSummary" aria-live="polite"></div>
+            </div>
+
+            <div class="catalog-meta">
+              <span id="catalogCount">Đang tải danh sách</span>
+              <span id="installedSummary">Đang kiểm tra ứng dụng trên máy</span>
+            </div>
+            <div class="app-grid" id="catalog" data-od-id="app-catalog">
+              <div class="skeleton-card"></div>
+              <div class="skeleton-card"></div>
+              <div class="skeleton-card"></div>
+              <div class="skeleton-card"></div>
+              <div class="skeleton-card"></div>
+              <div class="skeleton-card"></div>
+            </div>
+          </section>
+
+          <section class="selection-dock" id="selectionDock" aria-label="Tóm tắt lựa chọn">
+            <div class="selection-summary">
+              <span class="selection-summary-icon" aria-hidden="true">
+                <i class="ph ph-package"></i>
+              </span>
+              <span>
+                <strong id="dockCount">0 ứng dụng đã chọn</strong>
+                <span id="dockSubtext">Sẵn sàng để xem lại và chạy</span>
+              </span>
+            </div>
+            <button class="button primary" id="reviewSelectionBtn" type="button">
+              Xem gói cài đặt
+              <i class="ph ph-caret-right" aria-hidden="true"></i>
+            </button>
+          </section>
+        </section>
+
+        <section class="page" id="page-queue" data-page="queue" data-od-id="queue-page">
+          <div class="page-heading">
+            <h1 tabindex="-1">Cài đặt và theo dõi</h1>
+            <p>Xem tiến trình từng ứng dụng và mở ngay sau khi cài xong.</p>
+          </div>
+
+          <div class="review-layout">
+            <section class="panel" aria-labelledby="queueHeading">
+              <div class="panel-heading">
+                <h2 id="queueHeading">Gói cài đặt</h2>
+                <div class="panel-heading-actions">
+                  <button class="button compact" id="terminalToggleBtn" type="button" aria-expanded="false" aria-controls="terminalPanel">
+                    <i class="ph ph-terminal-window" aria-hidden="true"></i>
+                    Terminal
+                    <span class="terminal-count" id="terminalCount" hidden>0</span>
+                  </button>
+                  <span class="status-label" id="queueStatus">
+                    <i class="ph ph-list-checks" aria-hidden="true"></i>
+                    Sẵn sàng
+                  </span>
+                </div>
+              </div>
+              <div class="progress-wrap" id="progressWrap">
+                <div class="progress-copy">
+                  <span id="progressText">Chưa bắt đầu</span>
+                  <strong id="progressPercent">0%</strong>
+                </div>
+                <div class="progress-track" aria-label="Tiến trình cài đặt">
+                  <span class="progress-bar" id="progressBar"></span>
+                </div>
+              </div>
+              <section class="terminal-panel" id="terminalPanel" aria-labelledby="terminalTitle" hidden>
+                <div class="terminal-header">
+                  <div class="terminal-title">
+                    <i class="ph ph-terminal-window" aria-hidden="true"></i>
+                    <span>
+                      <strong id="terminalTitle">Đầu ra cài đặt</strong>
+                      <span id="terminalCommand">Chưa có lệnh nào được chạy</span>
+                    </span>
+                  </div>
+                  <div class="terminal-actions">
+                    <button class="terminal-action" id="terminalCopyBtn" type="button" title="Sao chép terminal" aria-label="Sao chép terminal">
+                      <i class="ph ph-copy" aria-hidden="true"></i>
+                    </button>
+                    <button class="terminal-action" id="terminalClearBtn" type="button" title="Xóa terminal" aria-label="Xóa terminal">
+                      <i class="ph ph-trash" aria-hidden="true"></i>
+                    </button>
+                    <button class="terminal-action" id="terminalCloseBtn" type="button" title="Đóng terminal" aria-label="Đóng terminal">
+                      <i class="ph ph-x" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </div>
+                <pre class="terminal-output" id="terminalOutput" role="log" aria-live="off">Terminal sẽ hiển thị command, stdout và stderr khi bắt đầu cài.</pre>
+              </section>
+              <div class="queue-list" id="queueList" data-od-id="queue-list"></div>
+            </section>
+
+            <aside class="panel summary-panel" aria-label="Tóm tắt gói cài đặt">
+              <div class="summary-top">
+                <strong>Tóm tắt</strong>
+                <span class="summary-count" id="queueCount">0</span>
+              </div>
+
+              <div class="summary-facts">
+                <div class="fact-row">
+                  <span>Đã có trên máy</span>
+                  <strong id="installedCount">0 ứng dụng</strong>
+                </div>
+                <div class="fact-row">
+                  <span>Ứng dụng dung lượng lớn</span>
+                  <strong id="largeAppCount">0</strong>
+                </div>
+                <div class="fact-row">
+                  <span>Nguồn</span>
+                  <strong>Đã xác minh</strong>
+                </div>
+                <div class="fact-row">
+                  <span>URL tải ngoài</span>
+                  <strong>Đã chặn</strong>
+                </div>
+                <div class="fact-row">
+                  <span>Chế độ</span>
+                  <strong id="modeLabel">Chạy thử an toàn</strong>
+                </div>
+              </div>
+
+              <div class="mode-switch">
+                <label for="realMode">Cài đặt thật</label>
+                <label class="switch-row" for="realMode">
+                  <input type="checkbox" id="realMode">
+                  <span class="switch" aria-hidden="true"></span>
+                  <span class="switch-copy">
+                    <strong>Cho phép chạy winget</strong>
+                    <span>Mỗi ứng dụng vẫn cần xác nhận</span>
+                  </span>
+                </label>
+              </div>
+
+              <div class="real-mode-warning" id="realModeWarning">
+                <i class="ph ph-warning-circle" aria-hidden="true"></i>
+                <span>Chế độ này sẽ thay đổi máy. SetupKit sẽ hỏi lại trước từng lệnh.</span>
+              </div>
+
+              <div class="summary-actions">
+                <button class="button primary full" id="installBtn" type="button">
+                  <i class="ph ph-play" aria-hidden="true"></i>
+                  Chạy thử gói cài
+                </button>
+                <button class="button full" id="exportQueueBtn" type="button">
+                  <i class="ph ph-export" aria-hidden="true"></i>
+                  Xuất hồ sơ
+                </button>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="page" id="page-logs" data-page="logs" data-od-id="logs-page">
+          <div class="page-heading">
+            <h1 tabindex="-1">Nhật ký hoạt động</h1>
+            <p>Theo dõi từng thay đổi và kết quả xử lý ngay trên máy.</p>
+          </div>
+
+          <section class="panel log-panel" aria-labelledby="logsHeading">
+            <div class="panel-heading">
+              <h2 id="logsHeading">Phiên hiện tại</h2>
+              <button class="button danger" id="clearLogsBtn" type="button">
+                <i class="ph ph-trash" aria-hidden="true"></i>
+                Xóa nhật ký
+              </button>
+            </div>
+            <pre class="log-box" id="logBox" aria-live="polite"></pre>
+          </section>
+        </section>
+
+        <section class="page" id="page-profile" data-page="profile" data-od-id="profile-page">
+          <div class="page-heading">
+            <h1 tabindex="-1">Lưu lại cấu hình máy</h1>
+            <p>Xuất danh sách ứng dụng thành một hồ sơ JSON để dùng lại sau.</p>
+          </div>
+
+          <div class="profile-layout">
+            <section class="panel profile-content" aria-labelledby="policyHeading">
+              <h2 id="policyHeading">Chính sách an toàn đi kèm</h2>
+              <p>Hồ sơ chỉ chứa package ID đã duyệt và lệnh được tạo cục bộ.</p>
+              <div class="policy-list">
+                <div class="policy-item">
+                  <i class="ph ph-shield-check" aria-hidden="true"></i>
+                  <strong>Allowlist cục bộ</strong>
+                  <span>Không chấp nhận package ID tùy ý</span>
+                </div>
+                <div class="policy-item">
+                  <i class="ph ph-link-break" aria-hidden="true"></i>
+                  <strong>Không có URL ngoài</strong>
+                  <span>Không tải script hoặc installer lạ</span>
+                </div>
+                <div class="policy-item">
+                  <i class="ph ph-terminal-window" aria-hidden="true"></i>
+                  <strong>Lệnh minh bạch</strong>
+                  <span>Có thể xem trước từng lệnh winget</span>
+                </div>
+                <div class="policy-item">
+                  <i class="ph ph-hand-palm" aria-hidden="true"></i>
+                  <strong>Xác nhận thủ công</strong>
+                  <span>Cài đặt thật luôn cần đồng ý</span>
+                </div>
+              </div>
+            </section>
+
+            <aside class="panel export-panel">
+              <h2>Hồ sơ SetupKit</h2>
+              <p>Xuất các ứng dụng đang chọn cùng nguồn và command tương ứng.</p>
+              <button class="button primary full" id="exportProfileBtn" type="button">
+                <i class="ph ph-export" aria-hidden="true"></i>
+                Xuất hồ sơ JSON
+              </button>
+            </aside>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <dialog id="detailDialog" aria-labelledby="detailName">
+    <div class="dialog-header">
+      <div class="dialog-title">
+        <strong id="detailName">Chi tiết ứng dụng</strong>
+        <span id="detailDescription"></span>
+      </div>
+      <button class="icon-button" id="dialogCloseBtn" type="button" aria-label="Đóng" title="Đóng">
+        <i class="ph ph-x" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="dialog-body">
+      <div class="detail-grid">
+        <div class="detail-item">
+          <span>Tình trạng</span>
+          <strong id="detailState"></strong>
+        </div>
+        <div class="detail-item">
+          <span>Phiên bản</span>
+          <strong id="detailVersion"></strong>
+        </div>
+        <div class="detail-item">
+          <span>Package ID</span>
+          <strong id="detailPackage"></strong>
+        </div>
+        <div class="detail-item">
+          <span>Nguồn cài đặt</span>
+          <strong id="detailSource"></strong>
+        </div>
+        <div class="detail-item">
+          <span>Nhà phát hành</span>
+          <strong id="detailPublisher"></strong>
+        </div>
+        <div class="detail-item">
+          <span>Loại công cụ</span>
+          <strong id="detailType"></strong>
+        </div>
+        <div class="detail-item">
+          <span>Mức dung lượng</span>
+          <strong id="detailSize"></strong>
+        </div>
+        <div class="detail-item full">
+          <span>Tag</span>
+          <div class="detail-tags" id="detailTags"></div>
+        </div>
+        <div class="detail-item full" id="detailRequiresItem">
+          <span>Nên cài cùng</span>
+          <strong id="detailRequires"></strong>
+        </div>
+        <div class="detail-item full">
+          <span>Lưu ý</span>
+          <strong id="detailRisk"></strong>
+        </div>
+        <div class="detail-item full">
+          <span>Thư mục hiện tại</span>
+          <strong class="path-value" id="detailLocation"></strong>
+        </div>
+        <div class="detail-item full" id="detailInstallTargetItem">
+          <span>Vị trí cài mới</span>
+          <strong class="path-value" id="detailInstallTarget"></strong>
+        </div>
+      </div>
+      <div id="commandSection">
+        <div class="command-label">
+          <span>Lệnh sẽ được chạy</span>
+        </div>
+        <pre class="command-box" id="commandPreview"></pre>
+        <p class="detail-note" id="detailSafetyNote">
+          <i class="ph ph-shield-check" aria-hidden="true"></i>
+          <span>Lệnh này được tạo từ allowlist nội bộ, không nhận URL hoặc script bên ngoài.</span>
+        </p>
+      </div>
+    </div>
+    <div class="dialog-footer">
+      <button class="button" id="dialogCancelBtn" type="button">Đóng</button>
+      <button class="button" id="detailFolderBtn" type="button" hidden>
+        <i class="ph ph-folder-open" aria-hidden="true"></i>
+        Mở thư mục
+      </button>
+      <button class="button" id="detailResetLocationBtn" type="button" hidden>
+        <i class="ph ph-arrow-counter-clockwise" aria-hidden="true"></i>
+        Dùng mặc định
+      </button>
+      <button class="button" id="detailChooseLocationBtn" type="button" hidden>
+        <i class="ph ph-folder-plus" aria-hidden="true"></i>
+        Chọn thư mục
+      </button>
+      <button class="button primary" id="detailOpenBtn" type="button" hidden>
+        <i class="ph ph-arrow-square-out" aria-hidden="true"></i>
+        Mở ứng dụng
+      </button>
+      <button class="button primary" id="detailAction" type="button">
+        <i class="ph ph-plus" aria-hidden="true"></i>
+        Thêm vào gói
+      </button>
+    </div>
+  </dialog>
+
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+  <script src="./native-bridge.js"></script>
+  <script src="./renderer.js"></script>
+</body>
+</html>
