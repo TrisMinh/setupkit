@@ -11,7 +11,7 @@
 param(
   [string]$RepoName = 'setupkit',
   [switch]$Private,
-  [string]$Tag = 'v0.4.1',
+  [string]$Tag = 'v0.5.0',
   [switch]$SkipBuild
 )
 

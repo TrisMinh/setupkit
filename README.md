@@ -36,6 +36,7 @@ Cài lại Windows xong thường mất cả buổi mở từng trang web tải 
 - **Tự biết máy bạn đã có gì** — quét winget, Registry, Start Menu và shortcut để đánh dấu app đã cài, kèm phiên bản và thư mục cài đặt; app đã có sẽ không bị cài lại
 - **Chạy thử trước, cài thật sau** — chế độ mặc định chỉ mô phỏng toàn bộ quá trình, máy không thay đổi gì; muốn cài thật phải bật công tắc riêng và xác nhận từng lệnh
 - **Minh bạch từng lệnh** — xem trước chính xác câu lệnh winget của từng app, theo dõi stdout/stderr trực tiếp trong terminal tích hợp khi cài
+- **Thanh trạng thái luôn hiện** dưới cùng: tình trạng winget, số app đã cài, số đang chọn và nút mở terminal nhanh
 - **Chọn nơi cài** cho các package hỗ trợ, mở app hoặc thư mục cài đặt ngay khi cài xong
 - **Xuất hồ sơ JSON** — lưu bộ ứng dụng đang chọn để dựng máy tiếp theo y hệt chỉ trong một lần import
 

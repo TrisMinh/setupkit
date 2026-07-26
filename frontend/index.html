@@ -352,6 +352,33 @@
     </main>
   </div>
 
+  <footer class="status-bar" data-od-id="status-bar" aria-label="Thanh trạng thái">
+    <div class="status-group status-left">
+      <span class="status-item status-winget" id="statusWinget">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span id="statusWingetText">Đang kiểm tra hệ thống</span>
+      </span>
+    </div>
+    <div class="status-group status-right">
+      <span class="status-item" id="statusInstalled" title="Ứng dụng trong danh mục đã có trên máy">
+        <i class="ph ph-check-circle" aria-hidden="true"></i>
+        <span id="statusInstalledText">0 đã cài</span>
+      </span>
+      <span class="status-sep" aria-hidden="true"></span>
+      <span class="status-item" id="statusSelected" title="Ứng dụng đang chọn trong gói cài đặt">
+        <i class="ph ph-package" aria-hidden="true"></i>
+        <span id="statusSelectedText">0 đang chọn</span>
+      </span>
+      <span class="status-sep" aria-hidden="true"></span>
+      <button class="status-button status-item" id="statusTerminalBtn" type="button" title="Mở terminal đầu ra cài đặt">
+        <i class="ph ph-terminal-window" aria-hidden="true"></i>
+        <span>Terminal</span>
+        <span class="status-terminal-count" id="statusTerminalCount" hidden>0</span>
+      </button>
+      <span class="status-version" id="statusVersion">v0.5.0</span>
+    </div>
+  </footer>
+
   <dialog id="detailDialog" aria-labelledby="detailName">
     <div class="dialog-header">
       <div class="dialog-title">

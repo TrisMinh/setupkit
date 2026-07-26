@@ -275,6 +275,28 @@
       ]
     },
     {
+      "id": "office-remote",
+      "name": "Office & Remote Work",
+      "icon": "ph-briefcase",
+      "desc": "Tài liệu, họp, đồng bộ, cộng tác và truy cập từ xa.",
+      "apps": [
+        "microsoft-365-apps",
+        "teams",
+        "slack",
+        "zoom",
+        "notion",
+        "obsidian",
+        "todoist",
+        "drive",
+        "onedrive",
+        "adobe-acrobat-reader",
+        "draw-io",
+        "miro",
+        "bitwarden",
+        "tailscale"
+      ]
+    },
+    {
       "id": "web-frontend",
       "name": "Web Frontend",
       "icon": "ph-browser",
@@ -448,28 +470,6 @@
         "db-browser-for-sqlite",
         "tableplus",
         "beekeeper-studio"
-      ]
-    },
-    {
-      "id": "office-remote",
-      "name": "Office & Remote Work",
-      "icon": "ph-briefcase",
-      "desc": "Tài liệu, họp, đồng bộ, cộng tác và truy cập từ xa.",
-      "apps": [
-        "microsoft-365-apps",
-        "teams",
-        "slack",
-        "zoom",
-        "notion",
-        "obsidian",
-        "todoist",
-        "drive",
-        "onedrive",
-        "adobe-acrobat-reader",
-        "draw-io",
-        "miro",
-        "bitwarden",
-        "tailscale"
       ]
     },
     {

@@ -1,7 +1,7 @@
 (() => {
-  // Production uses the lightweight Wails/WebView2 bridge exposed as
-  // window.go.main.App. Keeping this compatibility shape avoids coupling the UI
-  // to a desktop framework.
+  // Wails phơi struct App dưới dạng window.go.<package>.App. Tùy Go package
+  // (main hoặc kit...) mà namespace khác nhau, nên ta DÒ App ở mọi package
+  // thay vì hardcode window.go.main.App - tránh vỡ khi đổi cấu trúc Go.
   if (window.setupkitNative) return;
 
   const waitFor = (resolveValue, label) => new Promise((resolve, reject) => {
@@ -21,10 +21,20 @@
     poll();
   });
 
-  const nativeApp = () => waitFor(
-    () => window.go?.main?.App,
-    'cầu nối WebView2'
-  );
+  const findApp = () => {
+    const go = window.go;
+    if (!go || typeof go !== 'object') return null;
+    // Ưu tiên các namespace đã biết, sau đó dò mọi package có struct App.
+    const known = go.main?.App || go.kit?.App;
+    if (known) return known;
+    for (const pkg of Object.keys(go)) {
+      const candidate = go[pkg]?.App;
+      if (candidate && typeof candidate === 'object') return candidate;
+    }
+    return null;
+  };
+
+  const nativeApp = () => waitFor(findApp, 'cầu nối WebView2');
 
   const invoke = async (method, ...args) => {
     const app = await nativeApp();

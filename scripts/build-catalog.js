@@ -602,6 +602,18 @@ const planDefinitions = [
     ]
   },
   {
+    id: 'office-remote',
+    name: 'Office & Remote Work',
+    icon: 'ph-briefcase',
+    desc: 'Tài liệu, họp, đồng bộ, cộng tác và truy cập từ xa.',
+    packages: [
+      'Microsoft.Office', 'Microsoft.Teams', 'SlackTechnologies.Slack', 'Zoom.Zoom',
+      'Notion.Notion', 'Obsidian.Obsidian', 'Doist.Todoist', 'Google.GoogleDrive',
+      'Microsoft.OneDrive', 'Adobe.Acrobat.Reader.64-bit', 'JGraph.Draw',
+      'Miro.Miro', 'Bitwarden.Bitwarden', 'Tailscale.Tailscale'
+    ]
+  },
+  {
     id: 'web-frontend',
     name: 'Web Frontend',
     icon: 'ph-browser',
@@ -706,18 +718,6 @@ const planDefinitions = [
       'PostgreSQL.pgAdmin', 'Oracle.MySQLWorkbench', 'RedisInsight.RedisInsight',
       'Microsoft.SQLServerManagementStudio', 'DBBrowserForSQLite.DBBrowserForSQLite',
       'TablePlus.TablePlus', 'beekeeper-studio.beekeeper-studio'
-    ]
-  },
-  {
-    id: 'office-remote',
-    name: 'Office & Remote Work',
-    icon: 'ph-briefcase',
-    desc: 'Tài liệu, họp, đồng bộ, cộng tác và truy cập từ xa.',
-    packages: [
-      'Microsoft.Office', 'Microsoft.Teams', 'SlackTechnologies.Slack', 'Zoom.Zoom',
-      'Notion.Notion', 'Obsidian.Obsidian', 'Doist.Todoist', 'Google.GoogleDrive',
-      'Microsoft.OneDrive', 'Adobe.Acrobat.Reader.64-bit', 'JGraph.Draw',
-      'Miro.Miro', 'Bitwarden.Bitwarden', 'Tailscale.Tailscale'
     ]
   },
   {

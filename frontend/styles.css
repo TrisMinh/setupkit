@@ -29,6 +29,7 @@
   --radius-control: 10px;
   --radius-card: 16px;
   --sidebar-width: 224px;
+  --statusbar-h: 30px;
   --ease: cubic-bezier(0.2, 0, 0, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -108,6 +109,8 @@ body {
 body {
   min-width: 320px;
   min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
   overflow-x: hidden;
   background: var(--bg);
   color: var(--text);
@@ -187,15 +190,16 @@ select:focus-visible,
 }
 
 .app-shell {
+  flex: 1 0 auto;
   display: grid;
   grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
-  min-height: 100dvh;
+  min-height: 0;
 }
 
 .sidebar {
   position: sticky;
   top: 0;
-  height: 100dvh;
+  height: calc(100dvh - var(--statusbar-h));
   display: flex;
   flex-direction: column;
   gap: 28px;
@@ -350,13 +354,151 @@ select:focus-visible,
   font-size: 12px;
 }
 
+/* -------------------------------------------------------------- status bar */
+/* Thanh trạng thái cố định dưới cùng, hiện ở MỌI tab (kiểu IDE). */
+.status-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 15;
+  flex: 0 0 var(--statusbar-h);
+  height: var(--statusbar-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 12px 0 14px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 12px;
+  user-select: none;
+}
+
+.status-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.status-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.status-item > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status-item .ph {
+  font-size: 14px;
+  color: var(--text-tertiary);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--text-tertiary);
+}
+
+.status-winget.ok .status-dot {
+  background: var(--success);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--success) 22%, transparent);
+}
+
+.status-winget.warn .status-dot {
+  background: var(--warning);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--warning) 22%, transparent);
+}
+
+.status-winget.scanning .status-dot {
+  background: var(--accent);
+  animation: status-blink 1s ease-in-out infinite;
+}
+
+@keyframes status-blink {
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.status-winget.ok {
+  color: var(--success);
+}
+
+.status-sep {
+  width: 1px;
+  height: 14px;
+  flex: 0 0 auto;
+  background: var(--border);
+}
+
+.status-button {
+  height: 22px;
+  padding: 0 9px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 12px;
+  transition:
+    background 150ms var(--ease),
+    border-color 150ms var(--ease),
+    color 150ms var(--ease);
+}
+
+.status-button:hover {
+  border-color: var(--border-strong);
+  color: var(--text);
+  background: var(--surface-hover);
+}
+
+.status-button.active {
+  border-color: var(--accent);
+  color: var(--on-accent);
+  background: var(--accent);
+}
+
+.status-button.active .ph {
+  color: var(--on-accent);
+}
+
+.status-terminal-count {
+  min-width: 15px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+  color: var(--accent);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.status-button.active .status-terminal-count {
+  background: color-mix(in srgb, var(--on-accent) 26%, transparent);
+  color: var(--on-accent);
+}
+
+.status-version {
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
 .main {
   min-width: 0;
   padding: 30px clamp(22px, 3.2vw, 46px) 36px;
 }
 
 .main-inner {
-  width: min(100%, 1240px);
+  width: min(100%, 1320px);
   margin: 0 auto;
 }
 
@@ -915,7 +1057,9 @@ select:focus-visible,
 
 .app-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Tự xếp 3-4 app/hàng trên màn rộng, co dần còn 1 khi cửa sổ hẹp.
+     min(300px, 100%) chống tràn ngang khi cửa sổ nhỏ hơn 300px. */
+  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
   gap: 10px;
 }
 
@@ -1215,7 +1359,7 @@ select:focus-visible,
 
 .selection-dock {
   position: sticky;
-  bottom: 18px;
+  bottom: calc(var(--statusbar-h) + 14px);
   z-index: 2;
   min-height: 66px;
   display: flex;
@@ -2194,7 +2338,7 @@ dialog::backdrop {
 .toast-region {
   position: fixed;
   right: 20px;
-  bottom: 94px;
+  bottom: calc(var(--statusbar-h) + 76px);
   z-index: 20;
   display: grid;
   gap: 8px;
@@ -2258,10 +2402,6 @@ dialog::backdrop {
 @media (max-width: 1120px) {
   .toolbar {
     grid-template-columns: minmax(220px, 1fr) repeat(3, minmax(132px, 0.52fr));
-  }
-
-  .app-grid {
-    grid-template-columns: 1fr;
   }
 
   .review-layout,
@@ -2365,7 +2505,7 @@ dialog::backdrop {
   }
 
   .selection-dock {
-    bottom: 10px;
+    bottom: calc(var(--statusbar-h) + 8px);
     padding-left: 12px;
   }
 

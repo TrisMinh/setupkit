@@ -109,7 +109,13 @@ const els = {
   theme: document.getElementById('themeBtn'),
   rescan: document.getElementById('rescanBtn'),
   systemReady: document.getElementById('systemReady'),
-  toastRegion: document.getElementById('toastRegion')
+  toastRegion: document.getElementById('toastRegion'),
+  statusWinget: document.getElementById('statusWinget'),
+  statusWingetText: document.getElementById('statusWingetText'),
+  statusInstalledText: document.getElementById('statusInstalledText'),
+  statusSelectedText: document.getElementById('statusSelectedText'),
+  statusTerminalBtn: document.getElementById('statusTerminalBtn'),
+  statusTerminalCount: document.getElementById('statusTerminalCount')
 };
 
 let detailAppId = '';
@@ -839,6 +845,7 @@ function renderQueue() {
   els.modeLabel.textContent = els.realMode.checked ? 'Cài đặt thật bằng winget' : 'Chỉ mô phỏng, không thay đổi máy';
   els.realModeWarning.classList.toggle('visible', els.realMode.checked);
   renderRunStatus();
+  renderStatusBar();
 
   if (!selected.length) {
     els.queue.innerHTML = `
@@ -913,6 +920,7 @@ function renderTerminalChrome() {
   const lineCount = state.terminalLineCount;
   els.terminalCount.textContent = lineCount > 999 ? '999+' : lineCount;
   els.terminalCount.hidden = lineCount === 0;
+  renderStatusBar();
 }
 
 const renderTerminalOutput = rafBatch(() => {
@@ -932,6 +940,35 @@ function renderTerminal() {
   renderTerminalOutput();
 }
 
+// Thanh trạng thái dưới cùng - hiện ở mọi tab, cập nhật liên tục và rẻ.
+function renderStatusBar() {
+  if (!els.statusWinget) return;
+  const native = Boolean(window.setupkitNative);
+  let cls = 'status-item status-winget';
+  let text;
+  if (state.scanning) {
+    cls += ' scanning';
+    text = 'Đang quét ứng dụng trên máy...';
+  } else if (!native) {
+    cls += ' warn';
+    text = 'Chế độ mô phỏng - không có cầu nối native';
+  } else if (state.wingetAvailable) {
+    cls += ' ok';
+    text = `winget${state.wingetVersion ? ` ${state.wingetVersion}` : ''} sẵn sàng`;
+  } else {
+    cls += ' warn';
+    text = 'Không tìm thấy winget - chỉ mô phỏng';
+  }
+  els.statusWinget.className = cls;
+  els.statusWingetText.textContent = text;
+  els.statusInstalledText.textContent = `${state.installed.size} đã cài`;
+  els.statusSelectedText.textContent = `${state.selected.size} đang chọn`;
+  const lineCount = state.terminalLineCount;
+  els.statusTerminalCount.textContent = lineCount > 999 ? '999+' : String(lineCount);
+  els.statusTerminalCount.hidden = lineCount === 0;
+  els.statusTerminalBtn.classList.toggle('active', state.terminalOpen);
+}
+
 function renderAll() {
   renderPresets();
   renderTags();
@@ -939,6 +976,7 @@ function renderAll() {
   renderQueue();
   renderLog();
   renderTerminal();
+  renderStatusBar();
 }
 
 /* ---------------------------------------------------------------- actions */
@@ -1762,6 +1800,13 @@ function bindEvents() {
     if (outside) closeDetail();
   });
   els.theme.addEventListener('click', toggleTheme);
+
+  // Nút Terminal ở status bar: mở trang gói cài đặt và bật terminal.
+  els.statusTerminalBtn.addEventListener('click', () => {
+    const willOpen = !(state.terminalOpen && document.getElementById('page-queue')?.classList.contains('active'));
+    switchView('queue');
+    setTerminalOpen(willOpen);
+  });
 
   // Phím tắt: "/" hoặc Ctrl+K để tìm kiếm nhanh.
   document.addEventListener('keydown', (event) => {

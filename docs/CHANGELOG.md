@@ -2,6 +2,21 @@
 
 Toàn bộ thay đổi đáng chú ý của SetupKit được ghi tại đây.
 
+## [0.5.0] - 2026-07-26
+
+### Sửa lỗi
+
+- **Không quét được ứng dụng trên máy** — sau đợt tái cấu trúc, Wails phơi cầu nối native dưới package `kit` (`window.go.kit.App`) nhưng frontend vẫn tìm `window.go.main.App`, khiến mọi lời gọi native (quét máy, cài thật, mở app) đều thất bại. Cầu nối giờ tự dò `App` ở mọi package nên không vỡ khi đổi cấu trúc Go.
+
+### Thêm mới
+
+- **Thanh trạng thái cố định dưới cùng** kiểu IDE, hiện ở mọi tab: trạng thái winget, số ứng dụng đã cài, số đang chọn, và nút mở terminal nhanh kèm số dòng đầu ra
+- Đưa gói **Office & Remote Work** (Microsoft 365 / Word, Excel, PowerPoint, Outlook, Teams...) lên vị trí thứ hai để dễ thấy
+
+### Cải thiện
+
+- **Lưới ứng dụng dày hơn** — tự xếp 3-4 ứng dụng trên một hàng ở màn hình rộng thay vì cố định 2, co giãn mượt theo kích thước cửa sổ, tận dụng tối đa không gian
+
 ## [0.4.1] - 2026-07-26
 
 ### Thay đổi
