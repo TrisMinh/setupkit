@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"runtime"
 	"slices"
 	"strings"
 	"testing"
@@ -132,5 +133,52 @@ func TestInventoryNameMatchingDoesNotConfuseVariants(t *testing.T) {
 	}
 	if !namesMatch("Python 3.13.5 (64-bit)", []string{"Python 3.13"}) {
 		t.Fatal("safe version and architecture suffix should match")
+	}
+}
+
+func BenchmarkScanInstalledApps(b *testing.B) {
+	if runtime.GOOS != "windows" {
+		b.Skip("Windows inventory scan benchmark")
+	}
+	for index := 0; index < b.N; index++ {
+		result, details := scanInstalledApps()
+		if len(result.Apps) != len(allowlist) {
+			b.Fatalf("expected %d apps, got %d", len(allowlist), len(result.Apps))
+		}
+		if len(details) != len(allowlist) {
+			b.Fatalf("expected %d detail records, got %d", len(allowlist), len(details))
+		}
+		installed := 0
+		for _, detail := range details {
+			if detail.Installed {
+				installed++
+			}
+		}
+		b.ReportMetric(float64(result.Diagnostics.InventoryRecords), "inventory_records")
+		b.ReportMetric(float64(installed), "installed_apps")
+	}
+}
+
+func BenchmarkRefreshUpdateAvailability(b *testing.B) {
+	if runtime.GOOS != "windows" {
+		b.Skip("Windows winget upgrade benchmark")
+	}
+	_, details := scanInstalledApps()
+	b.ResetTimer()
+	for index := 0; index < b.N; index++ {
+		result, refreshed := refreshUpdateAvailability(details)
+		if len(result.Apps) != len(allowlist) {
+			b.Fatalf("expected %d apps, got %d", len(allowlist), len(result.Apps))
+		}
+		if len(refreshed) != len(allowlist) {
+			b.Fatalf("expected %d detail records, got %d", len(allowlist), len(refreshed))
+		}
+		updates := 0
+		for _, detail := range refreshed {
+			if detail.UpdateAvailable {
+				updates++
+			}
+		}
+		b.ReportMetric(float64(updates), "updates_available")
 	}
 }

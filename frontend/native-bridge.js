@@ -65,6 +65,7 @@
     listAllowlist: () => invoke('ListAllowlist'),
     checkSystem: () => invoke('CheckSystem'),
     scanInstalled: () => invoke('ScanInstalled'),
+    scanUpdates: () => invoke('ScanUpdates'),
     buildCommand: (packageId) => invoke('BuildCommand', packageId),
     chooseInstallLocation: (packageId) => invoke('ChooseInstallLocation', packageId),
     resetInstallLocation: (packageId) => invoke('ResetInstallLocation', packageId),

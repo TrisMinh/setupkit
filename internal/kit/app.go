@@ -135,6 +135,32 @@ func (a *App) ScanInstalled() inventoryResult {
 	return result
 }
 
+// ScanUpdates chạy chậm hơn ScanInstalled vì phải hỏi winget upgrade.
+// UI gọi hàm này ở nền sau khi danh sách app đã cài đã hiện xong.
+func (a *App) ScanUpdates() inventoryResult {
+	a.mu.RLock()
+	cached := make(map[string]packageDetails, len(a.inventoryCache))
+	for packageID, details := range a.inventoryCache {
+		cached[packageID] = details
+	}
+	a.mu.RUnlock()
+	if len(cached) == 0 {
+		a.ScanInstalled()
+		a.mu.RLock()
+		cached = make(map[string]packageDetails, len(a.inventoryCache))
+		for packageID, details := range a.inventoryCache {
+			cached[packageID] = details
+		}
+		a.mu.RUnlock()
+	}
+
+	result, details := refreshUpdateAvailability(cached)
+	a.mu.Lock()
+	a.inventoryCache = details
+	a.mu.Unlock()
+	return result
+}
+
 func (a *App) approvedLocation(packageID string) string {
 	a.mu.RLock()
 	defer a.mu.RUnlock()

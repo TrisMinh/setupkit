@@ -28,8 +28,13 @@
 
       <nav class="nav" aria-label="Điều hướng chính">
         <button class="nav-button active" data-view="catalog" type="button" title="Ứng dụng">
-          <i class="ph ph-squares-four" aria-hidden="true"></i>
-          <span>Ứng dụng</span>
+          <i class="ph ph-house" aria-hidden="true"></i>
+          <span>Bảng điều khiển</span>
+        </button>
+        <button class="nav-button" data-view="workspaces" type="button" title="Workspaces">
+          <i class="ph ph-kanban" aria-hidden="true"></i>
+          <span>Workspaces</span>
+          <span class="nav-count" id="navWorkspaceCount">0</span>
         </button>
         <button class="nav-button" data-view="queue" type="button" title="Gói cài đặt">
           <i class="ph ph-list-checks" aria-hidden="true"></i>
@@ -103,9 +108,10 @@
 
           <section class="preset-section" aria-labelledby="presetHeading">
             <div class="section-heading">
-              <h2 id="presetHeading">Workstation plans</h2>
+              <h2 id="presetHeading">Workspace preview</h2>
               <div class="heading-tools">
-                <span id="planSummary">Đang tải workstation plan</span>
+                <button class="link-action" data-view-target="workspaces" type="button">Xem tất cả</button>
+                <span id="planSummary">Đang tải workspace</span>
                 <button class="scroll-btn" id="presetPrev" type="button" aria-label="Cuộn danh sách plan sang trái" hidden>
                   <i class="ph ph-caret-left" aria-hidden="true"></i>
                 </button>
@@ -209,6 +215,30 @@
               Xem gói cài đặt
               <i class="ph ph-caret-right" aria-hidden="true"></i>
             </button>
+          </section>
+        </section>
+
+        <section class="page" id="page-workspaces" data-page="workspaces" data-od-id="workspaces-page">
+          <div class="page-heading">
+            <h1 tabindex="-1">Workspaces</h1>
+            <p>Chọn bộ công cụ theo vai trò, ngữ cảnh làm việc hoặc stack bạn muốn dựng trên máy.</p>
+          </div>
+
+          <section class="workspace-page-panel" aria-labelledby="allWorkspacesHeading">
+            <div class="section-heading">
+              <h2 id="allWorkspacesHeading">Tất cả workspace</h2>
+              <div class="heading-tools">
+                <span id="workspaceSummary">Đang tải workspace</span>
+              </div>
+            </div>
+            <div class="workspace-grid" id="workspaceList" data-od-id="workspace-list">
+              <div class="skeleton-card preset"></div>
+              <div class="skeleton-card preset"></div>
+              <div class="skeleton-card preset"></div>
+              <div class="skeleton-card preset"></div>
+              <div class="skeleton-card preset"></div>
+              <div class="skeleton-card preset"></div>
+            </div>
           </section>
         </section>
 
@@ -432,7 +462,7 @@
         <span>Terminal</span>
         <span class="status-terminal-count" id="statusTerminalCount" hidden>0</span>
       </button>
-      <span class="status-version" id="statusVersion">v0.7.0</span>
+      <span class="status-version" id="statusVersion">v0.8.0</span>
     </div>
   </footer>
 
@@ -540,6 +570,72 @@
       <button class="button primary" id="detailAction" type="button">
         <i class="ph ph-plus" aria-hidden="true"></i>
         Thêm vào gói
+      </button>
+    </div>
+  </dialog>
+
+  <dialog class="workspace-dialog" id="workspaceDialog" aria-labelledby="workspaceDetailName">
+    <div class="dialog-header">
+      <div class="dialog-head-main">
+        <span class="dialog-icon" id="workspaceDetailIcon" aria-hidden="true"></span>
+        <div class="dialog-title">
+          <strong id="workspaceDetailName">Chi tiết workspace</strong>
+          <span id="workspaceDetailDescription"></span>
+        </div>
+      </div>
+      <button class="icon-button" id="workspaceDialogCloseBtn" type="button" aria-label="Đóng" title="Đóng">
+        <i class="ph ph-x" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="dialog-body">
+      <div class="detail-grid workspace-detail-grid">
+        <div class="detail-item">
+          <span>Quy mô</span>
+          <strong id="workspaceDetailCount"></strong>
+        </div>
+        <div class="detail-item">
+          <span>Cần cài</span>
+          <strong id="workspaceDetailPending"></strong>
+        </div>
+        <div class="detail-item">
+          <span>Đã có trên máy</span>
+          <strong id="workspaceDetailInstalled"></strong>
+        </div>
+        <div class="detail-item">
+          <span>Nguồn cài đặt</span>
+          <strong id="workspaceDetailSources"></strong>
+        </div>
+      </div>
+
+      <section class="workspace-detail-section" aria-labelledby="workspaceDetailAppsHeading">
+        <div class="workspace-detail-heading">
+          <h3 id="workspaceDetailAppsHeading">Ứng dụng trong workspace</h3>
+          <span id="workspaceDetailListSummary"></span>
+        </div>
+        <div class="workspace-detail-apps" id="workspaceDetailApps"></div>
+      </section>
+
+      <section class="workspace-detail-section" id="workspaceCommandSection" aria-labelledby="workspaceCommandHeading">
+        <div class="workspace-detail-heading">
+          <h3 id="workspaceCommandHeading">Lệnh sẽ được chạy</h3>
+          <span>Chỉ liệt kê app chưa cài</span>
+        </div>
+        <pre class="command-box workspace-command-box" id="workspaceCommandPreview"></pre>
+        <p class="detail-note">
+          <i class="ph ph-shield-check" aria-hidden="true"></i>
+          <span>Các lệnh được tạo từ catalog đã duyệt, tự bỏ qua ứng dụng Windows đã phát hiện.</span>
+        </p>
+      </section>
+    </div>
+    <div class="dialog-footer">
+      <button class="button" id="workspaceDialogCancelBtn" type="button">Đóng</button>
+      <button class="button" id="workspaceDetailQueueBtn" type="button">
+        <i class="ph ph-stack" aria-hidden="true"></i>
+        Xem gói cài đặt
+      </button>
+      <button class="button primary" id="workspaceDetailApplyBtn" type="button">
+        <i class="ph ph-plus-circle" aria-hidden="true"></i>
+        Dùng workspace này
       </button>
     </div>
   </dialog>

@@ -2,6 +2,22 @@
 
 Toàn bộ thay đổi đáng chú ý của SetupKit được ghi tại đây.
 
+## [0.8.0] - 2026-07-30
+
+### Thêm mới
+
+- **Trang Workspaces riêng** — thêm tab Workspaces để duyệt toàn bộ 24 bộ công cụ theo vai trò/lĩnh vực thay vì chỉ xem vài plan nổi bật ở trang chính.
+- **Chi tiết workspace kiểu package detail** — mỗi workspace có dialog riêng với tổng số app, số app cần cài, app đã có, nguồn WinGet/Store, danh sách app compact và preview các lệnh sẽ chạy.
+- **Preview logo khi hover** — workspace/preset chỉ bung preview logo 2 dòng khi hover hoặc focus, giữ màn hình gọn khi không tương tác.
+
+### Cải thiện
+
+- **Workspace cards gọn hơn** — rail logo trong card tự dàn đều theo chiều ngang, bỏ caret thừa và chỉ hiện nút chi tiết khi người dùng đang focus vào card.
+- **Danh sách app trong workspace detail dày hơn** — app trong dialog xếp 2-3 item mỗi hàng trên desktop, giảm cuộn dọc khi xem bộ lớn.
+- **Chế độ biểu tượng cân hàng nút** — các nút chọn/chi tiết trong icon view thẳng hàng dù tên app dài 1 hay 2 dòng.
+- **Chế độ danh sách tận dụng khoảng trống** — list view hiển thị thêm mô tả, type/tag và trạng thái thay vì để phần giữa row trống.
+- **Validation seed hệ sinh thái** — thêm dữ liệu seed và bước kiểm tra `validate-ecosystem-seeds.js` vào `npm run validate`.
+
 ## [0.7.0] - 2026-07-26
 
 ### Thêm mới

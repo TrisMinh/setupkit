@@ -2,7 +2,7 @@
 
 <img src="docs/banner.svg" alt="SetupKit" width="1000">
 
-**Máy Windows mới tinh? Chọn một plan theo công việc của bạn, bấm cài, và đi pha ly cà phê.**
+**Máy Windows mới tinh? Chọn một workspace theo công việc của bạn, bấm cài, và đi pha ly cà phê.**
 
 ![Windows 10/11](https://img.shields.io/badge/Windows%2010%2F11-x64-0078D4?logo=windows&logoColor=white)
 ![Kích thước](https://img.shields.io/badge/1%20file%20EXE-~12%20MB-2ea44f)
@@ -32,13 +32,13 @@ Lệnh này tải bản mới nhất từ Releases, đặt vào thư mục ứng
 Cài lại Windows xong thường mất cả buổi mở từng trang web tải từng bộ cài. SetupKit gói toàn bộ việc đó vào một app:
 
 - **440 ứng dụng hợp pháp** từ Windows Package Manager và Microsoft Store — đủ từ trình duyệt, IDE, runtime, database, DevOps tool đến app chat, game launcher; chia 15 nhóm với 34 tag lọc nhanh
-- **24 Workstation plan theo vai trò** — Developer Core, Web Frontend, Node.js Backend, Python & AI, Designer, Gaming, Văn phòng... Chọn một plan là có ngay danh sách công cụ được sắp đúng thứ tự cài: nền tảng trước, IDE sau
+- **24 Workspaces theo vai trò** — Developer Core, Web Frontend, Node.js Backend, Python & AI, Designer, Gaming, Văn phòng... Mở chi tiết để xem logo, package, nguồn cài đặt và lệnh sẽ chạy trước khi dùng workspace đó
 - **Cài cả gói một lần** — chọn nhiều app rồi cài tuần tự, theo dõi tiến trình từng cái; có thể **dừng giữa chừng** và **cài lại đúng những app lỗi**
 - **Cập nhật và gỡ ngay trong app** — SetupKit tự phát hiện app có bản mới và đánh dấu trên thẻ; mở chi tiết là **Cập nhật** hoặc **Gỡ cài đặt** bằng winget, luôn xác nhận trước
 - **Tự biết máy bạn đã có gì** — quét winget, Registry, Start Menu và shortcut để đánh dấu app đã cài, kèm phiên bản, thư mục cài đặt và app nào đang có bản cập nhật; app đã có sẽ không bị cài lại
 - **Chọn nhanh, nhớ lựa chọn** — "Chọn hết" theo bộ lọc hiện tại hoặc "Bỏ chọn" chỉ một bấm; gói đang chọn được ghi nhớ cho lần mở sau
 - **Xuất và nhập hồ sơ JSON** — lưu bộ ứng dụng đang chọn thành một hồ sơ, rồi nhập lại để dựng máy tiếp theo y hệt
-- **Ba kiểu hiển thị** — Lưới, Danh sách hoặc Biểu tượng, tùy cách bạn thích duyệt; lựa chọn được ghi nhớ
+- **Ba kiểu hiển thị** — Lưới, Danh sách hoặc Biểu tượng, tùy cách bạn thích duyệt; list view hiển thị thêm mô tả/meta, icon view căn hàng nút gọn hơn
 - **Chạy thử trước, cài thật sau** — chế độ mặc định chỉ mô phỏng toàn bộ quá trình, máy không thay đổi gì; muốn cài thật phải bật công tắc riêng và xác nhận từng lệnh
 - **Minh bạch từng lệnh** — xem trước chính xác câu lệnh winget của từng app, theo dõi stdout/stderr trực tiếp trong terminal tích hợp khi cài
 - **Thanh trạng thái luôn hiện** dưới cùng: tình trạng winget, số app đã cài, số đang chọn và nút mở terminal nhanh
@@ -48,9 +48,9 @@ Cài lại Windows xong thường mất cả buổi mở từng trang web tải 
 ## Ảnh màn hình
 
 <div align="center">
-<img src="docs/screenshots/catalog-light.png" alt="Danh mục 440 ứng dụng với workstation plans" width="900">
+<img src="docs/screenshots/catalog-light.png" alt="Danh mục 440 ứng dụng với workspace preview" width="900">
 
-*Chọn Workstation plan theo vai trò, hoặc tự lọc trong 440 ứng dụng*
+*Chọn Workspace theo vai trò, hoặc tự lọc trong 440 ứng dụng*
 </div>
 
 | | |
@@ -64,7 +64,7 @@ Cài lại Windows xong thường mất cả buổi mở từng trang web tải 
 
 ## Dùng trong 3 bước
 
-1. **Chọn** — bấm một Workstation plan hoặc tự tick từng app trong danh mục
+1. **Chọn** — bấm một Workspace hoặc tự tick từng app trong danh mục
 2. **Xem lại** — sang tab Gói cài đặt, kiểm tra danh sách và lệnh của từng app; chạy thử nếu muốn chắc chắn
 3. **Cài** — bật "Cài đặt thật", bấm nút và xác nhận; SetupKit chạy winget tuần tự, báo tiến trình từng app và đánh dấu app cài xong
 

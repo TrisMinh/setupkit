@@ -17,6 +17,8 @@ import (
 	"time"
 	"unicode"
 	"unicode/utf16"
+
+	"golang.org/x/sys/windows/registry"
 )
 
 var (
@@ -151,6 +153,24 @@ Get-ChildItem -LiteralPath $shortcutRoots -Filter '*.lnk' -Recurse | ForEach-Obj
 @($items) | ConvertTo-Json -Compress -Depth 3
 `
 
+const startAppsPowerShell = `
+$ErrorActionPreference = 'SilentlyContinue'
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$items = [System.Collections.Generic.List[object]]::new()
+Get-StartApps | ForEach-Object {
+  $items.Add([pscustomobject]@{
+    Kind = 'start'
+    Name = [string]$_.Name
+    Version = ''
+    InstallLocation = ''
+    Target = ''
+    AppId = [string]$_.AppID
+    ShortcutPath = ''
+  })
+}
+@($items) | ConvertTo-Json -Compress -Depth 3
+`
+
 func hiddenCommandContext(ctx context.Context, name string, args ...string) *exec.Cmd {
 	cmd := exec.CommandContext(ctx, name, args...)
 	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
@@ -274,6 +294,21 @@ func wingetPackageListed(output string, packageID string) bool {
 	return false
 }
 
+func wingetPackageSet(output string) map[string]struct{} {
+	result := make(map[string]struct{})
+	for _, field := range strings.Fields(output) {
+		if strings.Contains(field, ".") {
+			result[strings.ToLower(strings.TrimSpace(field))] = struct{}{}
+		}
+	}
+	return result
+}
+
+func packageSetHas(packages map[string]struct{}, packageID string) bool {
+	_, exists := packages[strings.ToLower(packageID)]
+	return exists
+}
+
 func parseInventoryJSON(raw string) []inventoryRecord {
 	clean := strings.TrimSpace(strings.TrimPrefix(raw, "\ufeff"))
 	if clean == "" {
@@ -334,6 +369,222 @@ func firstNonEmpty(values []string) string {
 	return ""
 }
 
+func registryString(key registry.Key, name string) string {
+	value, _, err := key.GetStringValue(name)
+	if err != nil {
+		return ""
+	}
+	value = strings.TrimSpace(value)
+	if value == "" {
+		return ""
+	}
+	if expanded, err := registry.ExpandString(value); err == nil {
+		value = expanded
+	}
+	return value
+}
+
+func cleanDisplayIconTarget(value string) string {
+	target := strings.Trim(strings.TrimSpace(value), `"`)
+	if target == "" {
+		return ""
+	}
+	target = regexp.MustCompile(`,\s*-?\d+$`).ReplaceAllString(target, "")
+	return strings.Trim(strings.TrimSpace(target), `"`)
+}
+
+func collectRegistryRecords() []inventoryRecord {
+	locations := []struct {
+		root registry.Key
+		path string
+	}{
+		{registry.LOCAL_MACHINE, `Software\Microsoft\Windows\CurrentVersion\Uninstall`},
+		{registry.LOCAL_MACHINE, `Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall`},
+		{registry.CURRENT_USER, `Software\Microsoft\Windows\CurrentVersion\Uninstall`},
+	}
+
+	records := make([]inventoryRecord, 0, 256)
+	for _, location := range locations {
+		parent, err := registry.OpenKey(location.root, location.path, registry.ENUMERATE_SUB_KEYS)
+		if err != nil {
+			continue
+		}
+		names, err := parent.ReadSubKeyNames(-1)
+		parent.Close()
+		if err != nil {
+			continue
+		}
+
+		for _, name := range names {
+			key, err := registry.OpenKey(location.root, location.path+`\`+name, registry.QUERY_VALUE)
+			if err != nil {
+				continue
+			}
+			displayName := registryString(key, "DisplayName")
+			if displayName == "" {
+				key.Close()
+				continue
+			}
+			records = append(records, inventoryRecord{
+				Kind:            "registry",
+				Name:            displayName,
+				Version:         registryString(key, "DisplayVersion"),
+				InstallLocation: registryString(key, "InstallLocation"),
+				Target:          cleanDisplayIconTarget(registryString(key, "DisplayIcon")),
+			})
+			key.Close()
+		}
+	}
+	return records
+}
+
+func shortcutRoots() []string {
+	candidates := []string{
+		filepath.Join(os.Getenv("ProgramData"), `Microsoft\Windows\Start Menu`),
+		filepath.Join(os.Getenv("AppData"), `Microsoft\Windows\Start Menu`),
+		filepath.Join(os.Getenv("Public"), "Desktop"),
+		filepath.Join(os.Getenv("UserProfile"), "Desktop"),
+	}
+	roots := make([]string, 0, len(candidates))
+	seen := make(map[string]struct{}, len(candidates))
+	for _, candidate := range candidates {
+		if candidate == "" {
+			continue
+		}
+		clean, err := filepath.Abs(candidate)
+		if err != nil {
+			continue
+		}
+		clean = filepath.Clean(clean)
+		if _, exists := seen[strings.ToLower(clean)]; exists {
+			continue
+		}
+		if info, err := os.Stat(clean); err == nil && info.IsDir() {
+			seen[strings.ToLower(clean)] = struct{}{}
+			roots = append(roots, clean)
+		}
+	}
+	return roots
+}
+
+func collectShortcutRecords() []inventoryRecord {
+	records := make([]inventoryRecord, 0, 128)
+	for _, root := range shortcutRoots() {
+		filepath.WalkDir(root, func(path string, entry os.DirEntry, err error) error {
+			if err != nil || entry.IsDir() || !strings.EqualFold(filepath.Ext(entry.Name()), ".lnk") {
+				return nil
+			}
+			records = append(records, inventoryRecord{
+				Kind:         "shortcut",
+				Name:         strings.TrimSuffix(entry.Name(), filepath.Ext(entry.Name())),
+				ShortcutPath: path,
+			})
+			return nil
+		})
+	}
+	return records
+}
+
+func collectStartAppRecords() ([]inventoryRecord, processResult) {
+	result := runProcess(
+		"powershell.exe",
+		[]string{"-NoProfile", "-NonInteractive", "-EncodedCommand", encodePowerShell(startAppsPowerShell)},
+		10*time.Second,
+	)
+	return parseInventoryJSON(result.Stdout), result
+}
+
+func collectInventoryRecords() ([]inventoryRecord, bool) {
+	startChannel := make(chan struct {
+		records []inventoryRecord
+		result  processResult
+	}, 1)
+	go func() {
+		records, result := collectStartAppRecords()
+		startChannel <- struct {
+			records []inventoryRecord
+			result  processResult
+		}{records: records, result: result}
+	}()
+
+	records := make([]inventoryRecord, 0, 512)
+	records = append(records, collectRegistryRecords()...)
+	records = append(records, collectShortcutRecords()...)
+	start := <-startChannel
+	records = append(records, start.records...)
+	return records, start.result.OK
+}
+
+type normalizedInventoryRecord struct {
+	record inventoryRecord
+	name   string
+}
+
+type inventoryLookup struct {
+	records     []normalizedInventoryRecord
+	wingetIDs   map[string]struct{}
+	upgradeIDs  map[string]struct{}
+}
+
+func newInventoryLookup(records []inventoryRecord, wingetOutput string, upgradeOutput string) inventoryLookup {
+	normalized := make([]normalizedInventoryRecord, 0, len(records))
+	for _, record := range records {
+		name := normalizeName(record.Name)
+		if name == "" {
+			continue
+		}
+		normalized = append(normalized, normalizedInventoryRecord{record: record, name: name})
+	}
+	return inventoryLookup{
+		records:    normalized,
+		wingetIDs:  wingetPackageSet(wingetOutput),
+		upgradeIDs: wingetPackageSet(upgradeOutput),
+	}
+}
+
+func normalizedNamesMatch(record string, normalizedHints []string) bool {
+	if record == "" {
+		return false
+	}
+	for _, hint := range normalizedHints {
+		if hint == "" {
+			continue
+		}
+		if record == hint {
+			return true
+		}
+		if strings.HasPrefix(record, hint+" ") &&
+			safeNameSuffix(strings.TrimPrefix(record, hint+" ")) {
+			return true
+		}
+	}
+	return false
+}
+
+func resolvePackageDetailsWithLookup(
+	packageID string,
+	record packageRecord,
+	lookup inventoryLookup,
+) packageDetails {
+	hints := record.MatchNames
+	if len(hints) == 0 {
+		hints = []string{record.Name}
+	}
+	normalizedHints := make([]string, 0, len(hints))
+	for _, hint := range hints {
+		normalizedHints = append(normalizedHints, normalizeName(hint))
+	}
+
+	matches := make([]inventoryRecord, 0)
+	for _, item := range lookup.records {
+		if normalizedNamesMatch(item.name, normalizedHints) {
+			matches = append(matches, item.record)
+		}
+	}
+
+	return resolvePackageDetailsFromMatches(packageID, lookup, matches)
+}
+
 func resolvePackageDetails(
 	packageID string,
 	record packageRecord,
@@ -341,18 +592,14 @@ func resolvePackageDetails(
 	upgradeOutput string,
 	inventory []inventoryRecord,
 ) packageDetails {
-	hints := record.MatchNames
-	if len(hints) == 0 {
-		hints = []string{record.Name}
-	}
+	return resolvePackageDetailsWithLookup(packageID, record, newInventoryLookup(inventory, wingetOutput, upgradeOutput))
+}
 
-	matches := make([]inventoryRecord, 0)
-	for _, item := range inventory {
-		if namesMatch(item.Name, hints) {
-			matches = append(matches, item)
-		}
-	}
-
+func resolvePackageDetailsFromMatches(
+	packageID string,
+	lookup inventoryLookup,
+	matches []inventoryRecord,
+) packageDetails {
 	registryMatches := make([]inventoryRecord, 0)
 	shortcutMatches := make([]inventoryRecord, 0)
 	startMatches := make([]inventoryRecord, 0)
@@ -406,9 +653,9 @@ func resolvePackageDetails(
 		versions = append(versions, item.Version)
 	}
 	version := firstNonEmpty(versions)
-	wingetDetected := wingetPackageListed(wingetOutput, packageID)
+	wingetDetected := packageSetHas(lookup.wingetIDs, packageID)
 	installed := wingetDetected || len(matches) > 0
-	updateAvailable := installed && wingetPackageListed(upgradeOutput, packageID)
+	updateAvailable := installed && packageSetHas(lookup.upgradeIDs, packageID)
 
 	detectedBy := make([]string, 0, 4)
 	if wingetDetected {
@@ -453,8 +700,10 @@ func publicDetails(details packageDetails) publicPackageDetails {
 
 func scanInstalledApps() (inventoryResult, map[string]packageDetails) {
 	wingetChannel := make(chan processResult, 1)
-	upgradeChannel := make(chan processResult, 1)
-	inventoryChannel := make(chan processResult, 1)
+	inventoryChannel := make(chan struct {
+		records []inventoryRecord
+		ok      bool
+	}, 1)
 
 	go func() {
 		wingetChannel <- runProcess(
@@ -464,31 +713,22 @@ func scanInstalledApps() (inventoryResult, map[string]packageDetails) {
 		)
 	}()
 	go func() {
-		upgradeChannel <- runProcess(
-			"winget",
-			[]string{"upgrade", "--accept-source-agreements", "--disable-interactivity"},
-			30*time.Second,
-		)
-	}()
-	go func() {
-		inventoryChannel <- runProcess(
-			"powershell.exe",
-			[]string{"-NoProfile", "-NonInteractive", "-EncodedCommand", encodePowerShell(inventoryPowerShell)},
-			30*time.Second,
-		)
+		records, ok := collectInventoryRecords()
+		inventoryChannel <- struct {
+			records []inventoryRecord
+			ok      bool
+		}{records: records, ok: ok}
 	}()
 
 	wingetResult := <-wingetChannel
-	upgradeResult := <-upgradeChannel
-	systemResult := <-inventoryChannel
+	inventoryPayload := <-inventoryChannel
 	wingetOutput := wingetResult.Stdout + "\n" + wingetResult.Stderr
-	upgradeOutput := upgradeResult.Stdout + "\n" + upgradeResult.Stderr
-	records := parseInventoryJSON(systemResult.Stdout)
+	lookup := newInventoryLookup(inventoryPayload.records, wingetOutput, "")
 
 	detailsMap := make(map[string]packageDetails, len(allowlist))
 	apps := make([]publicPackageDetails, 0, len(allowlist))
 	for _, packageID := range allowlistIDs() {
-		details := resolvePackageDetails(packageID, allowlist[packageID], wingetOutput, upgradeOutput, records)
+		details := resolvePackageDetailsWithLookup(packageID, allowlist[packageID], lookup)
 		detailsMap[packageID] = details
 		apps = append(apps, publicDetails(details))
 	}
@@ -497,10 +737,37 @@ func scanInstalledApps() (inventoryResult, map[string]packageDetails) {
 		Apps: apps,
 		Diagnostics: inventoryDiagnostics{
 			WingetOK:         wingetResult.OK,
-			InventoryOK:      systemResult.OK,
-			InventoryRecords: len(records),
+			InventoryOK:      inventoryPayload.ok,
+			InventoryRecords: len(inventoryPayload.records),
 		},
 	}, detailsMap
+}
+
+func refreshUpdateAvailability(detailsMap map[string]packageDetails) (inventoryResult, map[string]packageDetails) {
+	upgradeResult := runProcess(
+		"winget",
+		[]string{"upgrade", "--accept-source-agreements", "--disable-interactivity"},
+		30*time.Second,
+	)
+	upgradeIDs := wingetPackageSet(upgradeResult.Stdout + "\n" + upgradeResult.Stderr)
+
+	next := make(map[string]packageDetails, len(detailsMap))
+	apps := make([]publicPackageDetails, 0, len(allowlist))
+	for _, packageID := range allowlistIDs() {
+		details := detailsMap[packageID]
+		details.UpdateAvailable = details.Installed && packageSetHas(upgradeIDs, packageID)
+		next[packageID] = details
+		apps = append(apps, publicDetails(details))
+	}
+
+	return inventoryResult{
+		Apps: apps,
+		Diagnostics: inventoryDiagnostics{
+			WingetOK:         upgradeResult.OK,
+			InventoryOK:      true,
+			InventoryRecords: len(detailsMap),
+		},
+	}, next
 }
 
 func stripTerminalNoise(value string) string {

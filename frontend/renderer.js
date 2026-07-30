@@ -30,6 +30,7 @@ const state = {
   viewMode: 'grid',
   running: false,
   scanning: false,
+  updatesScanning: false,
   currentId: '',
   busyId: '',
   stopRequested: false,
@@ -88,9 +89,12 @@ const els = {
   dockSubtext: document.getElementById('dockSubtext'),
   selectionDock: document.getElementById('selectionDock'),
   presets: document.getElementById('presetList'),
+  workspaces: document.getElementById('workspaceList'),
   presetPrev: document.getElementById('presetPrev'),
   presetNext: document.getElementById('presetNext'),
   planSummary: document.getElementById('planSummary'),
+  workspaceSummary: document.getElementById('workspaceSummary'),
+  navWorkspaceCount: document.getElementById('navWorkspaceCount'),
   realMode: document.getElementById('realMode'),
   realModeWarning: document.getElementById('realModeWarning'),
   modeLabel: document.getElementById('modeLabel'),
@@ -123,6 +127,20 @@ const els = {
   detailResetLocation: document.getElementById('detailResetLocationBtn'),
   detailUpgrade: document.getElementById('detailUpgradeBtn'),
   detailUninstall: document.getElementById('detailUninstallBtn'),
+  workspaceDialog: document.getElementById('workspaceDialog'),
+  workspaceDetailIcon: document.getElementById('workspaceDetailIcon'),
+  workspaceDetailName: document.getElementById('workspaceDetailName'),
+  workspaceDetailDescription: document.getElementById('workspaceDetailDescription'),
+  workspaceDetailCount: document.getElementById('workspaceDetailCount'),
+  workspaceDetailPending: document.getElementById('workspaceDetailPending'),
+  workspaceDetailInstalled: document.getElementById('workspaceDetailInstalled'),
+  workspaceDetailSources: document.getElementById('workspaceDetailSources'),
+  workspaceDetailListSummary: document.getElementById('workspaceDetailListSummary'),
+  workspaceDetailApps: document.getElementById('workspaceDetailApps'),
+  workspaceCommandSection: document.getElementById('workspaceCommandSection'),
+  workspaceCommandPreview: document.getElementById('workspaceCommandPreview'),
+  workspaceDetailQueue: document.getElementById('workspaceDetailQueueBtn'),
+  workspaceDetailApply: document.getElementById('workspaceDetailApplyBtn'),
   theme: document.getElementById('themeBtn'),
   rescan: document.getElementById('rescanBtn'),
   systemReady: document.getElementById('systemReady'),
@@ -137,6 +155,8 @@ const els = {
 
 let detailAppId = '';
 let dialogClosing = false;
+let workspaceDetailId = '';
+let workspaceDialogClosing = false;
 
 /* ------------------------------------------------------------- dropdown */
 
@@ -364,6 +384,10 @@ function appById(id) {
   return appIndex.get(id);
 }
 
+function presetById(id) {
+  return presets.find((item) => item.id === id);
+}
+
 function appByPackage(packageId) {
   return pkgIndex.get(packageId) || pkgIndex.get(String(packageId ?? '').toLowerCase());
 }
@@ -383,6 +407,14 @@ function sortByInstallOrder(list) {
     || Number(left.order || 999) - Number(right.order || 999)
     || left.name.localeCompare(right.name, 'vi')
   ));
+}
+
+function workspaceAppsFor(preset) {
+  const ids = new Set(preset?.apps || []);
+  for (const appId of preset?.apps || []) {
+    dependencyIdsFor(appById(appId)).forEach((dependencyId) => ids.add(dependencyId));
+  }
+  return sortByInstallOrder([...ids].map(appById).filter(Boolean));
 }
 
 function tagLabel(tagId) {
@@ -445,7 +477,9 @@ async function loadCatalog() {
   }
   searchIndex = null;
 
-  els.planSummary.textContent = `${presets.length} cấu hình theo vai trò, có thể chỉnh sửa sau`;
+  els.planSummary.textContent = `${Math.min(4, presets.length)} workspace nổi bật`;
+  if (els.workspaceSummary) els.workspaceSummary.textContent = `${presets.length} workspace theo vai trò và lĩnh vực`;
+  if (els.navWorkspaceCount) els.navWorkspaceCount.textContent = presets.length;
 
   const defaultPlan = presets.find((plan) => plan.id === state.activePreset) || presets[0];
   const persisted = loadPersistedSelection();
@@ -571,6 +605,12 @@ function presetButtonHTML(preset) {
   const pendingCount = preset.apps.filter((id) => !state.installed.has(id)).length;
   const installedCount = preset.apps.length - pendingCount;
   const largeCount = preset.apps.map(appById).filter((app) => app?.size === 'large').length;
+  const previewApps = preset.apps.map(appById).filter(Boolean);
+  const previewMarkup = previewApps.map((app) => `
+    <span class="workspace-app-tile" title="${escapeHtml(app.name)}">
+      ${appIconMarkup(app)}
+    </span>
+  `).join('');
   return `
     <button class="preset-button ${state.activePreset === preset.id ? 'active' : ''}" data-preset="${preset.id}" type="button" title="${escapeHtml(preset.desc)}">
       <span class="preset-icon" aria-hidden="true"><i class="ph ${preset.icon}"></i></span>
@@ -579,18 +619,65 @@ function presetButtonHTML(preset) {
         <span class="preset-description">${escapeHtml(preset.desc)}</span>
         <span class="preset-count">${pendingCount} cần cài${installedCount ? `, ${installedCount} đã có` : ''}${largeCount ? `, ${largeCount} app lớn` : ''}</span>
       </span>
+      <span class="workspace-preview" aria-hidden="true">
+        <span class="workspace-app-rail">${previewMarkup}</span>
+      </span>
     </button>
   `;
 }
 
+function workspaceCardHTML(preset) {
+  const pendingCount = preset.apps.filter((id) => !state.installed.has(id)).length;
+  const installedCount = preset.apps.length - pendingCount;
+  const largeCount = preset.apps.map(appById).filter((app) => app?.size === 'large').length;
+  const previewApps = preset.apps.map(appById).filter(Boolean);
+  const previewMarkup = previewApps.map((app) => `
+    <span class="workspace-app-tile" title="${escapeHtml(app.name)}">
+      ${appIconMarkup(app)}
+    </span>
+  `).join('');
+  return `
+    <article class="workspace-card ${state.activePreset === preset.id ? 'active' : ''}" data-workspace="${escapeHtml(preset.id)}" tabindex="0">
+      <div class="workspace-card-heading">
+        <span class="preset-icon" aria-hidden="true"><i class="ph ${escapeHtml(preset.icon)}"></i></span>
+        <div class="workspace-card-title">
+          <strong>${escapeHtml(preset.name)}</strong>
+          <span>${escapeHtml(preset.desc)}</span>
+        </div>
+        <button class="workspace-open-button" data-workspace-detail="${escapeHtml(preset.id)}" type="button" aria-label="Xem chi tiết ${escapeHtml(preset.name)}" title="Xem chi tiết workspace">
+          <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="workspace-preview workspace-preview-large" aria-label="Các ứng dụng trong workspace">
+        <div class="workspace-app-rail" tabindex="0">${previewMarkup}</div>
+      </div>
+      <div class="workspace-card-footer">
+        <span><strong>${previewApps.length}</strong> ứng dụng</span>
+        <span>${pendingCount} cần cài${installedCount ? ` · ${installedCount} đã có` : ''}${largeCount ? ` · ${largeCount} app lớn` : ''}</span>
+      </div>
+      <button class="button workspace-apply-button" data-workspace-apply="${escapeHtml(preset.id)}" type="button">
+        <i class="ph ph-plus-circle" aria-hidden="true"></i>
+        Dùng workspace này
+      </button>
+    </article>
+  `;
+}
+
 function renderPresets() {
-  els.presets.innerHTML = presets.map(presetButtonHTML).join('');
+  const preview = presets.slice(0, 4);
+  els.presets.innerHTML = preview.map(presetButtonHTML).join('');
+  if (els.workspaces) {
+    els.workspaces.innerHTML = presets.map(workspaceCardHTML).join('');
+  }
   updatePresetNav();
 }
 
 function updatePresetActive() {
   els.presets.querySelectorAll('.preset-button').forEach((button) => {
     button.classList.toggle('active', button.dataset.preset === state.activePreset);
+  });
+  els.workspaces?.querySelectorAll('.workspace-card').forEach((card) => {
+    card.classList.toggle('active', card.dataset.workspace === state.activePreset);
   });
 }
 
@@ -931,6 +1018,7 @@ function renderQueue() {
   els.installedCount.textContent = `${state.installed.size} ứng dụng`;
   els.largeAppCount.textContent = largeCount;
   els.navQueueCount.textContent = selected.length;
+  if (els.navWorkspaceCount) els.navWorkspaceCount.textContent = presets.length;
   els.dockCount.textContent = `${selected.length} ứng dụng đã chọn`;
   els.dockSubtext.textContent = selected.length
     ? `${pending.length} ứng dụng còn cần cài${largeCount ? `, gồm ${largeCount} app lớn` : ''}`
@@ -1252,6 +1340,91 @@ function closeDetail() {
   }, 130);
 }
 
+function workspaceAppRowHTML(app) {
+  const details = state.installed.get(app.id);
+  const selected = state.selected.has(app.id);
+  const status = details
+    ? (details.updateAvailable ? 'Đã cài, có cập nhật' : 'Đã cài')
+    : selected ? 'Đang trong gói' : 'Chưa cài';
+  const statusIcon = details
+    ? (details.updateAvailable ? 'ph-arrow-circle-up' : 'ph-check-circle')
+    : selected ? 'ph-stack' : 'ph-download-simple';
+  return `
+    <button class="workspace-detail-app" data-workspace-app-detail="${escapeHtml(app.id)}" type="button">
+      <span class="workspace-detail-app-icon" aria-hidden="true">${appIconMarkup(app)}</span>
+      <span class="workspace-detail-app-copy">
+        <strong>${escapeHtml(app.name)}</strong>
+        <span>${escapeHtml(app.pkg)}</span>
+      </span>
+      <span class="workspace-detail-app-meta">
+        <span>${escapeHtml(app.type)}</span>
+        <strong><i class="ph ${statusIcon}" aria-hidden="true"></i>${escapeHtml(status)}</strong>
+      </span>
+    </button>
+  `;
+}
+
+function openWorkspaceDetail(id) {
+  const preset = presetById(id);
+  if (!preset) return;
+
+  const workspaceApps = workspaceAppsFor(preset);
+  const pendingApps = workspaceApps.filter((app) => !state.installed.has(app.id));
+  const installedCount = workspaceApps.length - pendingApps.length;
+  const wingetCount = workspaceApps.filter((app) => app.source !== 'msstore').length;
+  const storeCount = workspaceApps.length - wingetCount;
+  const largeCount = workspaceApps.filter((app) => app.size === 'large').length;
+
+  workspaceDetailId = id;
+  els.workspaceDetailIcon.innerHTML = `<i class="ph ${escapeHtml(preset.icon || 'ph-stack')}" aria-hidden="true"></i>`;
+  els.workspaceDetailName.textContent = preset.name;
+  els.workspaceDetailDescription.textContent = preset.desc;
+  els.workspaceDetailCount.textContent = `${workspaceApps.length} ứng dụng${largeCount ? `, ${largeCount} app lớn` : ''}`;
+  els.workspaceDetailPending.textContent = pendingApps.length
+    ? `${pendingApps.length} cần cài`
+    : 'Đã đủ trên máy';
+  els.workspaceDetailInstalled.textContent = installedCount
+    ? `${installedCount} đã phát hiện`
+    : 'Chưa phát hiện app nào';
+  els.workspaceDetailSources.textContent = [
+    wingetCount ? `${wingetCount} WinGet` : '',
+    storeCount ? `${storeCount} Store` : ''
+  ].filter(Boolean).join(', ') || 'Không có';
+  els.workspaceDetailListSummary.textContent = pendingApps.length
+    ? `${pendingApps.length} app sẽ được đưa vào gói`
+    : 'Không còn app mới cần cài';
+  els.workspaceDetailApps.innerHTML = workspaceApps.map(workspaceAppRowHTML).join('');
+  els.workspaceCommandSection.hidden = pendingApps.length === 0;
+  els.workspaceCommandPreview.textContent = pendingApps.map(commandFor).join('\n');
+  els.workspaceDetailApply.disabled = Boolean(state.running || state.scanning);
+  els.workspaceDetailQueue.disabled = state.selected.size === 0;
+
+  if (!els.workspaceDialog.open) {
+    workspaceDialogClosing = false;
+    els.workspaceDialog.classList.remove('closing');
+    els.workspaceDialog.showModal();
+  }
+}
+
+function closeWorkspaceDetail({ immediate = false } = {}) {
+  if (!els.workspaceDialog.open || workspaceDialogClosing) return;
+  if (immediate) {
+    els.workspaceDialog.close();
+    els.workspaceDialog.classList.remove('closing');
+    workspaceDialogClosing = false;
+    workspaceDetailId = '';
+    return;
+  }
+  workspaceDialogClosing = true;
+  els.workspaceDialog.classList.add('closing');
+  window.setTimeout(() => {
+    els.workspaceDialog.close();
+    els.workspaceDialog.classList.remove('closing');
+    workspaceDialogClosing = false;
+    workspaceDetailId = '';
+  }, 130);
+}
+
 /* ------------------------------------------------------------ log & toast */
 
 function addLog(message) {
@@ -1313,6 +1486,7 @@ async function scanInstalled({ showFeedback = true, pruneSelection = false } = {
   if (!window.setupkitNative || state.scanning || state.running) return;
 
   state.scanning = true;
+  let shouldRefreshUpdates = false;
   els.rescan.disabled = true;
   els.rescan.querySelector('.ph')?.classList.add('is-spinning');
   setSystemStatus('scanning', 'Đang quét ứng dụng trên máy', 'ph-arrow-clockwise', true);
@@ -1320,24 +1494,8 @@ async function scanInstalled({ showFeedback = true, pruneSelection = false } = {
 
   try {
     const result = await window.setupkitNative.scanInstalled();
-    const nextInstalled = new Map();
-    result.apps.forEach((details) => {
-      if (!details.installed) return;
-      const app = appByPackage(details.packageId);
-      if (app) nextInstalled.set(app.id, details);
-    });
-    state.installed = nextInstalled;
-
-    if (pruneSelection) {
-      nextInstalled.forEach((_details, id) => {
-        state.selected.delete(id);
-        state.done.delete(id);
-        state.failed.delete(id);
-        state.simulated.delete(id);
-        state.installProgress.delete(id);
-      });
-      persistSelection();
-    }
+    const nextInstalled = applyInstalledResult(result, { pruneSelection });
+    shouldRefreshUpdates = Boolean(state.wingetAvailable && window.setupkitNative?.scanUpdates);
 
     const wingetNote = state.wingetAvailable
       ? `winget${state.wingetVersion ? ` ${state.wingetVersion}` : ''} sẵn sàng`
@@ -1356,6 +1514,51 @@ async function scanInstalled({ showFeedback = true, pruneSelection = false } = {
     els.rescan.disabled = false;
     els.rescan.querySelector('.ph')?.classList.remove('is-spinning');
     renderAll();
+    if (shouldRefreshUpdates) refreshUpdateAvailability();
+  }
+}
+
+function applyInstalledResult(result, { pruneSelection = false } = {}) {
+  const nextInstalled = new Map();
+  result.apps.forEach((details) => {
+    if (!details.installed) return;
+    const app = appByPackage(details.packageId);
+    if (app) nextInstalled.set(app.id, details);
+  });
+  state.installed = nextInstalled;
+
+  if (pruneSelection) {
+    nextInstalled.forEach((_details, id) => {
+      state.selected.delete(id);
+      state.done.delete(id);
+      state.failed.delete(id);
+      state.simulated.delete(id);
+      state.installProgress.delete(id);
+    });
+    persistSelection();
+  }
+  return nextInstalled;
+}
+
+async function refreshUpdateAvailability() {
+  if (!window.setupkitNative?.scanUpdates || state.updatesScanning || state.running) return;
+  state.updatesScanning = true;
+  try {
+    const result = await window.setupkitNative.scanUpdates();
+    applyInstalledResult(result);
+    const updateCount = result.apps.filter((details) => details.installed && details.updateAvailable).length;
+    if (updateCount) {
+      addLog(`[cập nhật] Phát hiện ${updateCount} ứng dụng có bản mới.`);
+    } else {
+      addLog('[cập nhật] Không phát hiện ứng dụng cần cập nhật.');
+    }
+    renderCatalog();
+    renderQueue();
+    renderStatusBar();
+  } catch (error) {
+    addLog(`[cập nhật] Không kiểm tra được bản cập nhật: ${error.message || 'winget upgrade không khả dụng.'}`);
+  } finally {
+    state.updatesScanning = false;
   }
 }
 
@@ -1999,6 +2202,33 @@ function bindEvents() {
     const button = event.target.closest('[data-preset]');
     if (button) applyPreset(button.dataset.preset);
   });
+  els.workspaces?.addEventListener('click', (event) => {
+    const detail = event.target.closest('[data-workspace-detail]');
+    const apply = event.target.closest('[data-workspace-apply]');
+    const button = event.target.closest('[data-preset]');
+    if (detail) {
+      event.stopPropagation();
+      openWorkspaceDetail(detail.dataset.workspaceDetail);
+      return;
+    }
+    if (apply) {
+      event.stopPropagation();
+      applyPreset(apply.dataset.workspaceApply);
+      return;
+    }
+    if (button) applyPreset(button.dataset.preset);
+    if (!event.target.closest('button')) {
+      const card = event.target.closest('[data-workspace]');
+      if (card) openWorkspaceDetail(card.dataset.workspace);
+    }
+  });
+  els.workspaces?.addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    if (event.target.matches?.('[data-workspace]')) {
+      event.preventDefault();
+      openWorkspaceDetail(event.target.dataset.workspace);
+    }
+  });
   enableWheelScroll(els.presets, updatePresetNav);
   els.presetPrev?.addEventListener('click', () => {
     els.presets.scrollBy({ left: -els.presets.clientWidth * 0.8, behavior: 'smooth' });
@@ -2186,6 +2416,38 @@ function bindEvents() {
       || event.clientY < rect.top
       || event.clientY > rect.bottom;
     if (outside) closeDetail();
+  });
+  document.getElementById('workspaceDialogCloseBtn').addEventListener('click', closeWorkspaceDetail);
+  document.getElementById('workspaceDialogCancelBtn').addEventListener('click', closeWorkspaceDetail);
+  els.workspaceDetailApply.addEventListener('click', () => {
+    if (workspaceDialogClosing || !workspaceDetailId) return;
+    applyPreset(workspaceDetailId);
+    closeWorkspaceDetail();
+  });
+  els.workspaceDetailQueue.addEventListener('click', () => {
+    closeWorkspaceDetail({ immediate: true });
+    switchView('queue');
+  });
+  els.workspaceDetailApps.addEventListener('click', (event) => {
+    const appButton = event.target.closest('[data-workspace-app-detail]');
+    if (!appButton) return;
+    const appId = appButton.dataset.workspaceAppDetail;
+    closeWorkspaceDetail({ immediate: true });
+    openDetail(appId);
+  });
+  els.workspaceDialog.addEventListener('cancel', (event) => {
+    event.preventDefault();
+    closeWorkspaceDetail();
+  });
+  els.workspaceDialog.addEventListener('click', (event) => {
+    if (event.detail === 0) return;
+    if (event.target !== els.workspaceDialog) return;
+    const rect = els.workspaceDialog.getBoundingClientRect();
+    const outside = event.clientX < rect.left
+      || event.clientX > rect.right
+      || event.clientY < rect.top
+      || event.clientY > rect.bottom;
+    if (outside) closeWorkspaceDetail();
   });
   els.theme.addEventListener('click', toggleTheme);
 

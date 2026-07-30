@@ -1,7 +1,7 @@
 /*
  * File này được tạo tự động bởi scripts/build-phosphor-subset.js.
  * Đừng sửa tay — hãy sửa scripts/phosphor-full/style.css rồi chạy lại script.
- * 81 / 1530 icon được giữ lại.
+ * 85 / 1530 icon được giữ lại.
  */
 @font-face {
   font-family: "Phosphor";
@@ -50,6 +50,9 @@
 }
 .ph.ph-arrow-square-out:before {
   content: "\e5de";
+}
+.ph.ph-arrow-up-right:before {
+  content: "\e092";
 }
 .ph.ph-brackets-curly:before {
   content: "\e860";
@@ -183,11 +186,17 @@
 .ph.ph-hexagon:before {
   content: "\e2ae";
 }
+.ph.ph-house:before {
+  content: "\e2c2";
+}
 .ph.ph-infinity:before {
   content: "\e634";
 }
 .ph.ph-info:before {
   content: "\e2ce";
+}
+.ph.ph-kanban:before {
+  content: "\eb54";
 }
 .ph.ph-link-break:before {
   content: "\e2e4";
@@ -227,6 +236,9 @@
 }
 .ph.ph-plus:before {
   content: "\e3d4";
+}
+.ph.ph-plus-circle:before {
+  content: "\e3d6";
 }
 .ph.ph-selection-all:before {
   content: "\e746";
