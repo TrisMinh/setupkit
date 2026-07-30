@@ -13,6 +13,20 @@
 
 ---
 
+<table>
+  <tr>
+    <td align="center">
+      <strong>Live Landing Page Preview</strong><br>
+      Explore the animated SetupKit product page, workspace orbit, update flow, rollback story, and screenshots.<br><br>
+      <a href="https://trisminh.github.io/setupkit/">
+        <img src="https://img.shields.io/badge/Open%20Landing%20Page-SetupKit%20Preview-2ea44f?style=for-the-badge&logo=githubpages&logoColor=white" alt="Open SetupKit landing page">
+      </a>
+    </td>
+  </tr>
+</table>
+
+---
+
 ## Install
 
 **Option 1 - one PowerShell command:**
