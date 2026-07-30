@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SetupKit - dựng workstation Windows trong một quỹ đạo</title>
+  <meta name="description" content="SetupKit cài, cập nhật, rollback và lưu hồ sơ ứng dụng Windows bằng catalog winget + Store đã duyệt.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23080a0b'/%3E%3Cpath d='M40 18a16 16 0 1 0 4 22' fill='none' stroke='%2375e0c0' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <canvas id="starfield" aria-hidden="true"></canvas>
+  <div class="cursor-orb" id="cursorOrb" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="SetupKit">
+      <span class="brand-mark"><span></span></span>
+      <span>SetupKit</span>
+    </a>
+    <nav class="site-nav" aria-label="Điều hướng landing page">
+      <a href="#engine">Engine</a>
+      <a href="#updates">Updates</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#download">Download</a>
+    </nav>
+    <a class="header-cta" href="https://github.com/TrisMinh/setupkit/releases/tag/v0.9.0">v0.9.0</a>
+  </header>
+
+  <main id="top">
+    <section class="hero-section">
+      <div class="black-hole-stage" aria-hidden="true">
+        <canvas id="blackHoleBack"></canvas>
+        <canvas id="blackHoleFront"></canvas>
+      </div>
+
+      <div class="hero-grid">
+        <div class="hero-copy reveal">
+          <span class="eyebrow">Windows workstation control center</span>
+          <h1>SetupKit biến cài máy thành một phiên điều phối có kiểm soát.</h1>
+          <p>
+            Chọn workspace, cài app, cập nhật hàng loạt, rollback version cũ và xuất hồ sơ máy trong một giao diện WebView2 nhẹ.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary magnetic" href="https://github.com/TrisMinh/setupkit/releases/download/v0.9.0/SetupKit.exe">
+              Tải SetupKit.exe
+            </a>
+            <a class="button ghost magnetic" href="https://github.com/TrisMinh/setupkit">Xem mã nguồn</a>
+          </div>
+        </div>
+
+        <aside class="hero-console reveal delay-1" aria-label="Trạng thái SetupKit">
+          <div class="console-top">
+            <span></span><span></span><span></span>
+            <strong>setupkit://session</strong>
+          </div>
+          <div class="console-stack">
+            <div class="console-row active">
+              <span class="pulse-dot"></span>
+              <span>catalog verified</span>
+              <strong>440 apps</strong>
+            </div>
+            <div class="console-row">
+              <span class="pulse-dot mint"></span>
+              <span>workspaces ready</span>
+              <strong>24 plans</strong>
+            </div>
+            <div class="console-row">
+              <span class="pulse-dot amber"></span>
+              <span>rollback channel</span>
+              <strong>winget versions</strong>
+            </div>
+            <pre class="console-log">winget upgrade --all? no
+SetupKit runs only reviewed package IDs.
+Rollback requires explicit confirmation.</pre>
+          </div>
+        </aside>
+      </div>
+
+      <div class="orbit-strip reveal delay-2" aria-label="Các app nổi bật">
+        <img src="../frontend/assets/apps/vscode.svg" alt="">
+        <img src="../frontend/assets/apps/docker.svg" alt="">
+        <img src="../frontend/assets/apps/git.svg" alt="">
+        <img src="../frontend/assets/apps/node.svg" alt="">
+        <img src="../frontend/assets/apps/python.svg" alt="">
+        <img src="../frontend/assets/apps/figma.svg" alt="">
+        <img src="../frontend/assets/apps/brave.svg" alt="">
+        <img src="../frontend/assets/apps/powertoys.png" alt="">
+      </div>
+    </section>
+
+    <section class="metrics-band reveal" id="engine">
+      <div class="metric-card">
+        <span data-count="440">0</span>
+        <p>ứng dụng đã duyệt</p>
+      </div>
+      <div class="metric-card">
+        <span data-count="24">0</span>
+        <p>workspace theo vai trò</p>
+      </div>
+      <div class="metric-card">
+        <span data-count="93">0</span>
+        <p>icon UI cắt gọn</p>
+      </div>
+      <div class="metric-card">
+        <span data-count="1">0</span>
+        <p>file exe mở là chạy</p>
+      </div>
+    </section>
+
+    <section class="section feature-section">
+      <div class="section-heading reveal">
+        <span class="eyebrow">The install engine</span>
+        <h2>Mọi thao tác đi qua một đường ray an toàn.</h2>
+        <p>SetupKit không tải script lạ, không nhận package tùy ý và luôn hiện lệnh thật trước khi thay đổi máy.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature-card reveal">
+          <span class="card-index">01</span>
+          <h3>Allowlist nhúng trong binary</h3>
+          <p>Catalog JSON được kiểm chứng lúc build rồi nhúng vào app. Native API từ chối package ID ngoài danh sách.</p>
+        </article>
+        <article class="feature-card reveal delay-1">
+          <span class="card-index">02</span>
+          <h3>Terminal sống</h3>
+          <p>stdout/stderr của winget stream trực tiếp, progress từng app được suy luận theo output thật.</p>
+        </article>
+        <article class="feature-card reveal delay-2">
+          <span class="card-index">03</span>
+          <h3>Profiles tái sử dụng</h3>
+          <p>Xuất và nhập bộ app thành hồ sơ JSON để dựng máy mới mà không nhớ lại từng công cụ.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="showcase-section reveal">
+      <div class="screenshot-frame tilted">
+        <img src="../docs/screenshots/catalog-light.png" alt="SetupKit catalog với workspace preview">
+      </div>
+      <div class="showcase-copy">
+        <span class="eyebrow">Workspace first</span>
+        <h2>Không bắt đầu từ danh sách app. Bắt đầu từ vai trò.</h2>
+        <p>Developer Core, Web Frontend, Python & AI, Office, Designer, Gaming. Chọn một workspace hoặc tự lọc theo tag/source/status.</p>
+        <div class="micro-list">
+          <span>hover logo rail</span>
+          <span>grid/list/icon view</span>
+          <span>sort thông minh</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section updates-section" id="updates">
+      <div class="section-heading reveal">
+        <span class="eyebrow">v0.9.0 control loops</span>
+        <h2>Cập nhật và rollback không còn là việc mở terminal mò lệnh.</h2>
+      </div>
+      <div class="flow-board">
+        <article class="flow-card reveal">
+          <span class="flow-glow"></span>
+          <h3>Updates</h3>
+          <p>Quét `winget upgrade`, search app có bản mới, cập nhật từng app hoặc tất cả sau một lần xác nhận.</p>
+        </article>
+        <article class="flow-card reveal delay-1">
+          <span class="flow-glow"></span>
+          <h3>Versions</h3>
+          <p>Tải version bằng `winget show --versions`, chọn bản cũ và quyết định cài đè hay gỡ rồi cài.</p>
+        </article>
+        <article class="flow-card reveal delay-2">
+          <span class="flow-glow"></span>
+          <h3>Audit</h3>
+          <p>Luồng nào cũng có confirm, terminal, log, scan lại trạng thái và chỉ chạy package trong allowlist.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="timeline-section" id="roadmap">
+      <div class="section-heading reveal">
+        <span class="eyebrow">Roadmap</span>
+        <h2>Từ app dựng máy thành hệ điều phối workstation.</h2>
+      </div>
+      <div class="timeline" id="timeline">
+        <span class="timeline-progress" id="timelineProgress"></span>
+        <article class="timeline-item reveal">
+          <span>Now</span>
+          <h3>SetupKit v0.9</h3>
+          <p>Install, update, rollback, workspace preview, profile import/export và UI motion mới.</p>
+        </article>
+        <article class="timeline-item reveal">
+          <span>Next</span>
+          <h3>10,000 app catalog</h3>
+          <p>Mở rộng catalog bằng pipeline kiểm chứng package, dedupe logo và phân loại tag tự động.</p>
+        </article>
+        <article class="timeline-item reveal">
+          <span>Later</span>
+          <h3>Team profiles</h3>
+          <p>Preset theo team, export hồ sơ có policy, và kiểm tra drift giữa máy thật với hồ sơ chuẩn.</p>
+        </article>
+        <article class="timeline-item reveal">
+          <span>Future</span>
+          <h3>Signed installer</h3>
+          <p>Code signing, auto-update của chính SetupKit và release channel ổn định/beta.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="screens-section">
+      <div class="screen-card reveal">
+        <img src="../docs/screenshots/install-progress.png" alt="Theo dõi cài đặt trong SetupKit">
+        <span>Live progress</span>
+      </div>
+      <div class="screen-card reveal delay-1">
+        <img src="../docs/screenshots/app-detail-installed.png" alt="Chi tiết app đã cài có cập nhật">
+        <span>Update & uninstall</span>
+      </div>
+      <div class="screen-card reveal delay-2">
+        <img src="../docs/screenshots/view-icon.png" alt="Kiểu hiển thị icon của SetupKit">
+        <span>Dense catalog</span>
+      </div>
+    </section>
+
+    <section class="download-section reveal" id="download">
+      <div>
+        <span class="eyebrow">Download</span>
+        <h2>Một file exe, không runtime Node, không Electron.</h2>
+        <p>SetupKit chạy bằng WebView2 native trên Windows, build `v0.9.0` đã có exe, zip và installer.</p>
+      </div>
+      <div class="download-actions">
+        <a class="button primary magnetic" href="https://github.com/TrisMinh/setupkit/releases/download/v0.9.0/SetupKit-Setup-0.9.0-win-x64.exe">Tải installer</a>
+        <a class="button ghost magnetic" href="https://github.com/TrisMinh/setupkit/releases/tag/v0.9.0">Release notes</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="./blackhole.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
