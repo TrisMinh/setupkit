@@ -1,11 +1,18 @@
 <!doctype html>
-<html lang="vi">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SetupKit - dựng workstation Windows trong một quỹ đạo</title>
-  <meta name="description" content="SetupKit cài, cập nhật, rollback và lưu hồ sơ ứng dụng Windows bằng catalog winget + Store đã duyệt.">
+  <title>SetupKit - Windows workspace setup</title>
+  <meta name="description" content="SetupKit installs, updates, rolls back, and saves Windows app profiles from a reviewed catalog.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23080a0b'/%3E%3Cpath d='M40 18a16 16 0 1 0 4 22' fill='none' stroke='%2375e0c0' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E">
+  <script>
+    try {
+      document.documentElement.dataset.theme = localStorage.getItem("setupkit-theme") || "light";
+    } catch {
+      document.documentElement.dataset.theme = "light";
+    }
+  </script>
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
@@ -17,13 +24,19 @@
       <span class="brand-mark"><span></span></span>
       <span>SetupKit</span>
     </a>
-    <nav class="site-nav" aria-label="Điều hướng landing page">
+    <nav class="site-nav" aria-label="Landing page navigation">
       <a href="#engine">Engine</a>
       <a href="#updates">Updates</a>
       <a href="#roadmap">Roadmap</a>
       <a href="#download">Download</a>
     </nav>
-    <a class="header-cta" href="https://github.com/TrisMinh/setupkit/releases/tag/v0.9.0">v0.9.0</a>
+    <div class="header-tools">
+      <div class="theme-switch" role="group" aria-label="Choose theme">
+        <button type="button" data-theme-choice="light" aria-pressed="true">Light</button>
+        <button type="button" data-theme-choice="dark" aria-pressed="false">Dark</button>
+      </div>
+      <a class="header-cta" href="https://github.com/TrisMinh/setupkit/releases/tag/v0.9.0">v0.9.0</a>
+    </div>
   </header>
 
   <main id="top">
@@ -31,24 +44,73 @@
       <div class="black-hole-stage" aria-hidden="true">
         <canvas id="blackHoleBack"></canvas>
         <canvas id="blackHoleFront"></canvas>
+        <div class="workspace-orbits" id="workspaceOrbits">
+          <div class="workspace-orbit-layer" data-orbit-layer="developer">
+            <img src="../frontend/assets/apps/vscode.svg" alt="">
+            <img src="../frontend/assets/apps/git.svg" alt="">
+            <img src="../frontend/assets/apps/docker.svg" alt="">
+            <img src="../frontend/assets/apps/node.svg" alt="">
+            <img src="../frontend/assets/apps/python.svg" alt="">
+            <img src="../frontend/assets/apps/postman.svg" alt="">
+            <span class="orbit-tag">dev</span>
+            <span class="orbit-tag">ide</span>
+            <span class="orbit-tag">api</span>
+          </div>
+          <div class="workspace-orbit-layer" data-orbit-layer="office">
+            <img src="../frontend/assets/apps/notion.svg" alt="">
+            <img src="../frontend/assets/apps/slack.svg" alt="">
+            <img src="../frontend/assets/apps/teams.svg" alt="">
+            <img src="../frontend/assets/apps/zoom.svg" alt="">
+            <img src="../frontend/assets/apps/obsidian.svg" alt="">
+            <img src="../frontend/assets/apps/bitwarden.svg" alt="">
+            <span class="orbit-tag">docs</span>
+            <span class="orbit-tag">remote</span>
+            <span class="orbit-tag">sync</span>
+          </div>
+          <div class="workspace-orbit-layer" data-orbit-layer="design">
+            <img src="../frontend/assets/apps/figma.svg" alt="">
+            <img src="../frontend/assets/apps/blender.svg" alt="">
+            <img src="../frontend/assets/apps/vlc.svg" alt="">
+            <img src="../frontend/assets/apps/powertoys.png" alt="">
+            <img src="../frontend/assets/apps/cursor.svg" alt="">
+            <img src="../frontend/assets/apps/chrome.svg" alt="">
+            <span class="orbit-tag">design</span>
+            <span class="orbit-tag">media</span>
+            <span class="orbit-tag">prototype</span>
+          </div>
+          <div class="workspace-orbit-layer" data-orbit-layer="gaming">
+            <img src="../frontend/assets/apps/steam.svg" alt="">
+            <img src="../frontend/assets/apps/epic.svg" alt="">
+            <img src="../frontend/assets/apps/discord.svg" alt="">
+            <img src="../frontend/assets/apps/firefox.svg" alt="">
+            <img src="../frontend/assets/apps/sevenzip.svg" alt="">
+            <img src="../frontend/assets/apps/dbeaver-community.svg" alt="">
+            <span class="orbit-tag">gaming</span>
+            <span class="orbit-tag">launcher</span>
+            <span class="orbit-tag">tools</span>
+          </div>
+        </div>
       </div>
 
       <div class="hero-grid">
         <div class="hero-copy reveal">
-          <span class="eyebrow">Windows workstation control center</span>
-          <h1>SetupKit biến cài máy thành một phiên điều phối có kiểm soát.</h1>
+          <span class="eyebrow">Windows workspace</span>
+          <h1>
+            <span class="hero-title-brand">SetupKit</span>
+            <span class="hero-title-rest">Controlled machine setup.</span>
+          </h1>
           <p>
-            Chọn workspace, cài app, cập nhật hàng loạt, rollback version cũ và xuất hồ sơ máy trong một giao diện WebView2 nhẹ.
+            Workspaces, apps, updates, rollback, profiles.
           </p>
           <div class="hero-actions">
             <a class="button primary magnetic" href="https://github.com/TrisMinh/setupkit/releases/download/v0.9.0/SetupKit.exe">
-              Tải SetupKit.exe
+              Download SetupKit.exe
             </a>
-            <a class="button ghost magnetic" href="https://github.com/TrisMinh/setupkit">Xem mã nguồn</a>
+            <a class="button ghost magnetic" href="https://github.com/TrisMinh/setupkit">View source</a>
           </div>
         </div>
 
-        <aside class="hero-console reveal delay-1" aria-label="Trạng thái SetupKit">
+        <aside class="hero-console reveal delay-1" aria-label="SetupKit status">
           <div class="console-top">
             <span></span><span></span><span></span>
             <strong>setupkit://session</strong>
@@ -56,27 +118,27 @@
           <div class="console-stack">
             <div class="console-row active">
               <span class="pulse-dot"></span>
-              <span>catalog verified</span>
-              <strong>440 apps</strong>
+              <span>catalog locked</span>
+              <strong>450 apps</strong>
             </div>
             <div class="console-row">
               <span class="pulse-dot mint"></span>
-              <span>workspaces ready</span>
+              <span>workspaces</span>
               <strong>24 plans</strong>
             </div>
             <div class="console-row">
               <span class="pulse-dot amber"></span>
-              <span>rollback channel</span>
+              <span>rollback</span>
               <strong>winget versions</strong>
             </div>
             <pre class="console-log">winget upgrade --all? no
-SetupKit runs only reviewed package IDs.
-Rollback requires explicit confirmation.</pre>
+Only reviewed package IDs.
+Rollback needs confirmation.</pre>
           </div>
         </aside>
       </div>
 
-      <div class="orbit-strip reveal delay-2" aria-label="Các app nổi bật">
+      <div class="orbit-strip reveal delay-2" aria-label="Featured apps">
         <div class="logo-marquee">
           <div class="logo-track">
             <img src="../frontend/assets/apps/vscode.svg" alt="">
@@ -160,84 +222,166 @@ Rollback requires explicit confirmation.</pre>
 
     <section class="metrics-band reveal" id="engine">
       <div class="metric-card">
-        <span data-count="440">0</span>
-        <p>ứng dụng đã duyệt</p>
+        <span data-count="450">0</span>
+        <p>reviewed apps</p>
       </div>
       <div class="metric-card">
         <span data-count="24">0</span>
-        <p>workspace theo vai trò</p>
+        <p>workspaces</p>
       </div>
       <div class="metric-card">
         <span data-count="93">0</span>
-        <p>icon UI cắt gọn</p>
+        <p>UI icons</p>
       </div>
       <div class="metric-card">
         <span data-count="1">0</span>
-        <p>file exe mở là chạy</p>
+        <p>portable exe</p>
       </div>
     </section>
 
     <section class="section feature-section">
-      <div class="section-heading reveal">
-        <span class="eyebrow">The install engine</span>
-        <h2>Mọi thao tác đi qua một đường ray an toàn.</h2>
-        <p>SetupKit không tải script lạ, không nhận package tùy ý và luôn hiện lệnh thật trước khi thay đổi máy.</p>
-      </div>
-      <div class="feature-grid">
-        <article class="feature-card reveal">
-          <span class="card-index">01</span>
-          <h3>Allowlist nhúng trong binary</h3>
-          <p>Catalog JSON được kiểm chứng lúc build rồi nhúng vào app. Native API từ chối package ID ngoài danh sách.</p>
-        </article>
-        <article class="feature-card reveal delay-1">
-          <span class="card-index">02</span>
-          <h3>Terminal sống</h3>
-          <p>stdout/stderr của winget stream trực tiếp, progress từng app được suy luận theo output thật.</p>
-        </article>
-        <article class="feature-card reveal delay-2">
-          <span class="card-index">03</span>
-          <h3>Profiles tái sử dụng</h3>
-          <p>Xuất và nhập bộ app thành hồ sơ JSON để dựng máy mới mà không nhớ lại từng công cụ.</p>
-        </article>
+      <div class="feature-scroll-story" id="featureScrollStory">
+        <div class="feature-sticky">
+          <div class="section-heading">
+            <span class="eyebrow">Engine</span>
+            <h2>Install the right package. See every command.</h2>
+            <p>No random scripts. No packages outside the allowlist.</p>
+          </div>
+          <div class="feature-rail">
+            <div class="feature-grid feature-page feature-page-primary">
+              <article class="feature-card" data-story-slot="1">
+                <div class="feature-visual allowlist-visual" aria-hidden="true">
+                  <div class="allowlist-logo-grid">
+                    <img src="../frontend/assets/apps/vscode.svg" alt="">
+                    <img src="../frontend/assets/apps/git.svg" alt="">
+                    <img src="../frontend/assets/apps/docker.svg" alt="">
+                    <img src="../frontend/assets/apps/python.svg" alt="">
+                    <img src="../frontend/assets/apps/node.svg" alt="">
+                    <img src="../frontend/assets/apps/figma.svg" alt="">
+                    <img src="../frontend/assets/apps/bitwarden.svg" alt="">
+                    <img src="../frontend/assets/apps/powertoys.png" alt="">
+                  </div>
+                  <div class="allowlist-line">
+                    <span>source</span>
+                    <strong>winget</strong>
+                  </div>
+                </div>
+                <span class="card-index">01</span>
+                <h3>Allowlist</h3>
+                <p>The reviewed catalog ships inside the app.</p>
+              </article>
+              <article class="feature-card" data-story-slot="2">
+                <div class="feature-visual terminal-visual" aria-hidden="true">
+                  <div class="terminal-bar"><span></span><span></span><span></span></div>
+                  <code>winget install --id Microsoft.VisualStudioCode</code>
+                  <code class="terminal-ok">verified package ID</code>
+                  <code>progress 78%</code>
+                </div>
+                <span class="card-index">02</span>
+                <h3>Live terminal</h3>
+                <p>Logs and progress follow real command output.</p>
+              </article>
+              <article class="feature-card" data-story-slot="3">
+                <div class="feature-visual profile-visual" aria-hidden="true">
+                  <div class="profile-card-mini">
+                    <span>profile.json</span>
+                    <strong>Developer Core</strong>
+                    <small>11 apps · 0 external URLs</small>
+                  </div>
+                  <div class="profile-code">
+                    <span>"source": "winget"</span>
+                    <span>"allowlist": true</span>
+                  </div>
+                </div>
+                <span class="card-index">03</span>
+                <h3>Profiles</h3>
+                <p>Save an app set and reuse it on the next machine.</p>
+              </article>
+            </div>
+
+            <div class="feature-grid feature-page feature-page-secondary">
+              <article class="feature-card" data-story-slot="1">
+                <div class="feature-visual scan-visual" aria-hidden="true">
+                  <img src="../docs/screenshots/search-khong-dau.png" alt="">
+                  <span>status filter</span>
+                </div>
+                <span class="card-index">04</span>
+                <h3>Search & sort</h3>
+                <p>Find apps by name, source, status, tag, or package ID.</p>
+              </article>
+              <article class="feature-card" data-story-slot="2">
+                <div class="feature-visual rollback-visual" aria-hidden="true">
+                  <div class="version-chip active">latest</div>
+                  <div class="version-chip">older</div>
+                  <div class="version-chip">restore</div>
+                </div>
+                <span class="card-index">05</span>
+                <h3>Rollback</h3>
+                <p>Choose a manifest version and confirm the exact command.</p>
+              </article>
+              <article class="feature-card" data-story-slot="3">
+                <div class="feature-visual policy-visual" aria-hidden="true">
+                  <div class="audit-line"><span></span><strong>package ID</strong><small>allowed</small></div>
+                  <div class="audit-line"><span></span><strong>external URL</strong><small>blocked</small></div>
+                  <div class="audit-line"><span></span><strong>profile</strong><small>portable</small></div>
+                </div>
+                <span class="card-index">06</span>
+                <h3>Policy</h3>
+                <p>Every install path stays inside the reviewed catalog.</p>
+              </article>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
     <section class="showcase-section reveal">
       <div class="screenshot-frame tilted">
-        <img src="../docs/screenshots/catalog-light.png" alt="SetupKit catalog với workspace preview">
+        <img src="../docs/screenshots/catalog-light.png" alt="SetupKit catalog with workspace preview">
       </div>
       <div class="showcase-copy">
         <span class="eyebrow">Workspace first</span>
-        <h2>Không bắt đầu từ danh sách app. Bắt đầu từ vai trò.</h2>
-        <p>Developer Core, Web Frontend, Python & AI, Office, Designer, Gaming. Chọn một workspace hoặc tự lọc theo tag/source/status.</p>
+        <h2>Pick a role. Apps line up.</h2>
+        <p>Developer, Office, Design, Gaming. Filter by tag, source, and status.</p>
         <div class="micro-list">
-          <span>hover logo rail</span>
+          <span>logo rail</span>
           <span>grid/list/icon view</span>
-          <span>sort thông minh</span>
+          <span>smart sort</span>
         </div>
       </div>
     </section>
 
     <section class="section updates-section" id="updates">
       <div class="section-heading reveal">
-        <span class="eyebrow">v0.9.0 control loops</span>
-        <h2>Cập nhật và rollback không còn là việc mở terminal mò lệnh.</h2>
+        <span class="eyebrow">Updates</span>
+        <h2>Fast updates. Clear rollback.</h2>
       </div>
       <div class="flow-board">
         <article class="flow-card reveal">
-          <span class="flow-glow"></span>
+          <div class="flow-visual update-visual" aria-hidden="true">
+            <img src="../docs/screenshots/app-detail-installed.png" alt="">
+            <span>scan complete</span>
+          </div>
           <h3>Updates</h3>
-          <p>Quét `winget upgrade`, search app có bản mới, cập nhật từng app hoặc tất cả sau một lần xác nhận.</p>
+          <p>Scan upgrades, search fast, update one app or all.</p>
         </article>
         <article class="flow-card reveal delay-1">
-          <span class="flow-glow"></span>
+          <div class="flow-visual version-visual" aria-hidden="true">
+            <div class="version-chip active">1.94.2</div>
+            <div class="version-chip">1.93.1</div>
+            <div class="version-chip">1.92.0</div>
+          </div>
           <h3>Versions</h3>
-          <p>Tải version bằng `winget show --versions`, chọn bản cũ và quyết định cài đè hay gỡ rồi cài.</p>
+          <p>View older versions and pick the one you need.</p>
         </article>
         <article class="flow-card reveal delay-2">
-          <span class="flow-glow"></span>
+          <div class="flow-visual audit-visual" aria-hidden="true">
+            <div class="audit-line"><span></span><strong>confirm</strong><small>required</small></div>
+            <div class="audit-line"><span></span><strong>log</strong><small>saved</small></div>
+            <div class="audit-line"><span></span><strong>rescan</strong><small>clean</small></div>
+          </div>
           <h3>Audit</h3>
-          <p>Luồng nào cũng có confirm, terminal, log, scan lại trạng thái và chỉ chạy package trong allowlist.</p>
+          <p>Confirm, log, and rescan status.</p>
         </article>
       </div>
     </section>
@@ -245,44 +389,44 @@ Rollback requires explicit confirmation.</pre>
     <section class="timeline-section" id="roadmap">
       <div class="section-heading reveal">
         <span class="eyebrow">Roadmap</span>
-        <h2>Từ app dựng máy thành hệ điều phối workstation.</h2>
+        <h2>From setup app to workstation control.</h2>
       </div>
       <div class="timeline" id="timeline">
         <span class="timeline-progress" id="timelineProgress"></span>
-        <article class="timeline-item reveal">
+        <article class="timeline-item reveal" data-orbit-focus="developer">
           <span>Now</span>
           <h3>SetupKit v0.9</h3>
-          <p>Install, update, rollback, workspace preview, profile import/export và UI motion mới.</p>
+          <p>Install, update, rollback, profiles, and motion UI.</p>
         </article>
-        <article class="timeline-item reveal">
+        <article class="timeline-item reveal" data-orbit-focus="office">
           <span>Next</span>
           <h3>10,000 app catalog</h3>
-          <p>Mở rộng catalog bằng pipeline kiểm chứng package, dedupe logo và phân loại tag tự động.</p>
+          <p>Larger catalog, cleaner logos, automatic tags.</p>
         </article>
-        <article class="timeline-item reveal">
+        <article class="timeline-item reveal" data-orbit-focus="design">
           <span>Later</span>
           <h3>Team profiles</h3>
-          <p>Preset theo team, export hồ sơ có policy, và kiểm tra drift giữa máy thật với hồ sơ chuẩn.</p>
+          <p>Team presets, policy, and drift checks.</p>
         </article>
-        <article class="timeline-item reveal">
+        <article class="timeline-item reveal" data-orbit-focus="gaming">
           <span>Future</span>
           <h3>Signed installer</h3>
-          <p>Code signing, auto-update của chính SetupKit và release channel ổn định/beta.</p>
+          <p>Signed builds, auto-update, and release channels.</p>
         </article>
       </div>
     </section>
 
     <section class="screens-section">
       <div class="screen-card reveal">
-        <img src="../docs/screenshots/install-progress.png" alt="Theo dõi cài đặt trong SetupKit">
+        <img src="../docs/screenshots/install-progress.png" alt="Track installs in SetupKit">
         <span>Live progress</span>
       </div>
       <div class="screen-card reveal delay-1">
-        <img src="../docs/screenshots/app-detail-installed.png" alt="Chi tiết app đã cài có cập nhật">
+        <img src="../docs/screenshots/app-detail-installed.png" alt="Installed app detail with updates">
         <span>Update & uninstall</span>
       </div>
       <div class="screen-card reveal delay-2">
-        <img src="../docs/screenshots/view-icon.png" alt="Kiểu hiển thị icon của SetupKit">
+        <img src="../docs/screenshots/view-icon.png" alt="SetupKit icon view">
         <span>Dense catalog</span>
       </div>
     </section>
@@ -290,11 +434,11 @@ Rollback requires explicit confirmation.</pre>
     <section class="download-section reveal" id="download">
       <div>
         <span class="eyebrow">Download</span>
-        <h2>Một file exe, không runtime Node, không Electron.</h2>
-        <p>SetupKit chạy bằng WebView2 native trên Windows, build `v0.9.0` đã có exe, zip và installer.</p>
+        <h2>One exe. Open and run.</h2>
+        <p>Native WebView2. No Node, no Electron.</p>
       </div>
       <div class="download-actions">
-        <a class="button primary magnetic" href="https://github.com/TrisMinh/setupkit/releases/download/v0.9.0/SetupKit-Setup-0.9.0-win-x64.exe">Tải installer</a>
+        <a class="button primary magnetic" href="https://github.com/TrisMinh/setupkit/releases/download/v0.9.0/SetupKit-Setup-0.9.0-win-x64.exe">Download installer</a>
         <a class="button ghost magnetic" href="https://github.com/TrisMinh/setupkit/releases/tag/v0.9.0">Release notes</a>
       </div>
     </section>

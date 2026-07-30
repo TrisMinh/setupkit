@@ -335,12 +335,11 @@ func buildUninstallArgs(packageID string) (commandSpec, error) {
 	}
 	args := []string{"uninstall", "--id", packageID, "--exact"}
 	if record.Source == "winget" {
-		args = append(args, "--source", record.Source, "--silent")
+		args = append(args, "--source", record.Source)
 	}
 	args = append(
 		args,
 		"--accept-source-agreements",
-		"--disable-interactivity",
 	)
 	return commandSpec{Command: "winget", Args: args, DryRun: false}, nil
 }
@@ -739,7 +738,7 @@ func (a *App) executeWinget(packageID string, op wingetOperation) installResult 
 }
 
 // RunWinget cài đặt một package đã duyệt qua winget.
-func (a *App) RunWinget(packageID string) installResult {
+func (a *App) runWinget(packageID string, skipConfirm bool) installResult {
 	installLocation := a.approvedLocation(packageID)
 	spec, err := buildWingetArgs(packageID, false, installLocation)
 	if err != nil {
@@ -759,6 +758,7 @@ func (a *App) RunWinget(packageID string) installResult {
 			Message: "SetupKit chuẩn bị chạy:\n\n" + commandLine(spec) + "\n\n" + detail,
 			Confirm: "Chạy lệnh winget",
 		},
+		SkipConfirm:     skipConfirm,
 		LaunchPhase:    "Đang khởi chạy winget",
 		LaunchMessage:  "Đã xác nhận. Đang khởi chạy winget.",
 		SuccessPhase:   "Đã cài đặt",
@@ -770,8 +770,16 @@ func (a *App) RunWinget(packageID string) installResult {
 	return a.executeWinget(packageID, op)
 }
 
+func (a *App) RunWinget(packageID string) installResult {
+	return a.runWinget(packageID, false)
+}
+
+func (a *App) RunWingetConfirmed(packageID string) installResult {
+	return a.runWinget(packageID, true)
+}
+
 // UpgradeApp cập nhật một package đã cài lên bản mới nhất qua winget.
-func (a *App) UpgradeApp(packageID string) installResult {
+func (a *App) upgradeApp(packageID string, skipConfirm bool) installResult {
 	spec, err := buildUpgradeArgs(packageID)
 	if err != nil {
 		return installResult{OK: false, Code: -1, Error: err.Error()}
@@ -788,6 +796,7 @@ func (a *App) UpgradeApp(packageID string) installResult {
 			Message: "SetupKit chuẩn bị cập nhật " + record.Name + ":\n\n" + commandLine(spec) + "\n\nChỉ cập nhật đúng ứng dụng này qua winget.",
 			Confirm: "Cập nhật",
 		},
+		SkipConfirm:    skipConfirm,
 		LaunchPhase:    "Đang khởi chạy winget",
 		LaunchMessage:  "Đã xác nhận. Đang khởi chạy winget để cập nhật.",
 		SuccessPhase:   "Đã cập nhật",
@@ -799,8 +808,16 @@ func (a *App) UpgradeApp(packageID string) installResult {
 	return a.executeWinget(packageID, op)
 }
 
+func (a *App) UpgradeApp(packageID string) installResult {
+	return a.upgradeApp(packageID, false)
+}
+
+func (a *App) UpgradeAppConfirmed(packageID string) installResult {
+	return a.upgradeApp(packageID, true)
+}
+
 // UpgradeApps cập nhật nhiều package đã duyệt sau một lần xác nhận.
-func (a *App) UpgradeApps(packageIDs []string) bulkUpgradeResult {
+func (a *App) upgradeApps(packageIDs []string, skipConfirm bool) bulkUpgradeResult {
 	type upgradePlanItem struct {
 		PackageID string
 		Name      string
@@ -847,16 +864,18 @@ func (a *App) UpgradeApps(packageIDs []string) bulkUpgradeResult {
 		}
 		lines = append(lines, "- "+item.Name+" ("+item.PackageID+")")
 	}
-	confirmed, err := a.confirmDialog(confirmConfig{
-		Title:   "Xác nhận cập nhật hàng loạt",
-		Message: fmt.Sprintf("SetupKit chuẩn bị cập nhật %d ứng dụng đã phát hiện có bản mới:\n\n%s\n\nTất cả package đều nằm trong allowlist. SetupKit sẽ chạy lần lượt bằng winget upgrade.", len(plan), strings.Join(lines, "\n")),
-		Confirm: "Cập nhật tất cả",
-	})
-	if err != nil {
-		return bulkUpgradeResult{OK: false, Total: len(plan), Error: err.Error()}
-	}
-	if !confirmed {
-		return bulkUpgradeResult{Cancelled: true, Total: len(plan)}
+	if !skipConfirm {
+		confirmed, err := a.confirmDialog(confirmConfig{
+			Title:   "Xác nhận cập nhật hàng loạt",
+			Message: fmt.Sprintf("SetupKit chuẩn bị cập nhật %d ứng dụng đã phát hiện có bản mới:\n\n%s\n\nTất cả package đều nằm trong allowlist. SetupKit sẽ chạy lần lượt bằng winget upgrade.", len(plan), strings.Join(lines, "\n")),
+			Confirm: "Cập nhật tất cả",
+		})
+		if err != nil {
+			return bulkUpgradeResult{OK: false, Total: len(plan), Error: err.Error()}
+		}
+		if !confirmed {
+			return bulkUpgradeResult{Cancelled: true, Total: len(plan)}
+		}
 	}
 
 	a.emitTerminal(plan[0].PackageID, "system", fmt.Sprintf("[SetupKit] Bắt đầu cập nhật hàng loạt %d ứng dụng.\n", len(plan)))
@@ -892,9 +911,17 @@ func (a *App) UpgradeApps(packageIDs []string) bulkUpgradeResult {
 	}
 }
 
+func (a *App) UpgradeApps(packageIDs []string) bulkUpgradeResult {
+	return a.upgradeApps(packageIDs, false)
+}
+
+func (a *App) UpgradeAppsConfirmed(packageIDs []string) bulkUpgradeResult {
+	return a.upgradeApps(packageIDs, true)
+}
+
 // InstallVersion cài một version cụ thể của package winget đã duyệt.
 // mode="install" thử cài đè; mode="reinstall" gỡ bản hiện tại rồi cài version đã chọn.
-func (a *App) InstallVersion(packageID string, version string, mode string) installResult {
+func (a *App) installVersion(packageID string, version string, mode string, skipConfirm bool) installResult {
 	version = strings.TrimSpace(version)
 	mode = strings.TrimSpace(strings.ToLower(mode))
 	if mode != "reinstall" {
@@ -930,17 +957,19 @@ func (a *App) InstallVersion(packageID string, version string, mode string) inst
 			"\n\nMột số ứng dụng có thể xóa cấu hình khi gỡ cài đặt. Hãy chắc chắn bạn đã sao lưu dữ liệu quan trọng."
 	}
 
-	confirmed, err := a.confirmDialog(confirmConfig{
-		Title:   title,
-		Message: message,
-		Confirm: confirm,
-	})
-	if err != nil {
-		return installResult{OK: false, Code: -1, Error: err.Error()}
-	}
-	if !confirmed {
-		a.emitTerminal(packageID, "system", "[SetupKit] Người dùng đã hủy rollback/version install.\n")
-		return installResult{Cancelled: true}
+	if !skipConfirm {
+		confirmed, err := a.confirmDialog(confirmConfig{
+			Title:   title,
+			Message: message,
+			Confirm: confirm,
+		})
+		if err != nil {
+			return installResult{OK: false, Code: -1, Error: err.Error()}
+		}
+		if !confirmed {
+			a.emitTerminal(packageID, "system", "[SetupKit] Người dùng đã hủy rollback/version install.\n")
+			return installResult{Cancelled: true}
+		}
 	}
 
 	if mode == "reinstall" {
@@ -975,8 +1004,16 @@ func (a *App) InstallVersion(packageID string, version string, mode string) inst
 	})
 }
 
+func (a *App) InstallVersion(packageID string, version string, mode string) installResult {
+	return a.installVersion(packageID, version, mode, false)
+}
+
+func (a *App) InstallVersionConfirmed(packageID string, version string, mode string) installResult {
+	return a.installVersion(packageID, version, mode, true)
+}
+
 // UninstallApp gỡ một package đã cài khỏi máy qua winget.
-func (a *App) UninstallApp(packageID string) installResult {
+func (a *App) uninstallApp(packageID string, skipConfirm bool) installResult {
 	spec, err := buildUninstallArgs(packageID)
 	if err != nil {
 		return installResult{OK: false, Code: -1, Error: err.Error()}
@@ -993,6 +1030,7 @@ func (a *App) UninstallApp(packageID string) installResult {
 			Message: "SetupKit chuẩn bị gỡ " + record.Name + ":\n\n" + commandLine(spec) + "\n\nThao tác này sẽ xóa ứng dụng khỏi máy.",
 			Confirm: "Gỡ cài đặt",
 		},
+		SkipConfirm:    skipConfirm,
 		LaunchPhase:    "Đang khởi chạy winget",
 		LaunchMessage:  "Đã xác nhận. Đang khởi chạy winget để gỡ.",
 		SuccessPhase:   "Đã gỡ cài đặt",
@@ -1002,4 +1040,12 @@ func (a *App) UninstallApp(packageID string) installResult {
 		MarkInstalled:  false,
 	}
 	return a.executeWinget(packageID, op)
+}
+
+func (a *App) UninstallApp(packageID string) installResult {
+	return a.uninstallApp(packageID, false)
+}
+
+func (a *App) UninstallAppConfirmed(packageID string) installResult {
+	return a.uninstallApp(packageID, true)
 }

@@ -59,6 +59,7 @@ const tags = [
   { id: 'api', label: 'API', icon: 'ph-plugs-connected' },
   { id: 'ai', label: 'AI', icon: 'ph-sparkle' },
   { id: 'network', label: 'Mạng', icon: 'ph-globe' },
+  { id: 'vpn', label: 'VPN', icon: 'ph-lock-key' },
   { id: 'security', label: 'Bảo mật', icon: 'ph-shield-check' },
   { id: 'remote', label: 'Remote', icon: 'ph-monitor-arrow-up' },
   { id: 'office', label: 'Office', icon: 'ph-briefcase' },
@@ -141,6 +142,19 @@ const publisherPrefixes = {
   KDE: 'KDE',
   Unity: 'Unity Technologies'
 };
+
+Object.assign(publisherPrefixes, {
+  ExpressVPN: 'ExpressVPN',
+  Privax: 'Privax',
+  Surfshark: 'Surfshark',
+  PrivateInternetAccess: 'Private Internet Access',
+  CyberGhost: 'CyberGhost',
+  IPVanish: 'IPVanish',
+  TunnelBear: 'TunnelBear',
+  eVenture: 'eVenture',
+  KeepSolid: 'KeepSolid',
+  AdGuard: 'AdGuard'
+});
 
 const defaultDescriptions = {
   'IDE & Code': (name) => `${name} dùng để viết, đọc, debug và quản lý mã nguồn.`,
@@ -264,6 +278,21 @@ const privilegedPackages = new Set([
   'OpenVPNTechnologies.OpenVPNConnect',
   'Cloudflare.Warp',
   'Tailscale.Tailscale',
+  'WireGuard.WireGuard',
+  'NordSecurity.NordVPN',
+  'Proton.ProtonVPN',
+  'MullvadVPN.MullvadVPN',
+  'Windscribe.Windscribe',
+  'ExpressVPN.ExpressVPN',
+  'Privax.HMAVPN',
+  'Surfshark.Surfshark',
+  'PrivateInternetAccess.PrivateInternetAccess',
+  'CyberGhost.CyberGhost',
+  'IPVanish.IPVanish',
+  'TunnelBear.TunnelBear',
+  'eVenture.HideMe',
+  'KeepSolid.VPNUnlimited',
+  'AdGuard.AdGuardVPN',
   'Microsoft.SQLServer.2022.Developer',
   'Rufus.Rufus'
 ]);
@@ -288,7 +317,21 @@ const commercialPackages = new Set([
   'GPSoftware.DirectoryOpus',
   'Typora.Typora',
   'Corel.MindManager',
-  'Adobe.CreativeCloud'
+  'Adobe.CreativeCloud',
+  'NordSecurity.NordVPN',
+  'Proton.ProtonVPN',
+  'MullvadVPN.MullvadVPN',
+  'Windscribe.Windscribe',
+  'ExpressVPN.ExpressVPN',
+  'Privax.HMAVPN',
+  'Surfshark.Surfshark',
+  'PrivateInternetAccess.PrivateInternetAccess',
+  'CyberGhost.CyberGhost',
+  'IPVanish.IPVanish',
+  'TunnelBear.TunnelBear',
+  'eVenture.HideMe',
+  'KeepSolid.VPNUnlimited',
+  'AdGuard.AdGuardVPN'
 ]);
 
 const loginPackages = new Set([
@@ -338,7 +381,8 @@ const tagRules = [
   [/azure|amazon\.aws|google\.cloud|cloudflare|pulumi|terraform|opentofu|vault|packer/i, ['cloud']],
   [/postman|insomnia|bruno/i, ['api']],
   [/dbeaver|datagrip|mongodb|postgresql|mysql|redis|sqlserver|sqlite|tableplus|beekeeper/i, ['database']],
-  [/wireshark|fiddler|mitmproxy|winscp|putty|tailscale|openvpn|warp/i, ['network']],
+  [/wireshark|fiddler|mitmproxy|winscp|putty/i, ['network']],
+  [/cloudflare\.warp|tailscale|wireguard|openvpn|zerotier|nordvpn|protonvpn|mullvadvpn|windscribe|expressvpn|hma vpn|hmavpn|surfshark|privateinternetaccess|private internet access|cyberghost|ipvanish|tunnelbear|hideme|hide\.me|vpn unlimited|vpnunlimited|adguardvpn|adguard vpn|\bvpn\b/i, ['network', 'vpn']],
   [/bitwarden|1password|keepass|gpg/i, ['security']],
   [/teamviewer|anydesk|localsend|syncthing/i, ['remote']],
   [/office|libreoffice|onlyoffice|powerbi|acrobat|draw|miro/i, ['office', 'productivity']],

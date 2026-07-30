@@ -2,7 +2,7 @@
 
 Ngày xác minh: 2026-07-26  
 Nguồn kiểm tra: Windows Package Manager `winget`  
-Kết quả: 438 package winget hợp lệ, 2 package Microsoft Store, tổng cộng 440 ứng dụng.
+Kết quả: 448 package winget hợp lệ, 2 package Microsoft Store, tổng cộng 450 ứng dụng.
 
 ## 1. Mục tiêu
 
@@ -30,7 +30,7 @@ Windows cung cấp dữ liệu.
 | DevOps & Cloud | 41 | `devops`, `cloud`, `container`, `kubernetes`, `iac`, `virtualization` |
 | Database & API | 28 | `database`, `sql`, `nosql`, `api`, `testing` |
 | AI lập trình | 19 | `ai`, `local-ai`, `llm`, `assistant` |
-| Mạng & Bảo mật | 31 | `network`, `vpn`, `ssh`, `remote`, `password`, `security` |
+| Mạng & Bảo mật | 41 | `network`, `vpn`, `ssh`, `remote`, `password`, `security` |
 | Office & Công việc | 35 | `office`, `docs`, `notes`, `meeting`, `sync`, `productivity` |
 | Liên lạc & Xã hội | 16 | `chat`, `meeting`, `social`, `work` |
 | Trình duyệt | 19 | `browser`, `web`, `privacy`, `testing` |
@@ -39,7 +39,7 @@ Windows cung cấp dữ liệu.
 | Game & Game Dev | 21 | `game`, `game-dev`, `engine`, `launcher` |
 
 Danh sách nền và danh sách mở rộng nằm trong `docs/package-candidates.json` và
-`docs/package-expansion-candidates.json`. Tổng cộng 438 ID được đưa vào catalog
+`docs/package-expansion-candidates.json`. Tổng cộng 450 ứng dụng được đưa vào catalog
 đã vượt qua:
 
 ```powershell
@@ -216,7 +216,7 @@ vẫn có thể cài thủ công từ website hợp pháp của sản phẩm.
 ## 9. Tiêu chí hoàn thành
 
 - Catalog và backend đọc cùng một nguồn dữ liệu.
-- 440 ứng dụng có package/source/command rõ ràng.
+- 450 ứng dụng có package/source/command rõ ràng.
 - Không có package winget chưa xác minh trong allowlist.
 - Search hỗ trợ tên, package ID, category, tag và publisher.
 - Tag, category, source và status kết hợp được.

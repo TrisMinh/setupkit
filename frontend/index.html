@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="vi">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -70,7 +70,7 @@
       </section>
 
       <div class="sidebar-footer">
-        <span>440 ứng dụng</span>
+        <span>450 ứng dụng</span>
         <span>winget + Store</span>
       </div>
     </aside>
@@ -83,6 +83,10 @@
             Hệ thống sẵn sàng
           </div>
           <div class="header-actions">
+            <div class="language-switch" role="group" aria-label="Language">
+              <button type="button" data-language-choice="en" aria-pressed="true">EN</button>
+              <button type="button" data-language-choice="vi" aria-pressed="false">VI</button>
+            </div>
             <button class="icon-button" id="rescanBtn" type="button" aria-label="Quét lại ứng dụng đã cài" title="Quét lại ứng dụng">
               <i class="ph ph-arrow-clockwise" aria-hidden="true"></i>
             </button>
@@ -815,8 +819,36 @@
     </div>
   </dialog>
 
+  <dialog class="action-confirm-dialog" id="actionConfirmDialog" aria-labelledby="actionConfirmTitle">
+    <div class="action-confirm-shell">
+      <div class="action-confirm-accent" aria-hidden="true"></div>
+      <div class="action-confirm-header">
+        <span class="action-confirm-icon" id="actionConfirmIcon" aria-hidden="true">
+          <i class="ph ph-warning-circle"></i>
+        </span>
+        <div class="action-confirm-title">
+          <strong id="actionConfirmTitle">Xác nhận thao tác</strong>
+          <span id="actionConfirmMessage"></span>
+        </div>
+      </div>
+      <pre class="action-confirm-command" id="actionConfirmCommand"></pre>
+      <div class="action-confirm-note" id="actionConfirmNote">
+        <i class="ph ph-shield-check" aria-hidden="true"></i>
+        <span>SetupKit chỉ chạy package ID nằm trong catalog đã duyệt.</span>
+      </div>
+      <div class="action-confirm-footer">
+        <button class="button" id="actionConfirmCancelBtn" type="button">Hủy</button>
+        <button class="button primary" id="actionConfirmRunBtn" type="button">
+          <i class="ph ph-check" aria-hidden="true"></i>
+          Xác nhận
+        </button>
+      </div>
+    </div>
+  </dialog>
+
   <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
   <script src="./native-bridge.js"></script>
+  <script src="./i18n.js"></script>
   <script src="./renderer.js"></script>
 </body>
 </html>

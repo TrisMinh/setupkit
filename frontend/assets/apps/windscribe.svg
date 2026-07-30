@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">Windscribe</title>
+  <rect width="64" height="64" rx="16" fill="#1fb6e8"/>
+  <path fill="#fff" d="M14 25c7-8 18-10 28-6 5 2 8 6 8 11 0 8-7 14-17 14H16c4-3 7-6 8-10-4 0-7-1-10-3 4-1 7-3 10-6-4 1-7 1-10 0Zm18 0c-5 0-9 3-11 7h12c4 0 8-2 8-5 0-2-3-2-9-2Z"/>
+</svg>

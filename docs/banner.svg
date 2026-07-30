@@ -35,7 +35,7 @@
     <!-- Chips -->
     <g font-size="18" font-weight="600">
       <rect x="312" y="222" width="176" height="38" rx="19" fill="#213829" stroke="#2f5240"/>
-      <text x="400" y="247" text-anchor="middle" fill="#8fd0b2">440 ứng dụng</text>
+      <text x="400" y="247" text-anchor="middle" fill="#8fd0b2">450 ứng dụng</text>
 
       <rect x="500" y="222" width="196" height="38" rx="19" fill="#213829" stroke="#2f5240"/>
       <text x="598" y="247" text-anchor="middle" fill="#8fd0b2">winget + Store</text>

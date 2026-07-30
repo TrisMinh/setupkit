@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">CyberGhost</title>
+  <rect width="64" height="64" rx="16" fill="#ffd21f"/>
+  <path fill="#161616" d="M16 30c0-10 7-18 16-18s16 8 16 18v20l-5-4-5 4-6-4-6 4-5-4-5 4V30Zm10 0a4 4 0 1 0-8 0 4 4 0 0 0 8 0Zm20 0a4 4 0 1 0-8 0 4 4 0 0 0 8 0Z"/>
+</svg>

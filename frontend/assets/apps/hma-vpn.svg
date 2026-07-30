@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">HMA VPN</title>
+  <rect width="64" height="64" rx="16" fill="#ffcf33"/>
+  <path fill="#131313" d="M15 19h7v10h9V19h7v26h-7V35h-9v10h-7V19Zm27 0h7l8 26h-7l-1-5h-7l-1 5h-7l8-26Zm2 15h4l-2-9-2 9Z"/>
+</svg>

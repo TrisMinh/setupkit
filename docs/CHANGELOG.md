@@ -14,8 +14,12 @@ Toàn bộ thay đổi đáng chú ý của SetupKit được ghi tại đây.
 
 ### Cải thiện
 
+- **Không tự chọn app khi mở** — phiên mới luôn bắt đầu với gói cài đặt trống; chỉ chọn app/workspace khi người dùng bấm rõ ràng.
+- **Hộp xác nhận trong app** — thay hộp thoại hệ thống thô bằng modal có CSS, icon, command preview và tone màu theo thao tác install/update/uninstall/rollback.
+- **Gỡ VPN ổn định hơn** — lệnh `winget uninstall` không còn ép `--silent`/`--disable-interactivity`, giúp uninstaller của VPN như ExpressVPN có thể hiện xác nhận, đóng service hoặc driver nếu cần.
 - **Tìm kiếm và sắp xếp catalog tốt hơn** — thêm dropdown Sort có icon, ghi nhớ lựa chọn, hỗ trợ sắp theo thông minh, thứ tự cài, tên, danh mục, tình trạng, nguồn, app lớn và app chưa cài.
 - **Search thông minh hơn** — mở rộng alias cho các từ khóa quen thuộc như `vscode`, `ai`, `docker`, `vpn`, `db`, `browser`, `office`, giúp tìm app nhanh hơn.
+- **Catalog VPN đầy đủ hơn** — bổ sung các VPN phổ biến như ExpressVPN, HMA VPN, Surfshark, Private Internet Access, CyberGhost, IPVanish, TunnelBear, hide.me VPN, VPN Unlimited, AdGuard VPN và Windscribe.
 - **Bộ lọc rõ hơn** — dropdown danh mục/nguồn/tình trạng/sort có icon; dot màu chỉ còn dùng cho tình trạng để tránh rối thị giác.
 - **Motion mượt hơn** — tinh chỉnh hover, dropdown, dialog và card transition để UI phản hồi mềm hơn mà vẫn tôn trọng reduced motion.
 - **Versions UI gọn hơn** — search, segmented filter và danh sách version co giãn tốt hơn trên panel hẹp.
@@ -23,6 +27,7 @@ Toàn bộ thay đổi đáng chú ý của SetupKit được ghi tại đây.
 ### Kiểm thử
 
 - Thêm unit test cho parser `winget show --versions` và command cài version cụ thể bằng `--version`.
+- Thêm unit test đảm bảo lệnh gỡ ExpressVPN không ép silent/non-interactive.
 - `npm run validate`, `npm test` và build package Windows đều đi qua bộ kiểm tra catalog, icon subset, DOM reference và Go tests.
 
 ## [0.8.0] - 2026-07-30

@@ -1,5 +1,5 @@
 {
-  "verifiedAt": "2026-07-26T08:34:29.723Z",
+  "verifiedAt": "2026-07-30T08:08:40.121Z",
   "policy": "legitimate-packages-from-winget-community-repository",
   "wingetSource": "winget",
   "valid": [
@@ -1030,6 +1030,86 @@
     {
       "name": "Windscribe",
       "pkg": "Windscribe.Windscribe",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "ExpressVPN",
+      "pkg": "ExpressVPN.ExpressVPN",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "HMA VPN",
+      "pkg": "Privax.HMAVPN",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Surfshark",
+      "pkg": "Surfshark.Surfshark",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "Private Internet Access",
+      "pkg": "PrivateInternetAccess.PrivateInternetAccess",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "CyberGhost",
+      "pkg": "CyberGhost.CyberGhost",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "IPVanish",
+      "pkg": "IPVanish.IPVanish",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "TunnelBear",
+      "pkg": "TunnelBear.TunnelBear",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "hide.me VPN",
+      "pkg": "eVenture.HideMe",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "VPN Unlimited",
+      "pkg": "KeepSolid.VPNUnlimited",
+      "category": "Mạng & Bảo mật",
+      "ok": true,
+      "code": 0,
+      "error": ""
+    },
+    {
+      "name": "AdGuard VPN",
+      "pkg": "AdGuard.AdGuardVPN",
       "category": "Mạng & Bảo mật",
       "ok": true,
       "code": 0,

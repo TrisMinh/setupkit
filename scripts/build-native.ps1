@@ -72,7 +72,9 @@ try {
     Compress-Archive -LiteralPath @(
       $executable,
       (Join-Path $projectRoot 'README.md'),
+      (Join-Path $projectRoot 'docs\CHANGELOG.md'),
       (Join-Path $projectRoot 'docs\CATALOG.md'),
+      (Join-Path $projectRoot 'docs\RELEASE-NOTES-v0.9.0.md'),
       (Join-Path $projectRoot 'docs\DEVELOPER-WORKSTATION-PLAN.md')
     ) -DestinationPath $archive -CompressionLevel Optimal -Force
   }

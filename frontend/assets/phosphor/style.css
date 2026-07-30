@@ -1,7 +1,7 @@
 /*
  * File này được tạo tự động bởi scripts/build-phosphor-subset.js.
  * Đừng sửa tay — hãy sửa scripts/phosphor-full/style.css rồi chạy lại script.
- * 93 / 1530 icon được giữ lại.
+ * 94 / 1530 icon được giữ lại.
  */
 @font-face {
   font-family: "Phosphor";
@@ -221,6 +221,9 @@
 }
 .ph.ph-list-checks:before {
   content: "\eadc";
+}
+.ph.ph-lock-key:before {
+  content: "\e2fe";
 }
 .ph.ph-magnifying-glass:before {
   content: "\e30c";

@@ -87,6 +87,26 @@ func TestBuildWingetArgsRejectsUnknownPackage(t *testing.T) {
 	}
 }
 
+func TestBuildUninstallArgsAllowsPublisherUninstallerUI(t *testing.T) {
+	spec, err := buildUninstallArgs("ExpressVPN.ExpressVPN")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !slices.Contains(spec.Args, "uninstall") ||
+		!slices.Contains(spec.Args, "--id") ||
+		!slices.Contains(spec.Args, "ExpressVPN.ExpressVPN") ||
+		!slices.Contains(spec.Args, "--source") ||
+		!slices.Contains(spec.Args, "winget") {
+		t.Fatalf("uninstall args are missing required tokens: %#v", spec.Args)
+	}
+	if slices.Contains(spec.Args, "--silent") {
+		t.Fatalf("uninstall must not force --silent because VPN uninstallers may require UI: %#v", spec.Args)
+	}
+	if slices.Contains(spec.Args, "--disable-interactivity") {
+		t.Fatalf("uninstall must not force --disable-interactivity because publisher uninstallers may ask to close apps: %#v", spec.Args)
+	}
+}
+
 func TestBuildVersionInstallArgsPinsVersion(t *testing.T) {
 	spec, err := buildVersionInstallArgs("Microsoft.VisualStudioCode", "1.90.2")
 	if err != nil {

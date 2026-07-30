@@ -31,17 +31,17 @@ Lệnh này tải bản mới nhất từ Releases, đặt vào thư mục ứng
 
 Cài lại Windows xong thường mất cả buổi mở từng trang web tải từng bộ cài. SetupKit gói toàn bộ việc đó vào một app:
 
-- **440 ứng dụng hợp pháp** từ Windows Package Manager và Microsoft Store — đủ từ trình duyệt, IDE, runtime, database, DevOps tool đến app chat, game launcher; chia 15 nhóm với 34 tag lọc nhanh
+- **450 ứng dụng hợp pháp** từ Windows Package Manager và Microsoft Store — đủ từ trình duyệt, IDE, runtime, database, VPN, DevOps tool đến app chat, game launcher; chia 15 nhóm với 35 tag lọc nhanh
 - **24 Workspaces theo vai trò** — Developer Core, Web Frontend, Node.js Backend, Python & AI, Designer, Gaming, Văn phòng... Mở chi tiết để xem logo, package, nguồn cài đặt và lệnh sẽ chạy trước khi dùng workspace đó
 - **Cài cả gói một lần** — chọn nhiều app rồi cài tuần tự, theo dõi tiến trình từng cái; có thể **dừng giữa chừng** và **cài lại đúng những app lỗi**
 - **Cập nhật ngay trong app** — SetupKit tự phát hiện app có bản mới, có tab Cập nhật riêng, tìm kiếm nhanh và **Cập nhật tất cả** sau một lần xác nhận
 - **Tải version cũ / rollback** — tab Versions tải danh sách bản cũ từ `winget show --versions`, rồi cài đúng version đã chọn hoặc gỡ bản hiện tại trước khi cài lại
 - **Gỡ app đã cài** — mở chi tiết app đã cài để gỡ bằng `winget uninstall`, luôn hỏi xác nhận trước khi thay đổi máy
 - **Tự biết máy bạn đã có gì** — quét winget, Registry, Start Menu và shortcut để đánh dấu app đã cài, kèm phiên bản, thư mục cài đặt và app nào đang có bản cập nhật; app đã có sẽ không bị cài lại
-- **Chọn nhanh, nhớ lựa chọn** — "Chọn hết" theo bộ lọc hiện tại hoặc "Bỏ chọn" chỉ một bấm; gói đang chọn được ghi nhớ cho lần mở sau
+- **Chọn nhanh nhưng không tự chọn khi mở app** — "Chọn hết" theo bộ lọc hiện tại hoặc "Bỏ chọn" chỉ một bấm; phiên mới luôn bắt đầu với gói cài đặt trống
 - **Xuất và nhập hồ sơ JSON** — lưu bộ ứng dụng đang chọn thành một hồ sơ, rồi nhập lại để dựng máy tiếp theo y hệt
 - **Ba kiểu hiển thị** — Lưới, Danh sách hoặc Biểu tượng, tùy cách bạn thích duyệt; list view hiển thị thêm mô tả/meta, icon view căn hàng nút gọn hơn
-- **Chạy thử trước, cài thật sau** — chế độ mặc định chỉ mô phỏng toàn bộ quá trình, máy không thay đổi gì; muốn cài thật phải bật công tắc riêng và xác nhận từng lệnh
+- **Chạy thử trước, cài thật sau** — chế độ mặc định chỉ mô phỏng toàn bộ quá trình, máy không thay đổi gì; muốn cài thật phải bật công tắc riêng và xác nhận từng lệnh bằng hộp thoại trong app
 - **Minh bạch từng lệnh** — xem trước chính xác câu lệnh winget của từng app, theo dõi stdout/stderr trực tiếp trong terminal tích hợp khi cài
 - **Thanh trạng thái luôn hiện** dưới cùng: tình trạng winget, số app đã cài, số đang chọn và nút mở terminal nhanh
 - **Chưa có winget cũng không sao** — nếu máy thiếu Windows Package Manager, SetupKit mời cài App Installer từ Microsoft Store chỉ với một bấm
@@ -50,9 +50,9 @@ Cài lại Windows xong thường mất cả buổi mở từng trang web tải 
 ## Ảnh màn hình
 
 <div align="center">
-<img src="docs/screenshots/catalog-light.png" alt="Danh mục 440 ứng dụng với workspace preview" width="900">
+<img src="docs/screenshots/catalog-light.png" alt="Danh mục 450 ứng dụng với workspace preview" width="900">
 
-*Chọn Workspace theo vai trò, hoặc tự lọc trong 440 ứng dụng*
+*Chọn Workspace theo vai trò, hoặc tự lọc trong 450 ứng dụng*
 </div>
 
 | | |
@@ -78,7 +78,7 @@ SetupKit được thiết kế để **không thể** bị lợi dụng thành c
 |---|---|
 | Allowlist nhúng trong binary | Chỉ chấp nhận package ID có trong catalog đã kiểm chứng — không URL ngoài, không script tải về, không installer thủ công |
 | Hai nguồn duy nhất | `winget` và `msstore`, đều là kho chính thức có kiểm duyệt của Microsoft |
-| Chạy thử mặc định | Mô phỏng không đụng tới máy; cài thật cần bật công tắc **và** xác nhận từng lệnh qua hộp thoại hệ thống |
+| Chạy thử mặc định | Mô phỏng không đụng tới máy; cài thật cần bật công tắc **và** xác nhận từng lệnh qua hộp thoại trong app |
 | Lệnh minh bạch | Mọi lệnh hiển thị đầy đủ trước khi chạy, output ghi lại nguyên văn trong terminal |
 | Xác minh sau cài | Quét lại máy để xác nhận trạng thái thật, không tin kết quả suông |
 | Rollback có kiểm soát | Chỉ áp dụng cho nguồn `winget`, không tự tải URL ngoài; chế độ gỡ rồi cài luôn cảnh báo rủi ro cấu hình |
@@ -102,8 +102,8 @@ setupkit-app/
 ├── internal/kit/      # toàn bộ logic Go: chạy winget, quét máy, allowlist
 ├── frontend/          # toàn bộ giao diện web (embed vào exe)
 │   ├── index.html · renderer.js · styles.css
-│   ├── catalog.json   # 440 app - file SINH TỰ ĐỘNG
-│   └── assets/        # 309 logo SVG + icon Phosphor
+│   ├── catalog.json   # 450 app - file SINH TỰ ĐỘNG
+│   └── assets/        # 320 logo SVG/PNG/ICO + icon Phosphor
 ├── scripts/           # build catalog, icon, đóng gói, publish, install.ps1
 ├── docs/              # CHANGELOG, tài liệu catalog, ảnh, release notes
 └── build/             # manifest + tài nguyên Windows

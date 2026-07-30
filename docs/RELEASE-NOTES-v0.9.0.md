@@ -14,11 +14,15 @@ irm https://raw.githubusercontent.com/TrisMinh/setupkit/main/scripts/install.ps1
 - **Rollback version** - chọn version rồi dùng **Cài version này** hoặc **Gỡ rồi cài version này**. Store app được đánh dấu không phù hợp vì Microsoft Store không cho chọn version cũ qua winget.
 - **Lọc nhanh app trong Versions** - chuyển giữa `Đã cài`, `Chưa cài`, `Tất cả` để không phải kéo trong danh sách dài.
 - **Sort catalog** - thêm sắp xếp thông minh, tên, thứ tự cài, danh mục, tình trạng, nguồn, app lớn và app chưa cài.
+- **Catalog VPN lớn hơn** - bổ sung ExpressVPN, HMA VPN, Surfshark, Private Internet Access, CyberGhost, IPVanish, TunnelBear, hide.me VPN, VPN Unlimited, AdGuard VPN và Windscribe.
+- **Không tự chọn khi mở app** - phiên mới bắt đầu với gói cài đặt trống; người dùng tự chọn app hoặc workspace khi cần.
+- **Confirm đẹp trong app** - install/update/uninstall/rollback dùng modal có command preview thay cho hộp thoại hệ thống thô.
+- **Gỡ VPN dễ hơn** - uninstall không ép silent/non-interactive để uninstaller của VPN có thể hiện cửa sổ xác nhận hoặc yêu cầu đóng service.
 - **UI filter rõ hơn** - icon trong dropdown, dot màu chỉ dùng cho tình trạng, search và motion được làm mượt lại.
 
 ### An toàn
 
-- Tất cả thao tác install/update/rollback vẫn chỉ chạy package ID nằm trong allowlist nhúng từ catalog.
+- Tất cả thao tác install/update/uninstall/rollback vẫn chỉ chạy package ID nằm trong allowlist nhúng từ catalog.
 - Rollback luôn hỏi xác nhận trước khi gỡ hoặc cài version, và cảnh báo rõ rủi ro mất cấu hình nếu chọn chế độ gỡ rồi cài.
 - SetupKit không tự tải installer từ URL ngoài; version cũ đi qua manifest và cơ chế xác minh của winget.
 

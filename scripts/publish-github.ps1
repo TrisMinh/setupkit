@@ -87,7 +87,7 @@ $branch = (git branch --show-current).Trim()
 if (-not $branch) { $branch = 'main' }
 
 # --- 4. Tạo repo trên GitHub + push -----------------------------------------
-$description = 'Dựng máy Windows mới với 440 ứng dụng đã xác minh qua winget và Microsoft Store. Một file EXE ~12 MB chạy trên WebView2, có workstation plan theo vai trò, chế độ chạy thử và allowlist an toàn.'
+$description = 'Dựng máy Windows mới với 450 ứng dụng đã xác minh qua winget và Microsoft Store. Một file EXE ~12 MB chạy trên WebView2, có workstation plan theo vai trò, chế độ chạy thử và allowlist an toàn.'
 cmd /c "gh repo view $login/$RepoName >nul 2>&1"
 if ($LASTEXITCODE -ne 0) {
   $visibility = if ($Private) { '--private' } else { '--public' }

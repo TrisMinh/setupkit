@@ -1,8 +1,8 @@
 # SetupKit Verified App Catalog
 
-Xác minh: 2026-07-26T08:34:29.723Z
+Xác minh: 2026-07-30T08:08:40.121Z
 
-Tổng cộng: 440 ứng dụng (438 winget + 2 Microsoft Store).
+Tổng cộng: 450 ứng dụng (448 winget + 2 Microsoft Store).
 
 Mọi command đều dùng `--exact`, source cố định, chấp nhận agreement và tắt tương tác ngoài hộp thoại xác nhận của SetupKit.
 
@@ -304,6 +304,16 @@ Mọi command đều dùng `--exact`, source cố định, chấp nhận agreeme
 | Mullvad VPN | Mullvad VPN | winget | `MullvadVPN.MullvadVPN` | `winget install --id MullvadVPN.MullvadVPN --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | NordVPN | Nord Security | winget | `NordSecurity.NordVPN` | `winget install --id NordSecurity.NordVPN --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | Windscribe | Windscribe | winget | `Windscribe.Windscribe` | `winget install --id Windscribe.Windscribe --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
+| ExpressVPN | ExpressVPN | winget | `ExpressVPN.ExpressVPN` | `winget install --id ExpressVPN.ExpressVPN --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
+| HMA VPN | Privax | winget | `Privax.HMAVPN` | `winget install --id Privax.HMAVPN --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
+| Surfshark | Surfshark | winget | `Surfshark.Surfshark` | `winget install --id Surfshark.Surfshark --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
+| Private Internet Access | Private Internet Access | winget | `PrivateInternetAccess.PrivateInternetAccess` | `winget install --id PrivateInternetAccess.PrivateInternetAccess --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
+| CyberGhost | CyberGhost | winget | `CyberGhost.CyberGhost` | `winget install --id CyberGhost.CyberGhost --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
+| IPVanish | IPVanish | winget | `IPVanish.IPVanish` | `winget install --id IPVanish.IPVanish --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
+| TunnelBear | TunnelBear | winget | `TunnelBear.TunnelBear` | `winget install --id TunnelBear.TunnelBear --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
+| hide.me VPN | eVenture | winget | `eVenture.HideMe` | `winget install --id eVenture.HideMe --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
+| VPN Unlimited | KeepSolid | winget | `KeepSolid.VPNUnlimited` | `winget install --id KeepSolid.VPNUnlimited --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
+| AdGuard VPN | AdGuard | winget | `AdGuard.AdGuardVPN` | `winget install --id AdGuard.AdGuardVPN --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | ZeroTier One | Zero Tier | winget | `ZeroTier.ZeroTierOne` | `winget install --id ZeroTier.ZeroTierOne --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | Termius | Termius | winget | `Termius.Termius` | `winget install --id Termius.Termius --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | Angry IP Scanner | angryziber | winget | `angryziber.AngryIPScanner` | `winget install --id angryziber.AngryIPScanner --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |

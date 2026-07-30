@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "verifiedAt": "2026-07-26T08:34:29.723Z",
+  "verifiedAt": "2026-07-30T08:08:40.121Z",
   "sources": {
     "winget": "Windows Package Manager community repository",
     "msstore": "Microsoft Store"
@@ -152,6 +152,11 @@
       "id": "network",
       "label": "Mạng",
       "icon": "ph-globe"
+    },
+    {
+      "id": "vpn",
+      "label": "VPN",
+      "icon": "ph-lock-key"
     },
     {
       "id": "security",
@@ -2163,8 +2168,7 @@
       "tags": [
         "code",
         "git",
-        "cli",
-        "network"
+        "cli"
       ],
       "matchNames": [
         "Warp"
@@ -3663,7 +3667,8 @@
       "risk": "Có thể cần quyền quản trị, driver hoặc khởi động lại Windows.",
       "tags": [
         "network",
-        "security"
+        "security",
+        "vpn"
       ],
       "matchNames": [
         "Tailscale"
@@ -3688,7 +3693,8 @@
       "risk": "Có thể cần quyền quản trị, driver hoặc khởi động lại Windows.",
       "tags": [
         "network",
-        "security"
+        "security",
+        "vpn"
       ],
       "matchNames": [
         "OpenVPN Connect"
@@ -3714,7 +3720,8 @@
       "tags": [
         "network",
         "security",
-        "cloud"
+        "cloud",
+        "vpn"
       ],
       "matchNames": [
         "Cloudflare WARP"
@@ -8784,10 +8791,11 @@
       "publisher": "Wire Guard",
       "type": "Desktop app",
       "desc": "WireGuard hỗ trợ mạng, bảo mật hoặc truy cập máy từ xa.",
-      "risk": "Không có lưu ý đặc biệt.",
+      "risk": "Có thể cần quyền quản trị, driver hoặc khởi động lại Windows.",
       "tags": [
         "network",
-        "security"
+        "security",
+        "vpn"
       ],
       "matchNames": [
         "WireGuard"
@@ -8809,10 +8817,11 @@
       "publisher": "Proton",
       "type": "Desktop app",
       "desc": "Proton VPN hỗ trợ mạng, bảo mật hoặc truy cập máy từ xa.",
-      "risk": "Không có lưu ý đặc biệt.",
+      "risk": "Có thể cần quyền quản trị, driver hoặc khởi động lại Windows.",
       "tags": [
         "network",
-        "security"
+        "security",
+        "vpn"
       ],
       "matchNames": [
         "Proton VPN"
@@ -8834,10 +8843,11 @@
       "publisher": "Mullvad VPN",
       "type": "Desktop app",
       "desc": "Mullvad VPN hỗ trợ mạng, bảo mật hoặc truy cập máy từ xa.",
-      "risk": "Không có lưu ý đặc biệt.",
+      "risk": "Có thể cần quyền quản trị, driver hoặc khởi động lại Windows.",
       "tags": [
         "network",
-        "security"
+        "security",
+        "vpn"
       ],
       "matchNames": [
         "Mullvad VPN"
@@ -8859,10 +8869,11 @@
       "publisher": "Nord Security",
       "type": "Desktop app",
       "desc": "NordVPN hỗ trợ mạng, bảo mật hoặc truy cập máy từ xa.",
-      "risk": "Không có lưu ý đặc biệt.",
+      "risk": "Có thể cần quyền quản trị, driver hoặc khởi động lại Windows.",
       "tags": [
         "network",
-        "security"
+        "security",
+        "vpn"
       ],
       "matchNames": [
         "NordVPN"
@@ -8884,19 +8895,280 @@
       "publisher": "Windscribe",
       "type": "Desktop app",
       "desc": "Windscribe hỗ trợ mạng, bảo mật hoặc truy cập máy từ xa.",
-      "risk": "Không có lưu ý đặc biệt.",
+      "risk": "Có thể cần quyền quản trị, driver hoặc khởi động lại Windows.",
       "tags": [
         "network",
-        "security"
+        "security",
+        "vpn"
       ],
       "matchNames": [
         "Windscribe"
       ],
       "size": "standard",
-      "logo": "",
+      "logo": "windscribe.svg",
       "verified": true,
       "installOrder": 75,
       "order": 316,
+      "requires": []
+    },
+    {
+      "id": "expressvpn",
+      "name": "ExpressVPN",
+      "cat": "Mạng & Bảo mật",
+      "categoryId": "network-security",
+      "pkg": "ExpressVPN.ExpressVPN",
+      "source": "winget",
+      "publisher": "ExpressVPN",
+      "type": "Desktop app",
+      "desc": "ExpressVPN hỗ trợ mạng, bảo mật hoặc truy cập máy từ xa.",
+      "risk": "Có thể cần quyền quản trị, driver hoặc khởi động lại Windows.",
+      "tags": [
+        "network",
+        "security",
+        "vpn"
+      ],
+      "matchNames": [
+        "ExpressVPN"
+      ],
+      "size": "standard",
+      "logo": "expressvpn.svg",
+      "verified": true,
+      "installOrder": 75,
+      "order": 317,
+      "requires": []
+    },
+    {
+      "id": "hma-vpn",
+      "name": "HMA VPN",
+      "cat": "Mạng & Bảo mật",
+      "categoryId": "network-security",
+      "pkg": "Privax.HMAVPN",
+      "source": "winget",
+      "publisher": "Privax",
+      "type": "Desktop app",
+      "desc": "HMA VPN hỗ trợ mạng, bảo mật hoặc truy cập máy từ xa.",
+      "risk": "Có thể cần quyền quản trị, driver hoặc khởi động lại Windows.",
+      "tags": [
+        "network",
+        "security",
+        "vpn"
+      ],
+      "matchNames": [
+        "HMA VPN"
+      ],
+      "size": "standard",
+      "logo": "hma-vpn.svg",
+      "verified": true,
+      "installOrder": 75,
+      "order": 318,
+      "requires": []
+    },
+    {
+      "id": "surfshark",
+      "name": "Surfshark",
+      "cat": "Mạng & Bảo mật",
+      "categoryId": "network-security",
+      "pkg": "Surfshark.Surfshark",
+      "source": "winget",
+      "publisher": "Surfshark",
+      "type": "Desktop app",
+      "desc": "Surfshark hỗ trợ mạng, bảo mật hoặc truy cập máy từ xa.",
+      "risk": "Có thể cần quyền quản trị, driver hoặc khởi động lại Windows.",
+      "tags": [
+        "network",
+        "security",
+        "vpn"
+      ],
+      "matchNames": [
+        "Surfshark"
+      ],
+      "size": "standard",
+      "logo": "surfshark.svg",
+      "verified": true,
+      "installOrder": 75,
+      "order": 319,
+      "requires": []
+    },
+    {
+      "id": "private-internet-access",
+      "name": "Private Internet Access",
+      "cat": "Mạng & Bảo mật",
+      "categoryId": "network-security",
+      "pkg": "PrivateInternetAccess.PrivateInternetAccess",
+      "source": "winget",
+      "publisher": "Private Internet Access",
+      "type": "Desktop app",
+      "desc": "Private Internet Access hỗ trợ mạng, bảo mật hoặc truy cập máy từ xa.",
+      "risk": "Có thể cần quyền quản trị, driver hoặc khởi động lại Windows.",
+      "tags": [
+        "network",
+        "security",
+        "vpn"
+      ],
+      "matchNames": [
+        "Private Internet Access"
+      ],
+      "size": "standard",
+      "logo": "private-internet-access.svg",
+      "verified": true,
+      "installOrder": 75,
+      "order": 320,
+      "requires": []
+    },
+    {
+      "id": "cyberghost",
+      "name": "CyberGhost",
+      "cat": "Mạng & Bảo mật",
+      "categoryId": "network-security",
+      "pkg": "CyberGhost.CyberGhost",
+      "source": "winget",
+      "publisher": "CyberGhost",
+      "type": "Desktop app",
+      "desc": "CyberGhost hỗ trợ mạng, bảo mật hoặc truy cập máy từ xa.",
+      "risk": "Có thể cần quyền quản trị, driver hoặc khởi động lại Windows.",
+      "tags": [
+        "network",
+        "security",
+        "vpn"
+      ],
+      "matchNames": [
+        "CyberGhost"
+      ],
+      "size": "standard",
+      "logo": "cyberghost.svg",
+      "verified": true,
+      "installOrder": 75,
+      "order": 321,
+      "requires": []
+    },
+    {
+      "id": "ipvanish",
+      "name": "IPVanish",
+      "cat": "Mạng & Bảo mật",
+      "categoryId": "network-security",
+      "pkg": "IPVanish.IPVanish",
+      "source": "winget",
+      "publisher": "IPVanish",
+      "type": "Desktop app",
+      "desc": "IPVanish hỗ trợ mạng, bảo mật hoặc truy cập máy từ xa.",
+      "risk": "Có thể cần quyền quản trị, driver hoặc khởi động lại Windows.",
+      "tags": [
+        "network",
+        "security",
+        "vpn"
+      ],
+      "matchNames": [
+        "IPVanish"
+      ],
+      "size": "standard",
+      "logo": "ipvanish.svg",
+      "verified": true,
+      "installOrder": 75,
+      "order": 322,
+      "requires": []
+    },
+    {
+      "id": "tunnelbear",
+      "name": "TunnelBear",
+      "cat": "Mạng & Bảo mật",
+      "categoryId": "network-security",
+      "pkg": "TunnelBear.TunnelBear",
+      "source": "winget",
+      "publisher": "TunnelBear",
+      "type": "Desktop app",
+      "desc": "TunnelBear hỗ trợ mạng, bảo mật hoặc truy cập máy từ xa.",
+      "risk": "Có thể cần quyền quản trị, driver hoặc khởi động lại Windows.",
+      "tags": [
+        "network",
+        "security",
+        "vpn"
+      ],
+      "matchNames": [
+        "TunnelBear"
+      ],
+      "size": "standard",
+      "logo": "tunnelbear.svg",
+      "verified": true,
+      "installOrder": 75,
+      "order": 323,
+      "requires": []
+    },
+    {
+      "id": "hide-me-vpn",
+      "name": "hide.me VPN",
+      "cat": "Mạng & Bảo mật",
+      "categoryId": "network-security",
+      "pkg": "eVenture.HideMe",
+      "source": "winget",
+      "publisher": "eVenture",
+      "type": "Desktop app",
+      "desc": "hide.me VPN hỗ trợ mạng, bảo mật hoặc truy cập máy từ xa.",
+      "risk": "Có thể cần quyền quản trị, driver hoặc khởi động lại Windows.",
+      "tags": [
+        "network",
+        "security",
+        "vpn"
+      ],
+      "matchNames": [
+        "hide.me VPN"
+      ],
+      "size": "standard",
+      "logo": "hide-me-vpn.svg",
+      "verified": true,
+      "installOrder": 75,
+      "order": 324,
+      "requires": []
+    },
+    {
+      "id": "vpn-unlimited",
+      "name": "VPN Unlimited",
+      "cat": "Mạng & Bảo mật",
+      "categoryId": "network-security",
+      "pkg": "KeepSolid.VPNUnlimited",
+      "source": "winget",
+      "publisher": "KeepSolid",
+      "type": "Desktop app",
+      "desc": "VPN Unlimited hỗ trợ mạng, bảo mật hoặc truy cập máy từ xa.",
+      "risk": "Có thể cần quyền quản trị, driver hoặc khởi động lại Windows.",
+      "tags": [
+        "network",
+        "security",
+        "vpn"
+      ],
+      "matchNames": [
+        "VPN Unlimited"
+      ],
+      "size": "standard",
+      "logo": "vpn-unlimited.svg",
+      "verified": true,
+      "installOrder": 75,
+      "order": 325,
+      "requires": []
+    },
+    {
+      "id": "adguard-vpn",
+      "name": "AdGuard VPN",
+      "cat": "Mạng & Bảo mật",
+      "categoryId": "network-security",
+      "pkg": "AdGuard.AdGuardVPN",
+      "source": "winget",
+      "publisher": "AdGuard",
+      "type": "Desktop app",
+      "desc": "AdGuard VPN hỗ trợ mạng, bảo mật hoặc truy cập máy từ xa.",
+      "risk": "Có thể cần quyền quản trị, driver hoặc khởi động lại Windows.",
+      "tags": [
+        "network",
+        "security",
+        "vpn"
+      ],
+      "matchNames": [
+        "AdGuard VPN"
+      ],
+      "size": "standard",
+      "logo": "adguard-vpn.svg",
+      "verified": true,
+      "installOrder": 75,
+      "order": 326,
       "requires": []
     },
     {
@@ -8912,7 +9184,8 @@
       "risk": "Không có lưu ý đặc biệt.",
       "tags": [
         "network",
-        "security"
+        "security",
+        "vpn"
       ],
       "matchNames": [
         "ZeroTier One"
@@ -8921,7 +9194,7 @@
       "logo": "zerotier-one.svg",
       "verified": true,
       "installOrder": 75,
-      "order": 317,
+      "order": 327,
       "requires": []
     },
     {
@@ -8946,7 +9219,7 @@
       "logo": "termius.svg",
       "verified": true,
       "installOrder": 75,
-      "order": 318,
+      "order": 328,
       "requires": []
     },
     {
@@ -8971,7 +9244,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 75,
-      "order": 319,
+      "order": 329,
       "requires": []
     },
     {
@@ -8996,7 +9269,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 75,
-      "order": 320,
+      "order": 330,
       "requires": []
     },
     {
@@ -9022,7 +9295,7 @@
       "logo": "burp-suite-community.svg",
       "verified": true,
       "installOrder": 75,
-      "order": 321,
+      "order": 331,
       "requires": []
     },
     {
@@ -9047,7 +9320,7 @@
       "logo": "owasp-zap.svg",
       "verified": true,
       "installOrder": 75,
-      "order": 322,
+      "order": 332,
       "requires": []
     },
     {
@@ -9072,7 +9345,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 75,
-      "order": 323,
+      "order": 333,
       "requires": []
     },
     {
@@ -9097,7 +9370,7 @@
       "logo": "cryptomator.svg",
       "verified": true,
       "installOrder": 75,
-      "order": 324,
+      "order": 334,
       "requires": []
     },
     {
@@ -9122,7 +9395,7 @@
       "logo": "malwarebytes.svg",
       "verified": true,
       "installOrder": 75,
-      "order": 325,
+      "order": 335,
       "requires": []
     },
     {
@@ -9147,7 +9420,7 @@
       "logo": "mozilla-thunderbird.svg",
       "verified": true,
       "installOrder": 90,
-      "order": 326,
+      "order": 336,
       "requires": []
     },
     {
@@ -9172,7 +9445,7 @@
       "logo": "joplin.svg",
       "verified": true,
       "installOrder": 90,
-      "order": 327,
+      "order": 337,
       "requires": []
     },
     {
@@ -9197,7 +9470,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 90,
-      "order": 328,
+      "order": 338,
       "requires": []
     },
     {
@@ -9222,7 +9495,7 @@
       "logo": "simplenote.svg",
       "verified": true,
       "installOrder": 90,
-      "order": 329,
+      "order": 339,
       "requires": []
     },
     {
@@ -9247,7 +9520,7 @@
       "logo": "anytype.svg",
       "verified": true,
       "installOrder": 90,
-      "order": 330,
+      "order": 340,
       "requires": []
     },
     {
@@ -9272,7 +9545,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 90,
-      "order": 331,
+      "order": 341,
       "requires": []
     },
     {
@@ -9297,7 +9570,7 @@
       "logo": "zettlr.svg",
       "verified": true,
       "installOrder": 90,
-      "order": 332,
+      "order": 342,
       "requires": []
     },
     {
@@ -9322,7 +9595,7 @@
       "logo": "marktext.svg",
       "verified": true,
       "installOrder": 90,
-      "order": 333,
+      "order": 343,
       "requires": []
     },
     {
@@ -9347,7 +9620,7 @@
       "logo": "zotero.svg",
       "verified": true,
       "installOrder": 90,
-      "order": 334,
+      "order": 344,
       "requires": []
     },
     {
@@ -9372,7 +9645,7 @@
       "logo": "calibre.svg",
       "verified": true,
       "installOrder": 90,
-      "order": 335,
+      "order": 345,
       "requires": []
     },
     {
@@ -9397,7 +9670,7 @@
       "logo": "sumatrapdf.svg",
       "verified": true,
       "installOrder": 90,
-      "order": 336,
+      "order": 346,
       "requires": []
     },
     {
@@ -9422,7 +9695,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 90,
-      "order": 337,
+      "order": 347,
       "requires": []
     },
     {
@@ -9447,7 +9720,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 90,
-      "order": 338,
+      "order": 348,
       "requires": []
     },
     {
@@ -9472,7 +9745,7 @@
       "logo": "okular.svg",
       "verified": true,
       "installOrder": 90,
-      "order": 339,
+      "order": 349,
       "requires": []
     },
     {
@@ -9497,7 +9770,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 90,
-      "order": 340,
+      "order": 350,
       "requires": []
     },
     {
@@ -9522,7 +9795,7 @@
       "logo": "mendeley-reference-manager.svg",
       "verified": true,
       "installOrder": 90,
-      "order": 341,
+      "order": 351,
       "requires": []
     },
     {
@@ -9547,7 +9820,7 @@
       "logo": "clickup.svg",
       "verified": true,
       "installOrder": 90,
-      "order": 342,
+      "order": 352,
       "requires": []
     },
     {
@@ -9572,7 +9845,7 @@
       "logo": "evernote.svg",
       "verified": true,
       "installOrder": 90,
-      "order": 343,
+      "order": 353,
       "requires": []
     },
     {
@@ -9597,7 +9870,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 90,
-      "order": 344,
+      "order": 354,
       "requires": []
     },
     {
@@ -9622,7 +9895,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 90,
-      "order": 345,
+      "order": 355,
       "requires": []
     },
     {
@@ -9646,7 +9919,7 @@
       "logo": "element.svg",
       "verified": true,
       "installOrder": 92,
-      "order": 346,
+      "order": 356,
       "requires": []
     },
     {
@@ -9670,7 +9943,7 @@
       "logo": "wechat.svg",
       "verified": true,
       "installOrder": 92,
-      "order": 347,
+      "order": 357,
       "requires": []
     },
     {
@@ -9694,7 +9967,7 @@
       "logo": "mattermost.svg",
       "verified": true,
       "installOrder": 92,
-      "order": 348,
+      "order": 358,
       "requires": []
     },
     {
@@ -9718,7 +9991,7 @@
       "logo": "zulip.svg",
       "verified": true,
       "installOrder": 92,
-      "order": 349,
+      "order": 359,
       "requires": []
     },
     {
@@ -9742,7 +10015,7 @@
       "logo": "rocket-chat.svg",
       "verified": true,
       "installOrder": 92,
-      "order": 350,
+      "order": 360,
       "requires": []
     },
     {
@@ -9766,7 +10039,7 @@
       "logo": "guilded.svg",
       "verified": true,
       "installOrder": 92,
-      "order": 351,
+      "order": 361,
       "requires": []
     },
     {
@@ -9790,7 +10063,7 @@
       "logo": "cisco-webex.svg",
       "verified": true,
       "installOrder": 92,
-      "order": 352,
+      "order": 362,
       "requires": []
     },
     {
@@ -9814,7 +10087,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 92,
-      "order": 353,
+      "order": 363,
       "requires": []
     },
     {
@@ -9838,7 +10111,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 92,
-      "order": 354,
+      "order": 364,
       "requires": []
     },
     {
@@ -9862,7 +10135,7 @@
       "logo": "kakaotalk.svg",
       "verified": true,
       "installOrder": 92,
-      "order": 355,
+      "order": 365,
       "requires": []
     },
     {
@@ -9887,7 +10160,7 @@
       "logo": "microsoft-edge.svg",
       "verified": true,
       "installOrder": 85,
-      "order": 356,
+      "order": 366,
       "requires": []
     },
     {
@@ -9912,7 +10185,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 85,
-      "order": 357,
+      "order": 367,
       "requires": []
     },
     {
@@ -9937,7 +10210,7 @@
       "logo": "librewolf.svg",
       "verified": true,
       "installOrder": 85,
-      "order": 358,
+      "order": 368,
       "requires": []
     },
     {
@@ -9962,7 +10235,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 85,
-      "order": 359,
+      "order": 369,
       "requires": []
     },
     {
@@ -9987,7 +10260,7 @@
       "logo": "floorp.svg",
       "verified": true,
       "installOrder": 85,
-      "order": 360,
+      "order": 370,
       "requires": []
     },
     {
@@ -10003,7 +10276,8 @@
       "risk": "Không có lưu ý đặc biệt.",
       "tags": [
         "browser",
-        "network"
+        "network",
+        "vpn"
       ],
       "matchNames": [
         "Mullvad Browser"
@@ -10012,7 +10286,7 @@
       "logo": "mullvad-browser.svg",
       "verified": true,
       "installOrder": 85,
-      "order": 361,
+      "order": 371,
       "requires": []
     },
     {
@@ -10037,7 +10311,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 85,
-      "order": 362,
+      "order": 372,
       "requires": []
     },
     {
@@ -10062,7 +10336,7 @@
       "logo": "yandex-browser.svg",
       "verified": true,
       "installOrder": 85,
-      "order": 363,
+      "order": 373,
       "requires": []
     },
     {
@@ -10087,7 +10361,7 @@
       "logo": "duckduckgo-browser.svg",
       "verified": true,
       "installOrder": 85,
-      "order": 364,
+      "order": 374,
       "requires": []
     },
     {
@@ -10112,7 +10386,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 85,
-      "order": 365,
+      "order": 375,
       "requires": []
     },
     {
@@ -10137,7 +10411,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 85,
-      "order": 366,
+      "order": 376,
       "requires": []
     },
     {
@@ -10161,7 +10435,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 10,
-      "order": 367,
+      "order": 377,
       "requires": []
     },
     {
@@ -10185,7 +10459,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 10,
-      "order": 368,
+      "order": 378,
       "requires": []
     },
     {
@@ -10209,7 +10483,7 @@
       "logo": "nanazip.svg",
       "verified": true,
       "installOrder": 10,
-      "order": 369,
+      "order": 379,
       "requires": []
     },
     {
@@ -10233,7 +10507,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 10,
-      "order": 370,
+      "order": 380,
       "requires": []
     },
     {
@@ -10258,7 +10532,7 @@
       "logo": "files.svg",
       "verified": true,
       "installOrder": 10,
-      "order": 371,
+      "order": 381,
       "requires": []
     },
     {
@@ -10282,7 +10556,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 10,
-      "order": 372,
+      "order": 382,
       "requires": []
     },
     {
@@ -10306,7 +10580,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 10,
-      "order": 373,
+      "order": 383,
       "requires": []
     },
     {
@@ -10330,7 +10604,7 @@
       "logo": "ditto.svg",
       "verified": true,
       "installOrder": 10,
-      "order": 374,
+      "order": 384,
       "requires": []
     },
     {
@@ -10354,7 +10628,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 10,
-      "order": 375,
+      "order": 385,
       "requires": []
     },
     {
@@ -10378,7 +10652,7 @@
       "logo": "glazewm.svg",
       "verified": true,
       "installOrder": 10,
-      "order": 376,
+      "order": 386,
       "requires": []
     },
     {
@@ -10402,7 +10676,7 @@
       "logo": "lively-wallpaper.svg",
       "verified": true,
       "installOrder": 10,
-      "order": 377,
+      "order": 387,
       "requires": []
     },
     {
@@ -10426,7 +10700,7 @@
       "logo": "translucenttb.svg",
       "verified": true,
       "installOrder": 10,
-      "order": 378,
+      "order": 388,
       "requires": []
     },
     {
@@ -10450,7 +10724,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 10,
-      "order": 379,
+      "order": 389,
       "requires": []
     },
     {
@@ -10474,7 +10748,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 10,
-      "order": 380,
+      "order": 390,
       "requires": []
     },
     {
@@ -10498,7 +10772,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 10,
-      "order": 381,
+      "order": 391,
       "requires": []
     },
     {
@@ -10522,7 +10796,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 10,
-      "order": 382,
+      "order": 392,
       "requires": []
     },
     {
@@ -10546,7 +10820,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 10,
-      "order": 383,
+      "order": 393,
       "requires": []
     },
     {
@@ -10570,7 +10844,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 10,
-      "order": 384,
+      "order": 394,
       "requires": []
     },
     {
@@ -10594,7 +10868,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 10,
-      "order": 385,
+      "order": 395,
       "requires": []
     },
     {
@@ -10618,7 +10892,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 10,
-      "order": 386,
+      "order": 396,
       "requires": []
     },
     {
@@ -10642,7 +10916,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 10,
-      "order": 387,
+      "order": 397,
       "requires": []
     },
     {
@@ -10666,7 +10940,7 @@
       "logo": "raspberry-pi-imager.svg",
       "verified": true,
       "installOrder": 10,
-      "order": 388,
+      "order": 398,
       "requires": []
     },
     {
@@ -10690,7 +10964,7 @@
       "logo": "devtoys.svg",
       "verified": true,
       "installOrder": 10,
-      "order": 389,
+      "order": 399,
       "requires": []
     },
     {
@@ -10714,7 +10988,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 10,
-      "order": 390,
+      "order": 400,
       "requires": []
     },
     {
@@ -10738,7 +11012,7 @@
       "logo": "picpick.svg",
       "verified": true,
       "installOrder": 10,
-      "order": 391,
+      "order": 401,
       "requires": []
     },
     {
@@ -10762,7 +11036,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 10,
-      "order": 392,
+      "order": 402,
       "requires": []
     },
     {
@@ -10786,7 +11060,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 10,
-      "order": 393,
+      "order": 403,
       "requires": []
     },
     {
@@ -10810,7 +11084,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 10,
-      "order": 394,
+      "order": 404,
       "requires": []
     },
     {
@@ -10834,7 +11108,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 10,
-      "order": 395,
+      "order": 405,
       "requires": []
     },
     {
@@ -10858,7 +11132,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 10,
-      "order": 396,
+      "order": 406,
       "requires": []
     },
     {
@@ -10882,7 +11156,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 10,
-      "order": 397,
+      "order": 407,
       "requires": []
     },
     {
@@ -10906,7 +11180,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 10,
-      "order": 398,
+      "order": 408,
       "requires": []
     },
     {
@@ -10931,7 +11205,7 @@
       "logo": "adobe-creative-cloud.svg",
       "verified": true,
       "installOrder": 95,
-      "order": 399,
+      "order": 409,
       "requires": []
     },
     {
@@ -10957,7 +11231,7 @@
       "logo": "paint-dotnet.svg",
       "verified": true,
       "installOrder": 95,
-      "order": 400,
+      "order": 410,
       "requires": []
     },
     {
@@ -10982,7 +11256,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 95,
-      "order": 401,
+      "order": 411,
       "requires": []
     },
     {
@@ -11007,7 +11281,7 @@
       "logo": "ffmpeg.svg",
       "verified": true,
       "installOrder": 95,
-      "order": 402,
+      "order": 412,
       "requires": []
     },
     {
@@ -11032,7 +11306,7 @@
       "logo": "kdenlive.svg",
       "verified": true,
       "installOrder": 95,
-      "order": 403,
+      "order": 413,
       "requires": []
     },
     {
@@ -11057,7 +11331,7 @@
       "logo": "shotcut.svg",
       "verified": true,
       "installOrder": 95,
-      "order": 404,
+      "order": 414,
       "requires": []
     },
     {
@@ -11082,7 +11356,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 95,
-      "order": 405,
+      "order": 415,
       "requires": []
     },
     {
@@ -11107,7 +11381,7 @@
       "logo": "canva.svg",
       "verified": true,
       "installOrder": 95,
-      "order": 406,
+      "order": 416,
       "requires": []
     },
     {
@@ -11132,7 +11406,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 95,
-      "order": 407,
+      "order": 417,
       "requires": []
     },
     {
@@ -11157,7 +11431,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 95,
-      "order": 408,
+      "order": 418,
       "requires": []
     },
     {
@@ -11182,7 +11456,7 @@
       "logo": "lmms.svg",
       "verified": true,
       "installOrder": 95,
-      "order": 409,
+      "order": 419,
       "requires": []
     },
     {
@@ -11207,7 +11481,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 95,
-      "order": 410,
+      "order": 420,
       "requires": []
     },
     {
@@ -11233,7 +11507,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 95,
-      "order": 411,
+      "order": 421,
       "requires": []
     },
     {
@@ -11258,7 +11532,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 95,
-      "order": 412,
+      "order": 422,
       "requires": []
     },
     {
@@ -11283,7 +11557,7 @@
       "logo": "kodi.svg",
       "verified": true,
       "installOrder": 95,
-      "order": 413,
+      "order": 423,
       "requires": []
     },
     {
@@ -11308,7 +11582,7 @@
       "logo": "mpc-hc.svg",
       "verified": true,
       "installOrder": 95,
-      "order": 414,
+      "order": 424,
       "requires": []
     },
     {
@@ -11333,7 +11607,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 95,
-      "order": 415,
+      "order": 425,
       "requires": []
     },
     {
@@ -11358,7 +11632,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 95,
-      "order": 416,
+      "order": 426,
       "requires": []
     },
     {
@@ -11383,7 +11657,7 @@
       "logo": "plex.svg",
       "verified": true,
       "installOrder": 95,
-      "order": 417,
+      "order": 427,
       "requires": []
     },
     {
@@ -11408,7 +11682,7 @@
       "logo": "apple-itunes.svg",
       "verified": true,
       "installOrder": 95,
-      "order": 418,
+      "order": 428,
       "requires": []
     },
     {
@@ -11433,7 +11707,7 @@
       "logo": "tidal.svg",
       "verified": true,
       "installOrder": 95,
-      "order": 419,
+      "order": 429,
       "requires": []
     },
     {
@@ -11458,7 +11732,7 @@
       "logo": "deezer.svg",
       "verified": true,
       "installOrder": 95,
-      "order": 420,
+      "order": 430,
       "requires": []
     },
     {
@@ -11483,7 +11757,7 @@
       "logo": "aimp.svg",
       "verified": true,
       "installOrder": 95,
-      "order": 421,
+      "order": 431,
       "requires": []
     },
     {
@@ -11508,7 +11782,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 95,
-      "order": 422,
+      "order": 432,
       "requires": []
     },
     {
@@ -11533,7 +11807,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 95,
-      "order": 423,
+      "order": 433,
       "requires": []
     },
     {
@@ -11557,7 +11831,7 @@
       "logo": "gog-galaxy.svg",
       "verified": true,
       "installOrder": 100,
-      "order": 424,
+      "order": 434,
       "requires": []
     },
     {
@@ -11581,7 +11855,7 @@
       "logo": "ea-app.svg",
       "verified": true,
       "installOrder": 100,
-      "order": 425,
+      "order": 435,
       "requires": []
     },
     {
@@ -11605,7 +11879,7 @@
       "logo": "ubisoft-connect.svg",
       "verified": true,
       "installOrder": 100,
-      "order": 426,
+      "order": 436,
       "requires": []
     },
     {
@@ -11629,7 +11903,7 @@
       "logo": "itch.svg",
       "verified": true,
       "installOrder": 100,
-      "order": 427,
+      "order": 437,
       "requires": []
     },
     {
@@ -11653,7 +11927,7 @@
       "logo": "heroic-games-launcher.svg",
       "verified": true,
       "installOrder": 100,
-      "order": 428,
+      "order": 438,
       "requires": []
     },
     {
@@ -11677,7 +11951,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 100,
-      "order": 429,
+      "order": 439,
       "requires": []
     },
     {
@@ -11701,7 +11975,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 100,
-      "order": 430,
+      "order": 440,
       "requires": []
     },
     {
@@ -11725,7 +11999,7 @@
       "logo": "curseforge.svg",
       "verified": true,
       "installOrder": 100,
-      "order": 431,
+      "order": 441,
       "requires": []
     },
     {
@@ -11749,7 +12023,7 @@
       "logo": "minecraft-launcher.svg",
       "verified": true,
       "installOrder": 100,
-      "order": 432,
+      "order": 442,
       "requires": []
     },
     {
@@ -11773,7 +12047,7 @@
       "logo": "roblox.svg",
       "verified": true,
       "installOrder": 100,
-      "order": 433,
+      "order": 443,
       "requires": []
     },
     {
@@ -11797,7 +12071,7 @@
       "logo": "osu.svg",
       "verified": true,
       "installOrder": 100,
-      "order": 434,
+      "order": 444,
       "requires": []
     },
     {
@@ -11821,7 +12095,7 @@
       "logo": "blockbench.svg",
       "verified": true,
       "installOrder": 100,
-      "order": 435,
+      "order": 445,
       "requires": []
     },
     {
@@ -11845,7 +12119,7 @@
       "logo": "",
       "verified": true,
       "installOrder": 100,
-      "order": 436,
+      "order": 446,
       "requires": []
     },
     {
@@ -11869,7 +12143,7 @@
       "logo": "godot-mono.svg",
       "verified": true,
       "installOrder": 100,
-      "order": 437,
+      "order": 447,
       "requires": [
         "dotnet-sdk-8"
       ]
@@ -11895,7 +12169,7 @@
       "logo": "gamemaker.svg",
       "verified": true,
       "installOrder": 100,
-      "order": 438,
+      "order": 448,
       "requires": []
     },
     {
@@ -11919,7 +12193,7 @@
       "logo": "whatsapp.svg",
       "verified": true,
       "installOrder": 92,
-      "order": 439,
+      "order": 449,
       "requires": []
     },
     {
@@ -11944,7 +12218,7 @@
       "logo": "nvidia-app.svg",
       "verified": true,
       "installOrder": 10,
-      "order": 440,
+      "order": 450,
       "requires": []
     }
   ]

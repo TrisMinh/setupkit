@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">VPN Unlimited</title>
+  <rect width="64" height="64" rx="16" fill="#1a78ff"/>
+  <path fill="none" stroke="#fff" stroke-linecap="round" stroke-width="7" d="M16 33c5-10 14-10 20 0s15 10 20 0"/>
+  <path fill="#fff" d="M18 43h28v6H18z"/>
+</svg>

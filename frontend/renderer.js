@@ -10,6 +10,7 @@ let appIndex = new Map();
 let pkgIndex = new Map();
 let tagCounts = new Map();
 let searchIndex = null;
+let localizeFrame = 0;
 
 const state = {
   selected: new Set(),
@@ -21,7 +22,7 @@ const state = {
   terminalLineCount: 0,
   terminalOpen: false,
   terminalCommand: '',
-  activePreset: 'developer-core',
+  activePreset: '',
   category: 'all',
   tags: new Set(),
   query: '',
@@ -172,6 +173,14 @@ const els = {
   workspaceCommandPreview: document.getElementById('workspaceCommandPreview'),
   workspaceDetailQueue: document.getElementById('workspaceDetailQueueBtn'),
   workspaceDetailApply: document.getElementById('workspaceDetailApplyBtn'),
+  actionConfirmDialog: document.getElementById('actionConfirmDialog'),
+  actionConfirmIcon: document.getElementById('actionConfirmIcon'),
+  actionConfirmTitle: document.getElementById('actionConfirmTitle'),
+  actionConfirmMessage: document.getElementById('actionConfirmMessage'),
+  actionConfirmCommand: document.getElementById('actionConfirmCommand'),
+  actionConfirmNote: document.getElementById('actionConfirmNote'),
+  actionConfirmCancel: document.getElementById('actionConfirmCancelBtn'),
+  actionConfirmRun: document.getElementById('actionConfirmRunBtn'),
   theme: document.getElementById('themeBtn'),
   rescan: document.getElementById('rescanBtn'),
   systemReady: document.getElementById('systemReady'),
@@ -188,6 +197,8 @@ let detailAppId = '';
 let dialogClosing = false;
 let workspaceDetailId = '';
 let workspaceDialogClosing = false;
+let actionConfirmResolve = null;
+let actionConfirmClosing = false;
 
 /* ------------------------------------------------------------- dropdown */
 
@@ -413,7 +424,7 @@ const SEARCH_ALIASES = new Map(Object.entries({
   remote: 'ssh ftp sftp vpn remote desktop anydesk teamviewer tailscale wireguard zerotier',
   shell: 'terminal powershell pwsh windows terminal alacritty wezterm warp nushell',
   terminal: 'shell cli command line powershell windows terminal alacritty wezterm warp',
-  vpn: 'tailscale wireguard openvpn nordvpn protonvpn mullvad zerotier warp',
+  vpn: 'tailscale wireguard openvpn nordvpn protonvpn mullvad zerotier warp windscribe expressvpn hma surfshark pia private internet access cyberghost ipvanish tunnelbear hideme hide me vpn unlimited adguard vpn',
   vs: 'visual studio vscode visualstudiocode visual studio code microsoft visual studio',
   vsc: 'visual studio code vscode visualstudiocode',
   vscode: 'visual studio code vsc microsoft visualstudiocode'
@@ -486,6 +497,105 @@ function appIconMarkup(app) {
   return `<i class="ph ${appIcon(app)}" aria-hidden="true"></i>`;
 }
 
+function currentLanguage() {
+  return window.SetupKitI18n?.getLanguage?.() || 'en';
+}
+
+function uiText(vi, en) {
+  return currentLanguage() === 'vi' ? vi : en;
+}
+
+function scheduleLocalize() {
+  if (!window.SetupKitI18n || localizeFrame) return;
+  localizeFrame = window.requestAnimationFrame(() => {
+    localizeFrame = 0;
+    window.SetupKitI18n?.localize(document.body);
+  });
+}
+
+function displayCategoryName(category) {
+  if (!category) return '';
+  if (currentLanguage() === 'vi') return category.name;
+  const labels = {
+    'ide-code': 'IDE & Code',
+    'languages-runtime': 'Languages & Runtime',
+    'build-package': 'Build & Package',
+    'terminal-git': 'Terminal & Git',
+    cli: 'CLI',
+    'devops-cloud': 'DevOps & Cloud',
+    'database-api': 'Database & API',
+    'ai-code': 'AI Coding',
+    'network-security': 'Network & Security',
+    'office-work': 'Office & Work',
+    'communication-social': 'Communication & Social',
+    browser: 'Browser',
+    utilities: 'Utilities',
+    'design-media': 'Design & Media',
+    'game-dev': 'Game & Game Dev'
+  };
+  return category.en || category.nameEn || labels[category.id] || category.name;
+}
+
+function displayTagLabel(tagId) {
+  const tag = tagMetadata.get(tagId);
+  if (!tag) return tagId;
+  if (currentLanguage() === 'vi') return tag.label;
+  const labels = {
+    code: 'Code',
+    cli: 'CLI',
+    language: 'Language',
+    network: 'Network',
+    security: 'Security',
+    productivity: 'Productivity',
+    social: 'Social',
+    browser: 'Browser',
+    remote: 'Remote',
+    mobile: 'Mobile',
+    data: 'Data',
+    utility: 'Utility',
+    terminal: 'Terminal',
+    editor: 'Editor',
+    runtime: 'Runtime',
+    design: 'Design',
+    database: 'Database',
+    cloud: 'Cloud',
+    container: 'Container',
+    devops: 'DevOps',
+    git: 'Git',
+    ide: 'IDE',
+    package: 'Package',
+    'package-manager': 'Package',
+    office: 'Office',
+    media: 'Media',
+    game: 'Game',
+    api: 'API',
+    ai: 'AI',
+    javascript: 'JavaScript',
+    python: 'Python',
+    dotnet: '.NET',
+    java: 'Java',
+    go: 'Go',
+    rust: 'Rust',
+    cpp: 'C/C++',
+    kubernetes: 'Kubernetes',
+    data: 'Data'
+  };
+  return tag.en || tag.labelEn || labels[tag.id] || tag.label;
+}
+
+function displayAppDescription(app) {
+  if (currentLanguage() === 'vi') return app.desc;
+  const source = app.source === 'msstore' ? 'Microsoft Store' : 'winget';
+  const category = displayCategoryName(catalogCategories.find((item) => item.id === app.categoryId)) || app.cat;
+  return `${category} package from ${source}.`;
+}
+
+function displayPresetDescription(preset) {
+  if (currentLanguage() === 'vi') return preset.desc || preset.description;
+  const count = preset.apps?.length || 0;
+  return `${count} reviewed apps for this workspace.`;
+}
+
 function commandFor(app) {
   const source = app.source === 'msstore' ? 'msstore' : 'winget';
   const silent = app.source === 'msstore' ? '' : ' --silent';
@@ -500,6 +610,11 @@ function upgradeCommandFor(app) {
   const source = app.source === 'msstore' ? 'msstore' : 'winget';
   const silent = app.source === 'msstore' ? '' : ' --silent';
   return `winget upgrade --id ${app.pkg} --exact --source ${source}${silent} --accept-package-agreements --accept-source-agreements --disable-interactivity`;
+}
+
+function uninstallCommandFor(app) {
+  const source = app.source === 'msstore' ? '' : ' --source winget';
+  return `winget uninstall --id ${app.pkg} --exact${source} --accept-source-agreements`;
 }
 
 function installLocationLabel(app) {
@@ -586,14 +701,14 @@ function ensureVersionSelection() {
 }
 
 function tagLabel(tagId) {
-  return tagMetadata.get(tagId)?.label || tagId;
+  return displayTagLabel(tagId);
 }
 
 function selectedApps() {
   return sortByInstallOrder(apps.filter((app) => state.selected.has(app.id)));
 }
 
-// Ghi nhớ danh sách đang chọn để lần mở sau khôi phục đúng gói cài đặt.
+// Chỉ lưu selection trong lúc người dùng thao tác; khi mở app mới luôn bắt đầu trống.
 const SELECTION_KEY = 'setupkit-selection';
 
 function persistSelection() {
@@ -604,15 +719,11 @@ function persistSelection() {
   }
 }
 
-function loadPersistedSelection() {
+function clearPersistedSelection() {
   try {
-    const raw = localStorage.getItem(SELECTION_KEY);
-    if (!raw) return null;
-    const ids = JSON.parse(raw);
-    if (!Array.isArray(ids)) return null;
-    return ids.filter((id) => appById(id));
+    localStorage.removeItem(SELECTION_KEY);
   } catch {
-    return null;
+    // Không xóa được cũng không ảnh hưởng phiên hiện tại.
   }
 }
 
@@ -649,16 +760,9 @@ async function loadCatalog() {
   if (els.workspaceSummary) els.workspaceSummary.textContent = `${presets.length} workspace theo vai trò và lĩnh vực`;
   if (els.navWorkspaceCount) els.navWorkspaceCount.textContent = presets.length;
 
-  const defaultPlan = presets.find((plan) => plan.id === state.activePreset) || presets[0];
-  const persisted = loadPersistedSelection();
-  if (persisted && persisted.length) {
-    // Khôi phục đúng danh sách người dùng đang chọn ở lần trước.
-    state.selected = new Set(persisted);
-    state.activePreset = '';
-  } else {
-    state.activePreset = defaultPlan?.id || '';
-    state.selected = new Set(defaultPlan?.apps.filter((id) => appById(id)) || []);
-  }
+  clearPersistedSelection();
+  state.activePreset = '';
+  state.selected = new Set();
 
   // Dựng chỉ mục tìm kiếm khi máy rảnh để lần gõ đầu tiên không bị khựng.
   idle(buildSearchIndex);
@@ -814,7 +918,7 @@ function renderCategories() {
     { value: 'all', label: 'Tất cả danh mục', icon: 'ph-squares-four', tone: 'neutral' },
     ...catalogCategories.map((category) => ({
       value: category.id,
-      label: category.name,
+      label: displayCategoryName(category),
       icon: category.icon || 'ph-folder',
       tone: 'accent'
     }))
@@ -822,10 +926,40 @@ function renderCategories() {
   categoryDropdown?.set(state.category, { silent: true });
 }
 
+function renderFilterDropdowns() {
+  const isVi = currentLanguage() === 'vi';
+  renderCategories();
+  sourceDropdown?.setOptions([
+    { value: 'all', label: isVi ? 'Tất cả nguồn' : 'All sources', icon: 'ph-stack', tone: 'neutral' },
+    { value: 'winget', label: isVi ? 'Chỉ winget' : 'winget only', icon: 'ph-terminal-window', tone: 'accent' },
+    { value: 'msstore', label: isVi ? 'Chỉ Microsoft Store' : 'Microsoft Store only', icon: 'ph-storefront', tone: 'store' }
+  ]);
+  sourceDropdown?.set(state.source, { silent: true });
+  statusDropdown?.setOptions([
+    { value: 'all', label: isVi ? 'Mọi tình trạng' : 'Any status', icon: 'ph-circles-three', tone: 'neutral' },
+    { value: 'installed', label: isVi ? 'Đã cài trên máy' : 'Installed on this machine', icon: 'ph-check-circle', tone: 'success' },
+    { value: 'available', label: isVi ? 'Chưa cài' : 'Not installed', icon: 'ph-download-simple', tone: 'muted' },
+    { value: 'selected', label: isVi ? 'Đang chọn' : 'Selected', icon: 'ph-stack', tone: 'accent' }
+  ]);
+  statusDropdown?.set(state.status, { silent: true });
+  sortDropdown?.setOptions([
+    { value: 'smart', label: sortLabel('smart'), icon: 'ph-sparkle', tone: 'accent' },
+    { value: 'installOrder', label: sortLabel('installOrder'), icon: 'ph-sort-ascending', tone: 'neutral' },
+    { value: 'name', label: sortLabel('name'), icon: 'ph-text-aa', tone: 'neutral' },
+    { value: 'category', label: sortLabel('category'), icon: 'ph-folders', tone: 'accent' },
+    { value: 'status', label: sortLabel('status'), icon: 'ph-traffic-signal', tone: 'success' },
+    { value: 'source', label: sortLabel('source'), icon: 'ph-git-branch', tone: 'store' },
+    { value: 'size', label: sortLabel('size'), icon: 'ph-hard-drives', tone: 'warning' },
+    { value: 'pending', label: sortLabel('pending'), icon: 'ph-download-simple', tone: 'muted' }
+  ]);
+  sortDropdown?.set(state.sort, { silent: true });
+}
+
 function renderTags() {
   els.tagFilterBar.innerHTML = catalogTags.map((tag) => {
     const active = state.tags.has(tag.id);
     const count = tagCounts.get(tag.id) || 0;
+    const label = displayTagLabel(tag.id);
     return `
       <button
         class="tag-filter-button ${active ? 'active' : ''}"
@@ -835,7 +969,7 @@ function renderTags() {
         title="${count} ứng dụng"
       >
         <i class="ph ${escapeHtml(tag.icon)}" aria-hidden="true"></i>
-        <span>${escapeHtml(tag.label)}</span>
+        <span>${escapeHtml(label)}</span>
         <small>${count}</small>
       </button>
     `;
@@ -844,33 +978,57 @@ function renderTags() {
 }
 
 function sortLabel(value) {
-  const labels = {
-    smart: 'Thông minh',
-    installOrder: 'Thứ tự cài',
-    name: 'Tên A-Z',
-    category: 'Danh mục',
-    status: 'Tình trạng',
-    source: 'Nguồn cài',
-    size: 'App lớn trước',
-    pending: 'Chưa cài trước'
-  };
+  const labels = currentLanguage() === 'vi'
+    ? {
+        smart: 'Thông minh',
+        installOrder: 'Thứ tự cài',
+        name: 'Tên A-Z',
+        category: 'Danh mục',
+        status: 'Tình trạng',
+        source: 'Nguồn cài',
+        size: 'App lớn trước',
+        pending: 'Chưa cài trước'
+      }
+    : {
+        smart: 'Smart',
+        installOrder: 'Install order',
+        name: 'Name A-Z',
+        category: 'Category',
+        status: 'Status',
+        source: 'Source',
+        size: 'Large apps first',
+        pending: 'Not installed first'
+      };
   return labels[value] || labels.smart;
+}
+
+function statusFilterLabel(value) {
+  const labels = currentLanguage() === 'vi'
+    ? { installed: 'Đã cài', available: 'Chưa cài', selected: 'Đang chọn' }
+    : { installed: 'Installed', available: 'Not installed', selected: 'Selected' };
+  return labels[value] || '';
 }
 
 function renderFilterSummary() {
   const parts = [];
   if (state.category !== 'all') {
-    parts.push(catalogCategories.find((category) => category.id === state.category)?.name);
+    parts.push(displayCategoryName(catalogCategories.find((category) => category.id === state.category)));
   }
   if (state.tags.size) parts.push([...state.tags].map(tagLabel).join(' + '));
   if (state.source !== 'all') parts.push(state.source === 'msstore' ? 'Microsoft Store' : 'WinGet');
   if (state.status !== 'all') {
-    parts.push({ installed: 'Đã cài', available: 'Chưa cài', selected: 'Đang chọn' }[state.status]);
+    parts.push(statusFilterLabel(state.status));
   }
-  if (state.sort !== 'smart') parts.push(`Sắp xếp: ${sortLabel(state.sort)}`);
+  if (state.sort !== 'smart') {
+    parts.push(currentLanguage() === 'vi' ? `Sắp xếp: ${sortLabel(state.sort)}` : `Sort: ${sortLabel(state.sort)}`);
+  }
   els.activeFilterSummary.textContent = parts.filter(Boolean).length
-    ? `Đang lọc: ${parts.filter(Boolean).join(' / ')}`
-    : 'Có thể chọn nhiều tag để thu hẹp danh sách. Nhấn / để tìm nhanh.';
+    ? (currentLanguage() === 'vi'
+        ? `Đang lọc: ${parts.filter(Boolean).join(' / ')}`
+        : `Filtering: ${parts.filter(Boolean).join(' / ')}`)
+    : (currentLanguage() === 'vi'
+        ? 'Có thể chọn nhiều tag để thu hẹp danh sách. Nhấn / để tìm nhanh.'
+        : 'Select multiple tags to narrow the list. Press / to search.');
 }
 
 function presetButtonHTML(preset) {
@@ -884,11 +1042,11 @@ function presetButtonHTML(preset) {
     </span>
   `).join('');
   return `
-    <button class="preset-button ${state.activePreset === preset.id ? 'active' : ''}" data-preset="${preset.id}" type="button" title="${escapeHtml(preset.desc)}">
+    <button class="preset-button ${state.activePreset === preset.id ? 'active' : ''}" data-preset="${preset.id}" type="button" title="${escapeHtml(displayPresetDescription(preset))}">
       <span class="preset-icon" aria-hidden="true"><i class="ph ${preset.icon}"></i></span>
       <span class="preset-copy">
         <strong>${escapeHtml(preset.name)}</strong>
-        <span class="preset-description">${escapeHtml(preset.desc)}</span>
+        <span class="preset-description">${escapeHtml(displayPresetDescription(preset))}</span>
         <span class="preset-count">${pendingCount} cần cài${installedCount ? `, ${installedCount} đã có` : ''}${largeCount ? `, ${largeCount} app lớn` : ''}</span>
       </span>
       <span class="workspace-preview" aria-hidden="true">
@@ -914,7 +1072,7 @@ function workspaceCardHTML(preset) {
         <span class="preset-icon" aria-hidden="true"><i class="ph ${escapeHtml(preset.icon)}"></i></span>
         <div class="workspace-card-title">
           <strong>${escapeHtml(preset.name)}</strong>
-          <span>${escapeHtml(preset.desc)}</span>
+          <span>${escapeHtml(displayPresetDescription(preset))}</span>
         </div>
         <button class="workspace-open-button" data-workspace-detail="${escapeHtml(preset.id)}" type="button" aria-label="Xem chi tiết ${escapeHtml(preset.name)}" title="Xem chi tiết workspace">
           <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
@@ -1015,7 +1173,7 @@ function cardHTML(app) {
           <span class="app-name">${name}</span>
           <span class="source-label">${app.source === 'msstore' ? 'Store' : 'winget'}</span>
         </div>
-        <p class="app-desc">${escapeHtml(app.desc)}</p>
+        <p class="app-desc">${escapeHtml(displayAppDescription(app))}</p>
         <div class="app-meta-row">
           <span class="app-type">${escapeHtml(app.type)}</span>
           ${app.size === 'large' ? '<span class="app-size-label"><i class="ph ph-hard-drives" aria-hidden="true"></i>App lớn</span>' : ''}
@@ -1121,13 +1279,15 @@ function renderCatalog() {
         </div>
       </div>
     `;
+    scheduleLocalize();
     return;
   }
 
   els.catalog.innerHTML = list.map(cardHTML).join('');
+  scheduleLocalize();
 }
 
-// Cập nhật một card tại chỗ khi chọn/bỏ chọn - không rebuild cả lưới 440 card.
+// Cập nhật một card tại chỗ khi chọn/bỏ chọn - không rebuild cả lưới 450 card.
 function updateCardToggle(id) {
   if (state.status === 'selected') {
     // Bộ lọc "Đang chọn" thay đổi danh sách hiển thị, cần render lại toàn bộ.
@@ -1391,11 +1551,13 @@ function renderQueue() {
         </div>
       </div>
     `;
+    scheduleLocalize();
     return;
   }
 
   els.queue.innerHTML = selected.map(queueItemHTML).join('');
   applyProgressFill(els.queue);
+  scheduleLocalize();
 }
 
 function renderUpdates() {
@@ -1462,11 +1624,13 @@ function renderUpdates() {
         </div>
       </div>
     `;
+    scheduleLocalize();
     return;
   }
 
   els.updatesList.innerHTML = updates.map(updateItemHTML).join('');
   applyProgressFill(els.updatesList);
+  scheduleLocalize();
 }
 
 function renderVersionAppList() {
@@ -1635,6 +1799,7 @@ function renderVersionDetail() {
 function renderVersions() {
   renderVersionAppList();
   renderVersionDetail();
+  scheduleLocalize();
 }
 
 // Cập nhật tiến trình một app tại chỗ - giữ nguyên DOM để thanh chạy mượt.
@@ -1742,6 +1907,7 @@ function renderStatusBar() {
   els.statusTerminalCount.textContent = lineCount > 999 ? '999+' : String(lineCount);
   els.statusTerminalCount.hidden = lineCount === 0;
   els.statusTerminalBtn.classList.toggle('active', state.terminalOpen);
+  scheduleLocalize();
 }
 
 function renderAll() {
@@ -1756,6 +1922,13 @@ function renderAll() {
   renderStatusBar();
   renderWingetBanner();
 }
+
+window.addEventListener('setupkit:languagechange', () => {
+  renderFilterDropdowns();
+  updateThemeButton();
+  renderAll();
+  window.SetupKitI18n?.localize(document.body);
+});
 
 /* ---------------------------------------------------------------- actions */
 
@@ -1870,7 +2043,7 @@ function openDetail(id) {
   detailAppId = id;
   els.detailIcon.innerHTML = appIconMarkup(app);
   els.detailName.textContent = app.name;
-  els.detailDescription.textContent = app.desc;
+  els.detailDescription.textContent = displayAppDescription(app);
   els.detailState.textContent = details
     ? (details.updateAvailable ? 'Đã cài, có bản cập nhật' : 'Đã cài trên máy')
     : simulated ? 'Chỉ mô phỏng, chưa cài' : 'Chưa cài';
@@ -1976,7 +2149,7 @@ function openWorkspaceDetail(id) {
   workspaceDetailId = id;
   els.workspaceDetailIcon.innerHTML = `<i class="ph ${escapeHtml(preset.icon || 'ph-stack')}" aria-hidden="true"></i>`;
   els.workspaceDetailName.textContent = preset.name;
-  els.workspaceDetailDescription.textContent = preset.desc;
+  els.workspaceDetailDescription.textContent = displayPresetDescription(preset);
   els.workspaceDetailCount.textContent = `${workspaceApps.length} ứng dụng${largeCount ? `, ${largeCount} app lớn` : ''}`;
   els.workspaceDetailPending.textContent = pendingApps.length
     ? `${pendingApps.length} cần cài`
@@ -2021,6 +2194,91 @@ function closeWorkspaceDetail({ immediate = false } = {}) {
     workspaceDialogClosing = false;
     workspaceDetailId = '';
   }, 130);
+}
+
+function closeActionConfirm(confirmed) {
+  if (!els.actionConfirmDialog?.open || actionConfirmClosing) return;
+  actionConfirmClosing = true;
+  const resolve = actionConfirmResolve;
+  actionConfirmResolve = null;
+  els.actionConfirmDialog.classList.add('closing');
+  window.setTimeout(() => {
+    els.actionConfirmDialog.close();
+    els.actionConfirmDialog.classList.remove('closing');
+    actionConfirmClosing = false;
+    resolve?.(confirmed);
+  }, 120);
+}
+
+function requestActionConfirm({
+  title,
+  message,
+  command,
+  note = uiText('SetupKit chỉ chạy package ID nằm trong catalog đã duyệt.', 'SetupKit only runs package IDs from the reviewed catalog.'),
+  confirmLabel = uiText('Xác nhận', 'Confirm'),
+  icon = 'ph-warning-circle',
+  tone = 'warning'
+}) {
+  if (!els.actionConfirmDialog) return Promise.resolve(true);
+  if (actionConfirmResolve) {
+    actionConfirmResolve(false);
+    actionConfirmResolve = null;
+  }
+
+  els.actionConfirmDialog.dataset.tone = tone;
+  els.actionConfirmIcon.innerHTML = `<i class="ph ${escapeHtml(icon)}" aria-hidden="true"></i>`;
+  els.actionConfirmTitle.textContent = title;
+  els.actionConfirmMessage.textContent = message;
+  els.actionConfirmCommand.textContent = command;
+  els.actionConfirmNote.querySelector('span').textContent = note;
+  els.actionConfirmRun.innerHTML = `<i class="ph ph-check" aria-hidden="true"></i>${escapeHtml(confirmLabel)}`;
+  els.actionConfirmRun.className = 'button primary';
+  actionConfirmClosing = false;
+  els.actionConfirmDialog.classList.remove('closing');
+  els.actionConfirmDialog.showModal();
+  els.actionConfirmCancel.focus({ preventScroll: true });
+  return new Promise((resolve) => {
+    actionConfirmResolve = resolve;
+  });
+}
+
+async function confirmInstallApp(app) {
+  const installLocation = state.installLocations.get(app.id);
+  const note = installLocation && app.source !== 'msstore'
+    ? uiText('Trình cài đặt có thể bỏ qua thư mục tùy chỉnh nếu package không hỗ trợ.', 'The installer may ignore a custom folder if the package does not support it.')
+    : uiText('URL tùy ý và script tải ngoài luôn bị chặn.', 'External URLs and unknown scripts stay blocked.');
+  return requestActionConfirm({
+    title: uiText(`Cài ${app.name}`, `Install ${app.name}`),
+    message: uiText('SetupKit sẽ chạy đúng lệnh winget bên dưới.', 'SetupKit will run the exact winget command below.'),
+    command: commandFor(app),
+    note,
+    confirmLabel: uiText('Chạy lệnh winget', 'Run winget command'),
+    icon: 'ph-download-simple',
+    tone: 'success'
+  });
+}
+
+function confirmSingleOperation(app, kind) {
+  if (kind === 'upgrade') {
+    return requestActionConfirm({
+      title: uiText(`Cập nhật ${app.name}`, `Update ${app.name}`),
+      message: uiText('Chỉ package này được cập nhật qua catalog đã duyệt.', 'Only this reviewed package will be updated.'),
+      command: upgradeCommandFor(app),
+      note: uiText('SetupKit dùng winget upgrade và giữ nguyên phạm vi trong allowlist.', 'SetupKit uses winget upgrade and keeps the scope inside the allowlist.'),
+      confirmLabel: uiText('Cập nhật', 'Update'),
+      icon: 'ph-arrow-circle-up',
+      tone: 'success'
+    });
+  }
+  return requestActionConfirm({
+    title: uiText(`Gỡ ${app.name}`, `Uninstall ${app.name}`),
+    message: uiText('Ứng dụng sẽ bị xóa khỏi máy. Với VPN, cửa sổ gỡ riêng có thể xuất hiện để tắt service hoặc driver.', 'The app will be removed from this machine. VPN uninstallers may open their own window to stop services or drivers.'),
+    command: uninstallCommandFor(app),
+    note: uiText('SetupKit không ép chế độ silent khi gỡ để uninstaller của nhà phát hành có thể hỏi xác nhận cần thiết.', 'SetupKit does not force silent uninstall so the publisher uninstaller can ask for required confirmation.'),
+    confirmLabel: uiText('Gỡ cài đặt', 'Uninstall'),
+    icon: 'ph-trash-simple',
+    tone: 'danger'
+  });
 }
 
 /* ------------------------------------------------------------ log & toast */
@@ -2345,12 +2603,16 @@ async function runInstallPlan() {
 
     if (realInstall && window.setupkitNative) {
       try {
-        const result = await window.setupkitNative.runWinget(app.pkg);
-        if (result.cancelled) {
+        const confirmed = await confirmInstallApp(app);
+        if (!confirmed) {
           state.failed.add(app.id);
           setProgress(app, 0, 'Đã hủy', 'Người dùng không xác nhận lệnh winget.', true);
           addLog(`[đã hủy] ${app.name}: người dùng không xác nhận cài đặt.`);
-        } else if (result.ok) {
+          continue;
+        }
+        const runner = window.setupkitNative.runWingetConfirmed || window.setupkitNative.runWinget;
+        const result = await runner(app.pkg);
+        if (result.ok) {
           const details = result.details || {
             packageId: app.pkg,
             installed: true,
@@ -2590,15 +2852,27 @@ function requestStop() {
 async function runSingleOp(id, kind, { view = kind === 'upgrade' ? 'updates' : 'queue' } = {}) {
   const app = appById(id);
   if (!app || !window.setupkitNative || state.running || state.scanning || state.busyId) return;
-  const method = kind === 'upgrade' ? 'upgradeApp' : 'uninstallApp';
+  const method = kind === 'upgrade'
+    ? (window.setupkitNative.upgradeAppConfirmed ? 'upgradeAppConfirmed' : 'upgradeApp')
+    : (window.setupkitNative.uninstallAppConfirmed ? 'uninstallAppConfirmed' : 'uninstallApp');
   if (typeof window.setupkitNative[method] !== 'function') {
     showToast('Không khả dụng', 'Cầu nối native chưa hỗ trợ thao tác này.', 'ph-warning-circle');
     return;
   }
   const verbLabel = kind === 'upgrade' ? 'Cập nhật' : 'Gỡ cài đặt';
 
+  if (els.detailDialog.open) {
+    closeDetail();
+    await wait(160);
+  }
+  const confirmed = await confirmSingleOperation(app, kind);
+  if (!confirmed) {
+    showToast(app.name, 'Đã hủy thao tác.', 'ph-hand-palm');
+    addLog(`[${kind === 'upgrade' ? 'cập nhật' : 'gỡ'}] ${app.name}: người dùng hủy trước khi chạy.`);
+    return;
+  }
+
   state.busyId = id;
-  closeDetail();
   switchView(view);
   state.terminalOpen = true;
   state.terminalCommand = '';
@@ -2651,8 +2925,27 @@ async function runSingleOp(id, kind, { view = kind === 'upgrade' ? 'updates' : '
 async function runUpdateAll() {
   const pending = updateApps();
   if (!pending.length || state.running || state.scanning || state.updatesScanning || state.busyId) return;
-  if (!window.setupkitNative?.upgradeApps) {
+  const upgradeAllRunner = window.setupkitNative?.upgradeAppsConfirmed || window.setupkitNative?.upgradeApps;
+  if (!upgradeAllRunner) {
     showToast('Không khả dụng', 'Cầu nối native chưa hỗ trợ cập nhật hàng loạt.', 'ph-warning-circle');
+    return;
+  }
+  const preview = pending.slice(0, 10).map((app) => `${app.name}\n${upgradeCommandFor(app)}`);
+  if (pending.length > 10) {
+    preview.push(uiText(`... và ${pending.length - 10} ứng dụng khác`, `... and ${pending.length - 10} more apps`));
+  }
+  const confirmed = await requestActionConfirm({
+    title: uiText(`Cập nhật ${pending.length} ứng dụng`, `Update ${pending.length} apps`),
+    message: uiText('SetupKit sẽ chạy tuần tự các package đã phát hiện có bản mới.', 'SetupKit will update the detected packages one by one.'),
+    command: preview.join('\n\n'),
+    note: uiText('Cập nhật hàng loạt chỉ chạy package nằm trong catalog đã duyệt và stream tiến trình từng app.', 'Bulk update only runs packages from the reviewed catalog and streams progress for each app.'),
+    confirmLabel: uiText('Cập nhật tất cả', 'Update all'),
+    icon: 'ph-arrow-circle-up',
+    tone: 'success'
+  });
+  if (!confirmed) {
+    showToast('Đã hủy cập nhật', 'Bạn chưa xác nhận phiên cập nhật hàng loạt.', 'ph-hand-palm');
+    addLog('[cập nhật] Người dùng hủy cập nhật hàng loạt trước khi chạy.');
     return;
   }
 
@@ -2673,7 +2966,7 @@ async function runUpdateAll() {
   renderAll();
 
   try {
-    const result = await window.setupkitNative.upgradeApps(pending.map((app) => app.pkg));
+    const result = await upgradeAllRunner(pending.map((app) => app.pkg));
     const results = result.results || {};
     pending.forEach((app) => {
       const item = results[app.pkg];
@@ -2747,6 +3040,30 @@ async function runInstallVersion(mode) {
   const version = state.selectedVersion;
   const record = app ? state.versionRecords.get(app.id) : null;
   if (!app || !version || !record?.ok || !window.setupkitNative?.installVersion || state.running || state.scanning || state.busyId) return;
+  const versionInstallCommand = `winget install --id ${app.pkg} --exact --source winget --version ${version} --silent --accept-package-agreements --accept-source-agreements --disable-interactivity`;
+  const reinstall = mode === 'reinstall';
+  const confirmed = await requestActionConfirm({
+    title: reinstall
+      ? uiText(`Rollback ${app.name}`, `Rollback ${app.name}`)
+      : uiText(`Cài ${app.name} ${version}`, `Install ${app.name} ${version}`),
+    message: reinstall
+      ? uiText('SetupKit sẽ gỡ bản hiện tại rồi cài version đã chọn.', 'SetupKit will uninstall the current build, then install the selected version.')
+      : uiText('SetupKit sẽ cài đúng version từ manifest winget.', 'SetupKit will install the selected version from the winget manifest.'),
+    command: reinstall
+      ? `${uninstallCommandFor(app)}\n${versionInstallCommand}`
+      : versionInstallCommand,
+    note: reinstall
+      ? uiText('Chế độ gỡ rồi cài có thể ảnh hưởng cấu hình của app. Với VPN, uninstaller riêng có thể xuất hiện.', 'Reinstall mode can affect app settings. VPN uninstallers may open their own window.')
+      : uiText('Nếu installer không cho downgrade trực tiếp, bạn có thể dùng chế độ gỡ rồi cài.', 'If the installer blocks direct downgrade, use uninstall-then-install mode.'),
+    confirmLabel: reinstall ? uiText('Gỡ rồi cài version', 'Uninstall then install') : uiText('Cài version này', 'Install this version'),
+    icon: reinstall ? 'ph-clock-counter-clockwise' : 'ph-download-simple',
+    tone: reinstall ? 'danger' : 'success'
+  });
+  if (!confirmed) {
+    showToast(app.name, 'Đã hủy cài version.', 'ph-hand-palm');
+    addLog(`[versions] ${app.name}: người dùng hủy trước khi chạy.`);
+    return;
+  }
 
   state.busyId = app.id;
   state.operation = mode === 'reinstall' ? 'rollback' : 'version';
@@ -2760,7 +3077,8 @@ async function runInstallVersion(mode) {
   renderAll();
 
   try {
-    const result = await window.setupkitNative.installVersion(app.pkg, version, mode);
+    const installer = window.setupkitNative.installVersionConfirmed || window.setupkitNative.installVersion;
+    const result = await installer(app.pkg, version, mode);
     if (result.cancelled) {
       showToast(app.name, 'Đã hủy cài version.', 'ph-hand-palm');
       addLog(`[versions] ${app.name}: người dùng hủy.`);
@@ -3223,6 +3541,21 @@ function bindEvents() {
   });
   document.getElementById('workspaceDialogCloseBtn').addEventListener('click', closeWorkspaceDetail);
   document.getElementById('workspaceDialogCancelBtn').addEventListener('click', closeWorkspaceDetail);
+  els.actionConfirmCancel?.addEventListener('click', () => closeActionConfirm(false));
+  els.actionConfirmRun?.addEventListener('click', () => closeActionConfirm(true));
+  els.actionConfirmDialog?.addEventListener('cancel', (event) => {
+    event.preventDefault();
+    closeActionConfirm(false);
+  });
+  els.actionConfirmDialog?.addEventListener('click', (event) => {
+    if (event.detail === 0 || event.target !== els.actionConfirmDialog) return;
+    const rect = els.actionConfirmDialog.getBoundingClientRect();
+    const outside = event.clientX < rect.left
+      || event.clientX > rect.right
+      || event.clientY < rect.top
+      || event.clientY > rect.bottom;
+    if (outside) closeActionConfirm(false);
+  });
   els.workspaceDetailApply.addEventListener('click', () => {
     if (workspaceDialogClosing || !workspaceDetailId) return;
     applyPreset(workspaceDetailId);
