@@ -36,6 +36,16 @@
           <span>Workspaces</span>
           <span class="nav-count" id="navWorkspaceCount">0</span>
         </button>
+        <button class="nav-button" data-view="updates" type="button" title="Cập nhật">
+          <i class="ph ph-arrow-circle-up" aria-hidden="true"></i>
+          <span>Cập nhật</span>
+          <span class="nav-count" id="navUpdateCount">0</span>
+        </button>
+        <button class="nav-button" data-view="versions" type="button" title="Versions">
+          <i class="ph ph-clock-counter-clockwise" aria-hidden="true"></i>
+          <span>Versions</span>
+          <span class="nav-count" id="navVersionCount">0</span>
+        </button>
         <button class="nav-button" data-view="queue" type="button" title="Gói cài đặt">
           <i class="ph ph-list-checks" aria-hidden="true"></i>
           <span>Gói cài đặt</span>
@@ -149,6 +159,7 @@
               <div class="dropdown" id="categoryDropdown" data-dropdown-label="Lọc theo danh mục"></div>
               <div class="dropdown" id="sourceDropdown" data-dropdown-label="Lọc theo nguồn cài đặt"></div>
               <div class="dropdown" id="statusDropdown" data-dropdown-label="Lọc theo tình trạng cài đặt"></div>
+              <div class="dropdown" id="sortDropdown" data-dropdown-label="Sắp xếp danh sách"></div>
             </div>
 
             <div class="tag-filter-section" aria-labelledby="tagFilterHeading">
@@ -240,6 +251,170 @@
               <div class="skeleton-card preset"></div>
             </div>
           </section>
+        </section>
+
+        <section class="page" id="page-updates" data-page="updates" data-od-id="updates-page">
+          <div class="page-heading">
+            <h1 tabindex="-1">Cập nhật ứng dụng</h1>
+            <p>SetupKit phát hiện app có bản mới qua winget và cập nhật đúng package đã duyệt.</p>
+          </div>
+
+          <div class="review-layout updates-layout">
+            <section class="panel" aria-labelledby="updatesHeading">
+              <div class="panel-heading">
+                <h2 id="updatesHeading">Ứng dụng có bản mới</h2>
+                <div class="panel-heading-actions">
+                  <button class="button compact" id="scanUpdatesBtn" type="button">
+                    <i class="ph ph-arrow-clockwise" aria-hidden="true"></i>
+                    Quét update
+                  </button>
+                  <span class="status-label" id="updatesStatus">
+                    <i class="ph ph-clock" aria-hidden="true"></i>
+                    Chưa quét
+                  </span>
+                </div>
+              </div>
+              <div class="update-search">
+                <label class="sr-only" for="updatesSearchInput">Tìm app cần cập nhật</label>
+                <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+                <input
+                  id="updatesSearchInput"
+                  type="search"
+                  placeholder="Tìm app cần cập nhật..."
+                  autocomplete="off"
+                  spellcheck="false"
+                  autocapitalize="off"
+                >
+              </div>
+              <div class="queue-list update-list" id="updatesList" data-od-id="updates-list"></div>
+            </section>
+
+            <aside class="panel summary-panel updates-summary-panel" aria-label="Tóm tắt cập nhật">
+              <div class="summary-top">
+                <strong>Cập nhật</strong>
+                <span class="summary-count" id="updatesCount">0</span>
+              </div>
+
+              <div class="summary-facts">
+                <div class="fact-row">
+                  <span>Đã phát hiện</span>
+                  <strong id="updatesDetectedCount">0 ứng dụng</strong>
+                </div>
+                <div class="fact-row">
+                  <span>Nguồn</span>
+                  <strong>winget upgrade</strong>
+                </div>
+                <div class="fact-row">
+                  <span>Phạm vi</span>
+                  <strong>Catalog đã duyệt</strong>
+                </div>
+                <div class="fact-row">
+                  <span>Chế độ</span>
+                  <strong id="updatesModeLabel">Sẵn sàng</strong>
+                </div>
+              </div>
+
+              <div class="real-mode-warning visible">
+                <i class="ph ph-shield-check" aria-hidden="true"></i>
+                <span>Cập nhật hàng loạt sẽ hỏi xác nhận một lần rồi chạy tuần tự từng package.</span>
+              </div>
+
+              <div class="summary-actions">
+                <button class="button primary full" id="updateAllBtn" type="button">
+                  <i class="ph ph-arrow-circle-up" aria-hidden="true"></i>
+                  Cập nhật tất cả
+                </button>
+                <button class="button full" data-view-target="logs" type="button">
+                  <i class="ph ph-terminal-window" aria-hidden="true"></i>
+                  Xem nhật ký
+                </button>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="page" id="page-versions" data-page="versions" data-od-id="versions-page">
+          <div class="page-heading">
+            <h1 tabindex="-1">Tải version cũ</h1>
+            <p>Chọn app nguồn winget, xem version còn trong manifest và cài lại version cần dùng.</p>
+          </div>
+
+          <div class="versions-layout">
+            <section class="panel version-browser" aria-labelledby="versionsAppHeading">
+              <div class="panel-heading">
+                <h2 id="versionsAppHeading">Ứng dụng winget</h2>
+                <span class="status-label" id="versionAppStatus">
+                  <i class="ph ph-package" aria-hidden="true"></i>
+                  Đang tải
+                </span>
+              </div>
+              <div class="version-search">
+                <label class="sr-only" for="versionSearchInput">Tìm app để tải version cũ</label>
+                <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+                <input
+                  id="versionSearchInput"
+                  type="search"
+                  placeholder="Tìm app winget..."
+                  autocomplete="off"
+                  spellcheck="false"
+                  autocapitalize="off"
+                >
+              </div>
+              <div class="version-scope" id="versionScope" role="group" aria-label="Lọc ứng dụng theo trạng thái cài đặt">
+                <button class="version-scope-btn active" data-version-scope="installed" type="button">
+                  <i class="ph ph-check-circle" aria-hidden="true"></i>
+                  Đã cài
+                </button>
+                <button class="version-scope-btn" data-version-scope="missing" type="button">
+                  <i class="ph ph-download-simple" aria-hidden="true"></i>
+                  Chưa cài
+                </button>
+                <button class="version-scope-btn" data-version-scope="all" type="button">
+                  <i class="ph ph-squares-four" aria-hidden="true"></i>
+                  Tất cả
+                </button>
+              </div>
+              <div class="version-app-list" id="versionAppList"></div>
+            </section>
+
+            <section class="panel version-detail-panel" aria-labelledby="versionDetailHeading">
+              <div class="panel-heading">
+                <h2 id="versionDetailHeading">Version có thể cài</h2>
+                <div class="panel-heading-actions">
+                  <button class="button compact" id="loadVersionsBtn" type="button">
+                    <i class="ph ph-download-simple" aria-hidden="true"></i>
+                    Tải version
+                  </button>
+                  <span class="status-label" id="versionDetailStatus">
+                    <i class="ph ph-clock" aria-hidden="true"></i>
+                    Chọn app
+                  </span>
+                </div>
+              </div>
+
+              <div class="version-detail-body">
+                <div class="version-selected-card" id="versionSelectedCard"></div>
+                <div class="version-list" id="versionList"></div>
+              </div>
+
+              <div class="version-actions">
+                <div class="real-mode-warning visible">
+                  <i class="ph ph-warning-circle" aria-hidden="true"></i>
+                  <span>Rollback có thể thất bại nếu installer không cho downgrade. Chế độ gỡ rồi cài có thể ảnh hưởng cấu hình của app.</span>
+                </div>
+                <div class="summary-actions">
+                  <button class="button full" id="installVersionBtn" type="button">
+                    <i class="ph ph-download-simple" aria-hidden="true"></i>
+                    Cài version này
+                  </button>
+                  <button class="button danger full" id="reinstallVersionBtn" type="button">
+                    <i class="ph ph-clock-counter-clockwise" aria-hidden="true"></i>
+                    Gỡ rồi cài version này
+                  </button>
+                </div>
+              </div>
+            </section>
+          </div>
         </section>
 
         <section class="page" id="page-queue" data-page="queue" data-od-id="queue-page">
@@ -462,7 +637,7 @@
         <span>Terminal</span>
         <span class="status-terminal-count" id="statusTerminalCount" hidden>0</span>
       </button>
-      <span class="status-version" id="statusVersion">v0.8.0</span>
+      <span class="status-version" id="statusVersion">v0.9.0</span>
     </div>
   </footer>
 

@@ -2,6 +2,29 @@
 
 Toàn bộ thay đổi đáng chú ý của SetupKit được ghi tại đây.
 
+## [0.9.0] - 2026-07-30
+
+### Thêm mới
+
+- **Tab Cập nhật riêng** — gom toàn bộ app đã cài có bản mới vào một màn hình riêng, có tìm kiếm, trạng thái, lệnh `winget upgrade` preview và nút cập nhật từng app.
+- **Cập nhật tất cả chỉ một lần xác nhận** — backend thêm `UpgradeApps`, hỏi xác nhận một lần rồi chạy tuần tự đúng các package đã duyệt trong catalog, vẫn stream terminal và tiến trình từng app.
+- **Tab Versions/Rollback** — chọn app nguồn `winget`, tải danh sách version bằng `winget show --versions`, chọn version cũ và cài lại đúng version đó.
+- **Hai chế độ cài version** — hỗ trợ **Cài version này** để thử cài đè và **Gỡ rồi cài version này** cho rollback mạnh hơn, kèm cảnh báo rủi ro cấu hình.
+- **Bộ lọc trạng thái trong Versions** — lọc nhanh app `Đã cài`, `Chưa cài` hoặc `Tất cả` để không phải kéo tay trong danh sách hơn 400 app winget.
+
+### Cải thiện
+
+- **Tìm kiếm và sắp xếp catalog tốt hơn** — thêm dropdown Sort có icon, ghi nhớ lựa chọn, hỗ trợ sắp theo thông minh, thứ tự cài, tên, danh mục, tình trạng, nguồn, app lớn và app chưa cài.
+- **Search thông minh hơn** — mở rộng alias cho các từ khóa quen thuộc như `vscode`, `ai`, `docker`, `vpn`, `db`, `browser`, `office`, giúp tìm app nhanh hơn.
+- **Bộ lọc rõ hơn** — dropdown danh mục/nguồn/tình trạng/sort có icon; dot màu chỉ còn dùng cho tình trạng để tránh rối thị giác.
+- **Motion mượt hơn** — tinh chỉnh hover, dropdown, dialog và card transition để UI phản hồi mềm hơn mà vẫn tôn trọng reduced motion.
+- **Versions UI gọn hơn** — search, segmented filter và danh sách version co giãn tốt hơn trên panel hẹp.
+
+### Kiểm thử
+
+- Thêm unit test cho parser `winget show --versions` và command cài version cụ thể bằng `--version`.
+- `npm run validate`, `npm test` và build package Windows đều đi qua bộ kiểm tra catalog, icon subset, DOM reference và Go tests.
+
 ## [0.8.0] - 2026-07-30
 
 ### Thêm mới

@@ -87,6 +87,43 @@ func TestBuildWingetArgsRejectsUnknownPackage(t *testing.T) {
 	}
 }
 
+func TestBuildVersionInstallArgsPinsVersion(t *testing.T) {
+	spec, err := buildVersionInstallArgs("Microsoft.VisualStudioCode", "1.90.2")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if spec.Command != "winget" || spec.DryRun {
+		t.Fatalf("unexpected command spec: %#v", spec)
+	}
+	if !slices.Contains(spec.Args, "install") ||
+		!slices.Contains(spec.Args, "--version") ||
+		!slices.Contains(spec.Args, "1.90.2") {
+		t.Fatalf("version install args are missing required tokens: %#v", spec.Args)
+	}
+}
+
+func TestBuildVersionInstallArgsRejectsStorePackages(t *testing.T) {
+	if _, err := buildVersionInstallArgs("9NKSQGP7F2NH", "1.0.0"); err == nil {
+		t.Fatal("expected Store package to reject pinned winget versions")
+	}
+}
+
+func TestParseWingetVersions(t *testing.T) {
+	output := `
+Found Visual Studio Code [Microsoft.VisualStudioCode]
+Version
+-------
+1.104.2
+1.104.1
+1.103.2
+`
+	got := parseWingetVersions(output)
+	want := []string{"1.104.2", "1.104.1", "1.103.2"}
+	if !slices.Equal(got, want) {
+		t.Fatalf("unexpected versions: got %#v want %#v", got, want)
+	}
+}
+
 func TestInferWingetProgress(t *testing.T) {
 	download := inferWingetProgress("Downloading 50 MB / 100 MB", 8)
 	if download.Percent < 44 || download.Percent > 46 {

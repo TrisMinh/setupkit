@@ -34,7 +34,9 @@ Cài lại Windows xong thường mất cả buổi mở từng trang web tải 
 - **440 ứng dụng hợp pháp** từ Windows Package Manager và Microsoft Store — đủ từ trình duyệt, IDE, runtime, database, DevOps tool đến app chat, game launcher; chia 15 nhóm với 34 tag lọc nhanh
 - **24 Workspaces theo vai trò** — Developer Core, Web Frontend, Node.js Backend, Python & AI, Designer, Gaming, Văn phòng... Mở chi tiết để xem logo, package, nguồn cài đặt và lệnh sẽ chạy trước khi dùng workspace đó
 - **Cài cả gói một lần** — chọn nhiều app rồi cài tuần tự, theo dõi tiến trình từng cái; có thể **dừng giữa chừng** và **cài lại đúng những app lỗi**
-- **Cập nhật và gỡ ngay trong app** — SetupKit tự phát hiện app có bản mới và đánh dấu trên thẻ; mở chi tiết là **Cập nhật** hoặc **Gỡ cài đặt** bằng winget, luôn xác nhận trước
+- **Cập nhật ngay trong app** — SetupKit tự phát hiện app có bản mới, có tab Cập nhật riêng, tìm kiếm nhanh và **Cập nhật tất cả** sau một lần xác nhận
+- **Tải version cũ / rollback** — tab Versions tải danh sách bản cũ từ `winget show --versions`, rồi cài đúng version đã chọn hoặc gỡ bản hiện tại trước khi cài lại
+- **Gỡ app đã cài** — mở chi tiết app đã cài để gỡ bằng `winget uninstall`, luôn hỏi xác nhận trước khi thay đổi máy
 - **Tự biết máy bạn đã có gì** — quét winget, Registry, Start Menu và shortcut để đánh dấu app đã cài, kèm phiên bản, thư mục cài đặt và app nào đang có bản cập nhật; app đã có sẽ không bị cài lại
 - **Chọn nhanh, nhớ lựa chọn** — "Chọn hết" theo bộ lọc hiện tại hoặc "Bỏ chọn" chỉ một bấm; gói đang chọn được ghi nhớ cho lần mở sau
 - **Xuất và nhập hồ sơ JSON** — lưu bộ ứng dụng đang chọn thành một hồ sơ, rồi nhập lại để dựng máy tiếp theo y hệt
@@ -66,7 +68,7 @@ Cài lại Windows xong thường mất cả buổi mở từng trang web tải 
 
 1. **Chọn** — bấm một Workspace hoặc tự tick từng app trong danh mục
 2. **Xem lại** — sang tab Gói cài đặt, kiểm tra danh sách và lệnh của từng app; chạy thử nếu muốn chắc chắn
-3. **Cài** — bật "Cài đặt thật", bấm nút và xác nhận; SetupKit chạy winget tuần tự, báo tiến trình từng app và đánh dấu app cài xong
+3. **Cài / cập nhật / rollback** — bật "Cài đặt thật" khi cài app mới, hoặc dùng tab Cập nhật/Versions; SetupKit luôn xác nhận trước khi chạy winget và báo tiến trình từng app
 
 ## An toàn là mặc định
 
@@ -79,6 +81,7 @@ SetupKit được thiết kế để **không thể** bị lợi dụng thành c
 | Chạy thử mặc định | Mô phỏng không đụng tới máy; cài thật cần bật công tắc **và** xác nhận từng lệnh qua hộp thoại hệ thống |
 | Lệnh minh bạch | Mọi lệnh hiển thị đầy đủ trước khi chạy, output ghi lại nguyên văn trong terminal |
 | Xác minh sau cài | Quét lại máy để xác nhận trạng thái thật, không tin kết quả suông |
+| Rollback có kiểm soát | Chỉ áp dụng cho nguồn `winget`, không tự tải URL ngoài; chế độ gỡ rồi cài luôn cảnh báo rủi ro cấu hình |
 
 ## Build từ mã nguồn
 

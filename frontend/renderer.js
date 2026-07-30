@@ -27,12 +27,21 @@ const state = {
   query: '',
   source: 'all',
   status: 'all',
+  sort: 'smart',
+  updateQuery: '',
+  versionQuery: '',
+  versionScope: 'installed',
+  versionAppId: '',
+  selectedVersion: '',
+  versionLoadingId: '',
+  versionRecords: new Map(),
   viewMode: 'grid',
   running: false,
   scanning: false,
   updatesScanning: false,
   currentId: '',
   busyId: '',
+  operation: '',
   stopRequested: false,
   done: new Set(),
   failed: new Set(),
@@ -50,9 +59,11 @@ const els = {
   categoryDropdown: document.getElementById('categoryDropdown'),
   sourceDropdown: document.getElementById('sourceDropdown'),
   statusDropdown: document.getElementById('statusDropdown'),
+  sortDropdown: document.getElementById('sortDropdown'),
   tagFilterBar: document.getElementById('tagFilterBar'),
   tagReset: document.getElementById('tagResetBtn'),
   activeFilterSummary: document.getElementById('activeFilterSummary'),
+  searchField: document.querySelector('.search-field'),
   search: document.getElementById('searchInput'),
   searchClear: document.getElementById('searchClear'),
   queue: document.getElementById('queueList'),
@@ -95,6 +106,26 @@ const els = {
   planSummary: document.getElementById('planSummary'),
   workspaceSummary: document.getElementById('workspaceSummary'),
   navWorkspaceCount: document.getElementById('navWorkspaceCount'),
+  navUpdateCount: document.getElementById('navUpdateCount'),
+  navVersionCount: document.getElementById('navVersionCount'),
+  updatesSearch: document.getElementById('updatesSearchInput'),
+  updatesList: document.getElementById('updatesList'),
+  updatesStatus: document.getElementById('updatesStatus'),
+  updatesCount: document.getElementById('updatesCount'),
+  updatesDetectedCount: document.getElementById('updatesDetectedCount'),
+  updatesModeLabel: document.getElementById('updatesModeLabel'),
+  scanUpdates: document.getElementById('scanUpdatesBtn'),
+  updateAll: document.getElementById('updateAllBtn'),
+  versionSearch: document.getElementById('versionSearchInput'),
+  versionScope: document.getElementById('versionScope'),
+  versionAppList: document.getElementById('versionAppList'),
+  versionAppStatus: document.getElementById('versionAppStatus'),
+  loadVersions: document.getElementById('loadVersionsBtn'),
+  versionDetailStatus: document.getElementById('versionDetailStatus'),
+  versionSelectedCard: document.getElementById('versionSelectedCard'),
+  versionList: document.getElementById('versionList'),
+  installVersion: document.getElementById('installVersionBtn'),
+  reinstallVersion: document.getElementById('reinstallVersionBtn'),
   realMode: document.getElementById('realMode'),
   realModeWarning: document.getElementById('realModeWarning'),
   modeLabel: document.getElementById('modeLabel'),
@@ -164,11 +195,13 @@ let workspaceDialogClosing = false;
 // bằng bàn phím (mũi tên, Enter, Esc, Home/End) và đóng khi bấm ra ngoài.
 const openDropdowns = new Set();
 
-function createDropdown(container, { options, value, onChange }) {
+function createDropdown(container, { options, value, onChange, statusDot = false }) {
   const label = container.dataset.dropdownLabel || '';
   let items = [...options];
   let current = value;
   let focusIndex = -1;
+
+  container.classList.toggle('has-status-dot', statusDot);
 
   const toggle = document.createElement('button');
   toggle.type = 'button';
@@ -179,10 +212,16 @@ function createDropdown(container, { options, value, onChange }) {
 
   const valueEl = document.createElement('span');
   valueEl.className = 'dropdown-value';
+  const marker = document.createElement('span');
+  marker.className = 'dropdown-marker';
+  marker.setAttribute('aria-hidden', 'true');
+  const markerIcon = document.createElement('i');
+  markerIcon.className = 'ph ph-list';
+  marker.append(markerIcon);
   const caret = document.createElement('i');
   caret.className = 'ph ph-caret-down dropdown-caret';
   caret.setAttribute('aria-hidden', 'true');
-  toggle.append(valueEl, caret);
+  toggle.append(marker, valueEl, caret);
 
   const menu = document.createElement('div');
   menu.className = 'dropdown-menu';
@@ -192,7 +231,8 @@ function createDropdown(container, { options, value, onChange }) {
 
   container.append(toggle, menu);
 
-  const labelFor = (val) => items.find((item) => item.value === val)?.label || '';
+  const itemFor = (val) => items.find((item) => item.value === val);
+  const labelFor = (val) => itemFor(val)?.label || '';
 
   function renderMenu() {
     menu.innerHTML = '';
@@ -202,15 +242,25 @@ function createDropdown(container, { options, value, onChange }) {
       option.className = 'dropdown-option';
       option.setAttribute('role', 'option');
       option.dataset.value = item.value;
+      if (item.tone) option.dataset.tone = item.tone;
       option.classList.toggle('selected', item.value === current);
       option.classList.toggle('focused', index === focusIndex);
       option.setAttribute('aria-selected', String(item.value === current));
+      const itemMarker = document.createElement('span');
+      itemMarker.className = 'dropdown-marker';
+      itemMarker.setAttribute('aria-hidden', 'true');
+      if (item.icon) {
+        const icon = document.createElement('i');
+        icon.className = `ph ${item.icon}`;
+        itemMarker.append(icon);
+      }
       const text = document.createElement('span');
+      text.className = 'dropdown-option-text';
       text.textContent = item.label;
       const check = document.createElement('i');
       check.className = 'ph ph-check';
       check.setAttribute('aria-hidden', 'true');
-      option.append(text, check);
+      option.append(itemMarker, text, check);
       option.addEventListener('click', () => {
         select(item.value);
         close();
@@ -221,8 +271,12 @@ function createDropdown(container, { options, value, onChange }) {
   }
 
   function updateToggle() {
-    valueEl.textContent = labelFor(current);
-    toggle.title = label ? `${label}: ${labelFor(current)}` : labelFor(current);
+    const item = itemFor(current);
+    const labelText = item?.label || '';
+    valueEl.textContent = labelText;
+    toggle.title = label ? `${label}: ${labelText}` : labelText;
+    toggle.dataset.tone = item?.tone || '';
+    markerIcon.className = `ph ${item?.icon || 'ph-list'}`;
   }
 
   function select(next, { silent = false } = {}) {
@@ -312,6 +366,7 @@ document.addEventListener('pointerdown', (event) => {
 let categoryDropdown = null;
 let sourceDropdown = null;
 let statusDropdown = null;
+let sortDropdown = null;
 
 /* ---------------------------------------------------------------- helpers */
 
@@ -331,6 +386,72 @@ function normalizeSearch(value) {
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
     .replaceAll('đ', 'd');
+}
+
+function compactSearch(value) {
+  return normalizeSearch(value).replace(/[^a-z0-9]+/g, '');
+}
+
+const SEARCH_ALIASES = new Map(Object.entries({
+  ai: 'artificial intelligence machine learning llm openai claude codex cursor qoder ollama lm studio',
+  android: 'mobile emulator adb apk google android studio',
+  archive: 'zip unzip compress extract sevenzip nanazip winrar',
+  browser: 'chrome edge firefox brave vivaldi opera floorp arc duckduckgo librewolf tor',
+  cloud: 'aws azure google cloud gcloud doctl flyctl heroku terraform opentofu pulumi',
+  db: 'database sql mysql postgresql postgres sqlite mongodb redis neo4j dbeaver datagrip pgadmin',
+  database: 'db sql mysql postgresql postgres sqlite mongodb redis neo4j dbeaver datagrip pgadmin',
+  docker: 'container containers kubernetes k8s podman rancher desktop docker desktop',
+  editor: 'ide code editor vscode cursor zed sublime neovim jetbrains',
+  game: 'gaming steam epic gog battle net bnet ea ubisoft riot valorant minecraft roblox',
+  git: 'version control github gitlab sourcetree gitkraken git extensions',
+  ide: 'code editor vscode visual studio jetbrains intellij pycharm webstorm rider goland clion',
+  js: 'javascript typescript node npm pnpm yarn bun deno frontend backend',
+  k8s: 'kubernetes kubectl helm kustomize minikube kind k3d',
+  node: 'nodejs javascript typescript npm pnpm yarn bun deno',
+  office: 'word excel powerpoint outlook teams microsoft 365 document spreadsheet presentation',
+  python: 'py pip conda miniconda jupyter ruff spyder pycharm ai machine learning',
+  remote: 'ssh ftp sftp vpn remote desktop anydesk teamviewer tailscale wireguard zerotier',
+  shell: 'terminal powershell pwsh windows terminal alacritty wezterm warp nushell',
+  terminal: 'shell cli command line powershell windows terminal alacritty wezterm warp',
+  vpn: 'tailscale wireguard openvpn nordvpn protonvpn mullvad zerotier warp',
+  vs: 'visual studio vscode visualstudiocode visual studio code microsoft visual studio',
+  vsc: 'visual studio code vscode visualstudiocode',
+  vscode: 'visual studio code vsc microsoft visualstudiocode'
+}));
+
+function acronymFor(value) {
+  return normalizeSearch(value)
+    .split(/[^a-z0-9]+/)
+    .filter(Boolean)
+    .map((part) => part[0])
+    .join('');
+}
+
+function searchAliasesFor(app) {
+  const aliases = new Set();
+  const lowerName = normalizeSearch(app.name);
+  const lowerPackage = normalizeSearch(app.pkg);
+  aliases.add(acronymFor(app.name));
+  aliases.add(compactSearch(app.name));
+  aliases.add(compactSearch(app.pkg));
+  if (lowerName.includes('visual studio code')) aliases.add('vscode vsc vs code');
+  if (lowerName.includes('visual studio')) aliases.add('vs visualstudio');
+  if (lowerName.includes('node')) aliases.add('js javascript typescript npm');
+  if (lowerName.includes('python')) aliases.add('py pip ai');
+  if (lowerPackage.includes('postgresql')) aliases.add('postgres database db sql');
+  if (lowerPackage.includes('mongodb')) aliases.add('mongo database db nosql');
+  if (lowerPackage.includes('sqlite')) aliases.add('database db sql');
+  return [...aliases].filter(Boolean).join(' ');
+}
+
+function expandQueryTokens(query) {
+  return normalizeSearch(query)
+    .split(/[^a-z0-9]+/)
+    .filter(Boolean)
+    .map((token) => {
+      const alias = SEARCH_ALIASES.get(token);
+      return [token, compactSearch(token), ...(alias ? normalizeSearch(alias).split(/[^a-z0-9]+/).filter(Boolean) : [])];
+    });
 }
 
 function wait(ms) {
@@ -375,6 +496,12 @@ function commandFor(app) {
   return `winget install --id ${app.pkg} --exact --source ${source}${silent}${location} --accept-package-agreements --accept-source-agreements --disable-interactivity`;
 }
 
+function upgradeCommandFor(app) {
+  const source = app.source === 'msstore' ? 'msstore' : 'winget';
+  const silent = app.source === 'msstore' ? '' : ' --silent';
+  return `winget upgrade --id ${app.pkg} --exact --source ${source}${silent} --accept-package-agreements --accept-source-agreements --disable-interactivity`;
+}
+
 function installLocationLabel(app) {
   if (app.source === 'msstore') return 'Do Microsoft Store quản lý';
   return state.installLocations.get(app.id) || 'Mặc định của nhà phát hành, xác nhận sau khi cài';
@@ -415,6 +542,47 @@ function workspaceAppsFor(preset) {
     dependencyIdsFor(appById(appId)).forEach((dependencyId) => ids.add(dependencyId));
   }
   return sortByInstallOrder([...ids].map(appById).filter(Boolean));
+}
+
+function allUpdateApps() {
+  return [...apps]
+    .filter((app) => state.installed.get(app.id)?.updateAvailable)
+    .sort((left, right) => left.name.localeCompare(right.name, 'vi'));
+}
+
+function updateApps() {
+  const query = state.updateQuery.trim();
+  return allUpdateApps().filter((app) => !query || appMatchesQuery(app, query));
+}
+
+function versionEligibleApps() {
+  const query = state.versionQuery.trim();
+  const installedWingetCount = apps.filter((app) => app.source === 'winget' && state.installed.has(app.id)).length;
+  const scope = state.versionScope === 'installed' && installedWingetCount === 0 ? 'all' : state.versionScope;
+  return [...apps]
+    .filter((app) => app.source === 'winget')
+    .filter((app) => {
+      if (scope === 'installed') return state.installed.has(app.id);
+      if (scope === 'missing') return !state.installed.has(app.id);
+      return true;
+    })
+    .filter((app) => !query || appMatchesQuery(app, query))
+    .sort((left, right) => {
+      const leftInstalled = state.installed.has(left.id) ? 0 : 1;
+      const rightInstalled = state.installed.has(right.id) ? 0 : 1;
+      return leftInstalled - rightInstalled
+        || left.name.localeCompare(right.name, 'vi');
+    });
+}
+
+function ensureVersionSelection() {
+  const list = versionEligibleApps();
+  if (state.versionAppId && list.some((app) => app.id === state.versionAppId)) return;
+  const preferred = list[0]
+    || apps.find((app) => app.source === 'winget' && state.installed.has(app.id))
+    || apps.find((app) => app.source === 'winget');
+  state.versionAppId = preferred?.id || '';
+  state.selectedVersion = '';
 }
 
 function tagLabel(tagId) {
@@ -502,7 +670,7 @@ function buildSearchIndex() {
   searchIndex = new Map();
   for (const app of apps) {
     const tagLabels = app.tags.map(tagLabel).join(' ');
-    searchIndex.set(app.id, normalizeSearch([
+    const haystack = normalizeSearch([
       app.name,
       app.pkg,
       app.cat,
@@ -510,9 +678,94 @@ function buildSearchIndex() {
       app.type,
       app.desc,
       app.tags.join(' '),
-      tagLabels
-    ].join(' ')));
+      tagLabels,
+      searchAliasesFor(app)
+    ].join(' '));
+    searchIndex.set(app.id, {
+      haystack,
+      compact: compactSearch(haystack),
+      name: normalizeSearch(app.name),
+      pkg: normalizeSearch(app.pkg)
+    });
   }
+}
+
+function appMatchesQuery(app, query) {
+  if (!query) return true;
+  buildSearchIndex();
+  const record = searchIndex?.get(app.id);
+  if (!record) return false;
+  const queryCompact = compactSearch(query);
+  if (record.compact.includes(queryCompact)) return true;
+  return expandQueryTokens(query).every((variants) => (
+    variants.some((variant) => variant && (
+      record.haystack.includes(variant) || record.compact.includes(compactSearch(variant))
+    ))
+  ));
+}
+
+function queryRelevance(app, query) {
+  if (!query) return 0;
+  const record = searchIndex?.get(app.id);
+  if (!record) return 0;
+  const normalized = normalizeSearch(query);
+  const compact = compactSearch(query);
+  let score = 0;
+  if (record.name === normalized) score += 120;
+  if (record.name.startsWith(normalized)) score += 80;
+  if (record.pkg === normalized) score += 75;
+  if (record.pkg.includes(normalized)) score += 45;
+  if (record.compact.startsWith(compact)) score += 32;
+  for (const variants of expandQueryTokens(query)) {
+    if (variants.some((variant) => record.name.includes(variant))) score += 12;
+    if (variants.some((variant) => record.pkg.includes(variant))) score += 10;
+    if (variants.some((variant) => record.haystack.includes(variant))) score += 4;
+  }
+  return score;
+}
+
+function statusRank(app) {
+  if (state.running && state.currentId === app.id) return 0;
+  if (state.failed.has(app.id)) return 1;
+  if (state.selected.has(app.id)) return 2;
+  const details = state.installed.get(app.id);
+  if (details?.updateAvailable) return 3;
+  if (!details) return 4;
+  return 5;
+}
+
+function appSortValue(app, sort) {
+  const details = state.installed.get(app.id);
+  const pending = !details;
+  const large = app.size === 'large';
+  const sourceRank = app.source === 'winget' ? 0 : 1;
+  const order = Number(app.installOrder || 999) * 1000 + Number(app.order || 999);
+  const values = {
+    smart: statusRank(app) * 100000 + order,
+    installOrder: order,
+    name: app.name.toLocaleLowerCase('vi'),
+    category: `${app.cat}|${app.name.toLocaleLowerCase('vi')}`,
+    status: `${statusRank(app)}|${app.name.toLocaleLowerCase('vi')}`,
+    source: `${sourceRank}|${app.name.toLocaleLowerCase('vi')}`,
+    size: `${large ? 0 : 1}|${app.name.toLocaleLowerCase('vi')}`,
+    pending: `${pending ? 0 : 1}|${app.name.toLocaleLowerCase('vi')}`
+  };
+  return values[sort] ?? values.smart;
+}
+
+function compareApps(left, right, query = '') {
+  if (query) {
+    const relevance = queryRelevance(right, query) - queryRelevance(left, query);
+    if (relevance) return relevance;
+  }
+  const leftValue = appSortValue(left, state.sort);
+  const rightValue = appSortValue(right, state.sort);
+  if (typeof leftValue === 'number' && typeof rightValue === 'number' && leftValue !== rightValue) {
+    return leftValue - rightValue;
+  }
+  const valueCompare = String(leftValue).localeCompare(String(rightValue), 'vi', { numeric: true });
+  if (valueCompare) return valueCompare;
+  return left.name.localeCompare(right.name, 'vi');
 }
 
 function appStatus(app) {
@@ -538,10 +791,8 @@ function statusMeta(status) {
 
 function filteredApps() {
   const query = normalizeSearch(state.query.trim());
-  if (query) buildSearchIndex();
-  return apps.filter((app) => {
-    const matchesQuery = !query || Boolean(searchIndex?.get(app.id)?.includes(query));
-    if (!matchesQuery) return false;
+  const filtered = apps.filter((app) => {
+    if (!appMatchesQuery(app, query)) return false;
     const matchesCategory = state.category === 'all' || app.categoryId === state.category;
     if (!matchesCategory) return false;
     const matchesTags = state.tags.size === 0 || [...state.tags].every((tag) => app.tags.includes(tag));
@@ -553,14 +804,20 @@ function filteredApps() {
       || (state.status === 'available' && !state.installed.has(app.id))
       || (state.status === 'selected' && state.selected.has(app.id));
   });
+  return filtered.sort((left, right) => compareApps(left, right, query));
 }
 
 /* -------------------------------------------------------------- renderers */
 
 function renderCategories() {
   categoryDropdown?.setOptions([
-    { value: 'all', label: 'Tất cả danh mục' },
-    ...catalogCategories.map((category) => ({ value: category.id, label: category.name }))
+    { value: 'all', label: 'Tất cả danh mục', icon: 'ph-squares-four', tone: 'neutral' },
+    ...catalogCategories.map((category) => ({
+      value: category.id,
+      label: category.name,
+      icon: category.icon || 'ph-folder',
+      tone: 'accent'
+    }))
   ]);
   categoryDropdown?.set(state.category, { silent: true });
 }
@@ -586,6 +843,20 @@ function renderTags() {
   els.tagReset.hidden = state.tags.size === 0;
 }
 
+function sortLabel(value) {
+  const labels = {
+    smart: 'Thông minh',
+    installOrder: 'Thứ tự cài',
+    name: 'Tên A-Z',
+    category: 'Danh mục',
+    status: 'Tình trạng',
+    source: 'Nguồn cài',
+    size: 'App lớn trước',
+    pending: 'Chưa cài trước'
+  };
+  return labels[value] || labels.smart;
+}
+
 function renderFilterSummary() {
   const parts = [];
   if (state.category !== 'all') {
@@ -596,6 +867,7 @@ function renderFilterSummary() {
   if (state.status !== 'all') {
     parts.push({ installed: 'Đã cài', available: 'Chưa cài', selected: 'Đang chọn' }[state.status]);
   }
+  if (state.sort !== 'smart') parts.push(`Sắp xếp: ${sortLabel(state.sort)}`);
   els.activeFilterSummary.textContent = parts.filter(Boolean).length
     ? `Đang lọc: ${parts.filter(Boolean).join(' / ')}`
     : 'Có thể chọn nhiều tag để thu hẹp danh sách. Nhấn / để tìm nhanh.';
@@ -760,6 +1032,7 @@ function cardHTML(app) {
 
 /* --------------------------------------------------------- kiểu hiển thị */
 const VIEW_MODES = ['grid', 'list', 'icon'];
+const SORT_MODES = ['smart', 'installOrder', 'name', 'category', 'status', 'source', 'size', 'pending'];
 
 function applyViewMode() {
   els.catalog.className = `app-grid mode-${state.viewMode}`;
@@ -798,6 +1071,35 @@ function initViewMode() {
   renderViewModes();
 }
 
+function setSortMode(mode, { render = true } = {}) {
+  if (!SORT_MODES.includes(mode)) return;
+  state.sort = mode;
+  try {
+    localStorage.setItem('setupkit-sort', mode);
+  } catch {
+    // Không lưu được cũng không sao.
+  }
+  sortDropdown?.set(mode, { silent: true });
+  if (render) renderCatalog();
+}
+
+function initSortMode() {
+  let saved = 'smart';
+  try {
+    const value = localStorage.getItem('setupkit-sort');
+    if (SORT_MODES.includes(value)) saved = value;
+  } catch {
+    // localStorage không khả dụng.
+  }
+  state.sort = saved;
+}
+
+function updateSearchAffordance() {
+  const hasQuery = Boolean(state.query.trim());
+  els.searchClear.classList.toggle('visible', hasQuery);
+  els.searchField?.classList.toggle('is-active', hasQuery);
+}
+
 function renderCatalog() {
   applyViewMode();
   const list = filteredApps();
@@ -805,7 +1107,7 @@ function renderCatalog() {
   els.installedSummary.textContent = state.scanning
     ? 'Đang quét Registry, Start Menu và winget'
     : `${state.installed.size} ứng dụng đã cài trên máy`;
-  els.searchClear.classList.toggle('visible', Boolean(state.query));
+  updateSearchAffordance();
   renderFilterSummary();
 
   if (!list.length) {
@@ -944,6 +1246,49 @@ function queueItemHTML(app) {
   `;
 }
 
+function updateStatusMeta(app) {
+  const details = state.installed.get(app.id);
+  if (state.running && state.currentId === app.id) {
+    return { label: 'Đang cập nhật', className: 'warning', icon: 'ph-arrow-clockwise', spin: true };
+  }
+  if (state.failed.has(app.id)) {
+    return { label: 'Cần kiểm tra', className: 'danger', icon: 'ph-warning-circle' };
+  }
+  if (details?.updateAvailable) {
+    return { label: 'Có update', className: 'warning', icon: 'ph-arrow-circle-up' };
+  }
+  return { label: 'Mới nhất', className: 'success', icon: 'ph-check-circle' };
+}
+
+function updateItemHTML(app) {
+  const details = state.installed.get(app.id);
+  const meta = updateStatusMeta(app);
+  return `
+    <div class="queue-item update-item" data-update-app="${app.id}">
+      <span class="queue-item-icon" aria-hidden="true">${appIconMarkup(app)}</span>
+      <div class="queue-item-info">
+        <strong>${escapeHtml(app.name)}</strong>
+        <span>${escapeHtml(details?.version ? `Đang cài ${details.version}` : app.pkg)}</span>
+      </div>
+      <div class="queue-item-actions">
+        <span class="status-label ${meta.className}">
+          <i class="ph ${meta.icon} ${meta.spin ? 'is-spinning' : ''}" aria-hidden="true"></i>${meta.label}
+        </span>
+        <button class="button compact update" data-update-single="${escapeHtml(app.id)}" type="button" ${state.running || state.scanning || state.updatesScanning || state.busyId ? 'disabled' : ''}>
+          <i class="ph ph-arrow-circle-up" aria-hidden="true"></i>
+          Cập nhật
+        </button>
+        <button class="button compact" data-detail="${escapeHtml(app.id)}" type="button">
+          <i class="ph ph-info" aria-hidden="true"></i>
+          Chi tiết
+        </button>
+      </div>
+      <div class="update-command" title="${escapeHtml(upgradeCommandFor(app))}">${escapeHtml(upgradeCommandFor(app))}</div>
+      ${queueProgressMarkup(app)}
+    </div>
+  `;
+}
+
 function applyProgressFill(scope) {
   scope.querySelectorAll('[data-progress-fill]').forEach((bar) => {
     bar.style.setProperty('--progress-scale', String(Number(bar.dataset.progressFill || 0) / 100));
@@ -967,7 +1312,7 @@ function renderRunStatus() {
     els.retryFailed.disabled = state.scanning || Boolean(state.busyId);
   }
   const installHTML = state.running
-    ? '<i class="ph ph-arrow-clockwise is-spinning" aria-hidden="true"></i>Đang cài đặt'
+    ? `<i class="ph ph-arrow-clockwise is-spinning" aria-hidden="true"></i>${state.operation === 'upgrade' ? 'Đang cập nhật' : 'Đang cài đặt'}`
     : els.realMode.checked
       ? `<i class="ph ph-download-simple" aria-hidden="true"></i>Cài ${pending.length} ứng dụng`
       : `<i class="ph ph-flask" aria-hidden="true"></i>Mô phỏng ${pending.length} ứng dụng`;
@@ -1013,12 +1358,14 @@ function renderQueue() {
   const selected = selectedApps();
   const pending = selected.filter((app) => !state.installed.has(app.id));
   const largeCount = pending.filter((app) => app.size === 'large').length;
+  const updates = allUpdateApps();
 
   els.queueCount.textContent = selected.length;
   els.installedCount.textContent = `${state.installed.size} ứng dụng`;
   els.largeAppCount.textContent = largeCount;
   els.navQueueCount.textContent = selected.length;
   if (els.navWorkspaceCount) els.navWorkspaceCount.textContent = presets.length;
+  if (els.navUpdateCount) els.navUpdateCount.textContent = updates.length;
   els.dockCount.textContent = `${selected.length} ứng dụng đã chọn`;
   els.dockSubtext.textContent = selected.length
     ? `${pending.length} ứng dụng còn cần cài${largeCount ? `, gồm ${largeCount} app lớn` : ''}`
@@ -1051,44 +1398,288 @@ function renderQueue() {
   applyProgressFill(els.queue);
 }
 
-// Cập nhật tiến trình một app tại chỗ - giữ nguyên DOM để thanh chạy mượt.
-function updateQueueProgressRow(app) {
-  const row = els.queue.querySelector(`[data-queue-app="${app.id}"]`);
-  if (!row) return;
+function renderUpdates() {
+  if (!els.updatesList) return;
+  const totalUpdates = allUpdateApps();
+  const updates = updateApps();
+  const hasQuery = Boolean(state.updateQuery.trim());
+  const unavailable = !window.setupkitNative || !state.wingetAvailable;
+  const busy = state.running || state.scanning || state.updatesScanning || Boolean(state.busyId);
 
-  const chip = row.querySelector('.status-label');
-  if (chip) {
-    const status = appStatus(app);
-    // Chỉ ghi DOM khi trạng thái đổi để icon xoay không bị reset mỗi tick.
-    if (chip.dataset.status !== status) {
-      const meta = statusMeta(status);
-      chip.dataset.status = status;
-      chip.className = `status-label ${meta.className}`;
-      chip.innerHTML = `<i class="ph ${meta.icon} ${meta.spin ? 'is-spinning' : ''}" aria-hidden="true"></i>${meta.label}`;
-    }
+  els.navUpdateCount.textContent = totalUpdates.length;
+  els.updatesCount.textContent = updates.length;
+  els.updatesDetectedCount.textContent = hasQuery
+    ? `${updates.length}/${totalUpdates.length} ứng dụng`
+    : `${totalUpdates.length} ứng dụng`;
+  els.updateAll.disabled = unavailable || busy || updates.length === 0 || typeof window.setupkitNative?.upgradeApps !== 'function';
+  els.scanUpdates.disabled = unavailable || busy || typeof window.setupkitNative?.scanUpdates !== 'function';
+  els.updatesModeLabel.textContent = unavailable
+    ? 'Cần winget'
+    : state.updatesScanning
+      ? 'Đang quét'
+      : state.running
+        ? state.operation === 'upgrade' ? 'Đang cập nhật' : 'Đang bận'
+        : totalUpdates.length
+          ? 'Có thể chạy'
+          : 'Đã mới nhất';
+
+  let statusClass = 'status-label';
+  let statusHTML = '<i class="ph ph-check-circle" aria-hidden="true"></i>Đã mới nhất';
+  if (state.updatesScanning) {
+    statusClass = 'status-label warning';
+    statusHTML = '<i class="ph ph-arrow-clockwise is-spinning" aria-hidden="true"></i>Đang quét';
+  } else if (state.running) {
+    statusClass = 'status-label warning';
+    statusHTML = state.operation === 'upgrade'
+      ? '<i class="ph ph-arrow-clockwise is-spinning" aria-hidden="true"></i>Đang cập nhật'
+      : '<i class="ph ph-arrow-clockwise is-spinning" aria-hidden="true"></i>Đang bận';
+  } else if (unavailable) {
+    statusClass = 'status-label danger';
+    statusHTML = '<i class="ph ph-warning-circle" aria-hidden="true"></i>Không khả dụng';
+  } else if (totalUpdates.length) {
+    statusClass = 'status-label warning';
+    statusHTML = `<i class="ph ph-arrow-circle-up" aria-hidden="true"></i>${hasQuery ? `${updates.length}/${totalUpdates.length}` : totalUpdates.length} có update`;
   }
+  els.updatesStatus.className = statusClass;
+  els.updatesStatus.innerHTML = statusHTML;
 
-  const item = state.installProgress.get(app.id);
-  if (!item) return;
-  let progressRow = row.querySelector('.queue-progress-row');
-  if (!progressRow) {
-    row.insertAdjacentHTML('beforeend', queueProgressMarkup(app));
-    applyProgressFill(row);
+  if (!updates.length) {
+    const emptyTitle = totalUpdates.length && hasQuery
+      ? 'Không tìm thấy app update'
+      : 'Chưa có ứng dụng cần cập nhật';
+    const emptyCopy = totalUpdates.length && hasQuery
+      ? 'Thử từ khóa ngắn hơn hoặc xóa ô tìm kiếm để xem toàn bộ app có update.'
+      : 'Bấm quét update để hỏi lại winget khi cần kiểm tra phiên bản mới.';
+    els.updatesList.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-content">
+          <span class="empty-icon" aria-hidden="true"><i class="ph ${totalUpdates.length && hasQuery ? 'ph-magnifying-glass' : 'ph-check-circle'}"></i></span>
+          <h3>${escapeHtml(emptyTitle)}</h3>
+          <p>${escapeHtml(emptyCopy)}</p>
+          <button class="button primary empty-action" id="emptyScanUpdatesBtn" type="button" ${els.scanUpdates.disabled ? 'disabled' : ''}>
+            <i class="ph ph-arrow-clockwise" aria-hidden="true"></i>Quét update
+          </button>
+        </div>
+      </div>
+    `;
     return;
   }
-  const percent = Math.max(0, Math.min(100, Number(item.percent) || 0));
-  const installing = state.running && state.currentId === app.id && !item.error && percent < 100;
-  progressRow.classList.toggle('error', Boolean(item.error));
-  progressRow.classList.toggle('complete', percent === 100 && !item.error);
-  progressRow.classList.toggle('installing', installing);
-  const phase = progressRow.querySelector('[data-progress-phase]');
-  if (phase) phase.textContent = item.phase || 'Đang chuẩn bị';
-  const percentEl = progressRow.querySelector('[data-progress-percent]');
-  if (percentEl) percentEl.textContent = `${percent}%`;
-  const track = progressRow.querySelector('.queue-progress-track');
-  if (track) track.setAttribute('aria-valuenow', String(percent));
-  const bar = progressRow.querySelector('.queue-progress-bar');
-  if (bar) bar.style.setProperty('--progress-scale', String(percent / 100));
+
+  els.updatesList.innerHTML = updates.map(updateItemHTML).join('');
+  applyProgressFill(els.updatesList);
+}
+
+function renderVersionAppList() {
+  if (!els.versionAppList) return;
+  ensureVersionSelection();
+  const list = versionEligibleApps();
+  const installedWinget = apps.filter((app) => app.source === 'winget' && state.installed.has(app.id)).length;
+  const missingWinget = apps.filter((app) => app.source === 'winget' && !state.installed.has(app.id)).length;
+  const allWinget = installedWinget + missingWinget;
+  const effectiveScope = state.versionScope === 'installed' && installedWinget === 0 ? 'all' : state.versionScope;
+  els.navVersionCount.textContent = installedWinget || allWinget;
+  els.versionAppStatus.innerHTML = `<i class="ph ph-package" aria-hidden="true"></i>${list.length} app`;
+  els.versionScope?.querySelectorAll('[data-version-scope]').forEach((button) => {
+    const scope = button.dataset.versionScope;
+    const active = scope === effectiveScope;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-pressed', String(active));
+    const count = scope === 'installed' ? installedWinget : scope === 'missing' ? missingWinget : allWinget;
+    button.title = `${button.textContent.trim()}: ${count} app`;
+  });
+
+  if (!list.length) {
+    const emptyText = state.versionScope === 'installed'
+      ? 'Chưa phát hiện app winget nào đã cài. Bấm Tất cả hoặc quét lại máy.'
+      : state.versionScope === 'missing'
+        ? 'Không còn app winget nào chưa cài trong catalog.'
+        : 'Rollback version cũ không áp dụng cho Microsoft Store app.';
+    els.versionAppList.innerHTML = `
+      <div class="empty-state version-empty">
+        <div class="empty-content">
+          <span class="empty-icon" aria-hidden="true"><i class="ph ph-magnifying-glass"></i></span>
+          <h3>Không tìm thấy app winget</h3>
+          <p>${escapeHtml(emptyText)}</p>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  els.versionAppList.innerHTML = list.map((app) => {
+    const details = state.installed.get(app.id);
+    const active = app.id === state.versionAppId;
+    return `
+      <button class="version-app-row ${active ? 'active' : ''}" data-version-app="${escapeHtml(app.id)}" type="button">
+        <span class="version-app-icon" aria-hidden="true">${appIconMarkup(app)}</span>
+        <span class="version-app-copy">
+          <strong>${escapeHtml(app.name)}</strong>
+          <span>${escapeHtml(details?.version ? `Đang cài ${details.version}` : app.pkg)}</span>
+        </span>
+        <i class="ph ${details ? 'ph-check-circle' : 'ph-download-simple'}" aria-hidden="true"></i>
+      </button>
+    `;
+  }).join('');
+}
+
+function renderVersionDetail() {
+  if (!els.versionSelectedCard) return;
+  ensureVersionSelection();
+  const app = appById(state.versionAppId);
+  const details = app ? state.installed.get(app.id) : null;
+  const record = app ? state.versionRecords.get(app.id) : null;
+  const loading = Boolean(app && state.versionLoadingId === app.id);
+  const unavailable = !window.setupkitNative || !state.wingetAvailable || !app || app.source !== 'winget';
+  const busy = state.running || state.scanning || state.updatesScanning || Boolean(state.busyId);
+  const selectedVersion = state.selectedVersion;
+  const canInstall = Boolean(app && selectedVersion && !unavailable && !busy && typeof window.setupkitNative?.installVersion === 'function');
+
+  els.loadVersions.disabled = unavailable || busy || loading || typeof window.setupkitNative?.listPackageVersions !== 'function';
+  els.installVersion.disabled = !canInstall;
+  els.reinstallVersion.disabled = !canInstall || !details;
+
+  els.versionSelectedCard.innerHTML = app ? `
+    <span class="version-selected-icon" aria-hidden="true">${appIconMarkup(app)}</span>
+    <span class="version-selected-copy">
+      <strong>${escapeHtml(app.name)}</strong>
+      <span>${escapeHtml(app.pkg)}</span>
+    </span>
+    <span class="version-current">
+      <i class="ph ${details ? 'ph-check-circle' : 'ph-download-simple'}" aria-hidden="true"></i>
+      ${escapeHtml(details?.version ? `Hiện tại ${details.version}` : 'Chưa cài trên máy')}
+    </span>
+  ` : `
+    <div class="empty-state version-empty">
+      <div class="empty-content">
+        <span class="empty-icon" aria-hidden="true"><i class="ph ph-package"></i></span>
+        <h3>Chọn một ứng dụng</h3>
+        <p>Danh sách bên trái chỉ gồm app nguồn winget.</p>
+      </div>
+    </div>
+  `;
+
+  let statusClass = 'status-label';
+  let statusHTML = '<i class="ph ph-clock" aria-hidden="true"></i>Chưa tải';
+  if (loading) {
+    statusClass = 'status-label warning';
+    statusHTML = '<i class="ph ph-arrow-clockwise is-spinning" aria-hidden="true"></i>Đang tải';
+  } else if (unavailable) {
+    statusClass = 'status-label danger';
+    statusHTML = '<i class="ph ph-warning-circle" aria-hidden="true"></i>Không khả dụng';
+  } else if (record?.ok) {
+    statusClass = 'status-label success';
+    statusHTML = `<i class="ph ph-check-circle" aria-hidden="true"></i>${record.versions.length} version`;
+  } else if (record?.error) {
+    statusClass = 'status-label danger';
+    statusHTML = '<i class="ph ph-warning-circle" aria-hidden="true"></i>Lỗi';
+  }
+  els.versionDetailStatus.className = statusClass;
+  els.versionDetailStatus.innerHTML = statusHTML;
+
+  if (!app) {
+    els.versionList.innerHTML = '';
+    return;
+  }
+  if (loading) {
+    els.versionList.innerHTML = `
+      <div class="empty-state version-empty">
+        <div class="empty-content">
+          <span class="empty-icon" aria-hidden="true"><i class="ph ph-arrow-clockwise is-spinning"></i></span>
+          <h3>Đang tải version</h3>
+          <p>SetupKit đang hỏi manifest winget của ${escapeHtml(app.name)}.</p>
+        </div>
+      </div>
+    `;
+    return;
+  }
+  if (!record) {
+    els.versionList.innerHTML = `
+      <div class="empty-state version-empty">
+        <div class="empty-content">
+          <span class="empty-icon" aria-hidden="true"><i class="ph ph-download-simple"></i></span>
+          <h3>Chưa tải danh sách version</h3>
+          <p>Bấm Tải version để xem các bản mà winget còn giữ trong manifest.</p>
+        </div>
+      </div>
+    `;
+    return;
+  }
+  if (!record.ok) {
+    els.versionList.innerHTML = `
+      <div class="empty-state version-empty">
+        <div class="empty-content">
+          <span class="empty-icon" aria-hidden="true"><i class="ph ph-warning-circle"></i></span>
+          <h3>Không lấy được version</h3>
+          <p>${escapeHtml(record.error || 'Package này không công bố version cũ trong winget.')}</p>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  els.versionList.innerHTML = record.versions.map((version, index) => {
+    const current = details?.version && version === details.version;
+    const selected = version === selectedVersion;
+    return `
+      <button class="version-row ${selected ? 'active' : ''} ${current ? 'current' : ''}" data-version="${escapeHtml(version)}" type="button">
+        <span>
+          <strong>${escapeHtml(version)}</strong>
+          <small>${current ? 'Đang cài trên máy' : index === 0 ? 'Mới nhất trong manifest' : 'Version cũ'}</small>
+        </span>
+        <i class="ph ${selected ? 'ph-check-circle' : 'ph-circle'}" aria-hidden="true"></i>
+      </button>
+    `;
+  }).join('');
+}
+
+function renderVersions() {
+  renderVersionAppList();
+  renderVersionDetail();
+}
+
+// Cập nhật tiến trình một app tại chỗ - giữ nguyên DOM để thanh chạy mượt.
+function updateQueueProgressRow(app) {
+  const rows = [
+    els.queue?.querySelector(`[data-queue-app="${app.id}"]`),
+    els.updatesList?.querySelector(`[data-update-app="${app.id}"]`)
+  ].filter(Boolean);
+  if (!rows.length) return;
+
+  rows.forEach((row) => {
+    const chip = row.querySelector('.status-label');
+    if (chip) {
+      const status = row.matches('[data-update-app]') ? `update:${updateStatusMeta(app).label}` : appStatus(app);
+      // Chỉ ghi DOM khi trạng thái đổi để icon xoay không bị reset mỗi tick.
+      if (chip.dataset.status !== status) {
+        const meta = row.matches('[data-update-app]') ? updateStatusMeta(app) : statusMeta(appStatus(app));
+        chip.dataset.status = status;
+        chip.className = `status-label ${meta.className}`;
+        chip.innerHTML = `<i class="ph ${meta.icon} ${meta.spin ? 'is-spinning' : ''}" aria-hidden="true"></i>${meta.label}`;
+      }
+    }
+
+    const item = state.installProgress.get(app.id);
+    if (!item) return;
+    let progressRow = row.querySelector('.queue-progress-row');
+    if (!progressRow) {
+      row.insertAdjacentHTML('beforeend', queueProgressMarkup(app));
+      applyProgressFill(row);
+      return;
+    }
+    const percent = Math.max(0, Math.min(100, Number(item.percent) || 0));
+    const installing = state.running && state.currentId === app.id && !item.error && percent < 100;
+    progressRow.classList.toggle('error', Boolean(item.error));
+    progressRow.classList.toggle('complete', percent === 100 && !item.error);
+    progressRow.classList.toggle('installing', installing);
+    const phase = progressRow.querySelector('[data-progress-phase]');
+    if (phase) phase.textContent = item.phase || 'Đang chuẩn bị';
+    const percentEl = progressRow.querySelector('[data-progress-percent]');
+    if (percentEl) percentEl.textContent = `${percent}%`;
+    const track = progressRow.querySelector('.queue-progress-track');
+    if (track) track.setAttribute('aria-valuenow', String(percent));
+    const bar = progressRow.querySelector('.queue-progress-bar');
+    if (bar) bar.style.setProperty('--progress-scale', String(percent / 100));
+  });
 }
 
 const renderLog = rafBatch(() => {
@@ -1157,6 +1748,8 @@ function renderAll() {
   renderPresets();
   renderTags();
   renderCatalog();
+  renderUpdates();
+  renderVersions();
   renderQueue();
   renderLog();
   renderTerminal();
@@ -1204,7 +1797,11 @@ function toggleApp(id) {
   state.activePreset = '';
   persistSelection();
   updatePresetActive();
-  changedIds.forEach(updateCardToggle);
+  if (['smart', 'status', 'pending'].includes(state.sort)) {
+    renderCatalog();
+  } else {
+    changedIds.forEach(updateCardToggle);
+  }
   renderQueue();
 }
 
@@ -1254,6 +1851,7 @@ function clearFilters() {
   state.source = 'all';
   state.status = 'all';
   els.search.value = '';
+  updateSearchAffordance();
   categoryDropdown?.set('all', { silent: true });
   sourceDropdown?.set('all', { silent: true });
   statusDropdown?.set('all', { silent: true });
@@ -1553,12 +2151,14 @@ async function refreshUpdateAvailability() {
       addLog('[cập nhật] Không phát hiện ứng dụng cần cập nhật.');
     }
     renderCatalog();
+    renderUpdates();
     renderQueue();
     renderStatusBar();
   } catch (error) {
     addLog(`[cập nhật] Không kiểm tra được bản cập nhật: ${error.message || 'winget upgrade không khả dụng.'}`);
   } finally {
     state.updatesScanning = false;
+    renderUpdates();
   }
 }
 
@@ -1712,6 +2312,7 @@ async function runInstallPlan() {
 
   const realInstall = els.realMode.checked;
   state.running = true;
+  state.operation = realInstall ? 'install' : 'simulate';
   state.stopRequested = false;
   state.currentId = '';
   state.done.clear();
@@ -1793,6 +2394,7 @@ async function runInstallPlan() {
   }
 
   state.running = false;
+  state.operation = '';
   state.stopRequested = false;
   const successCount = state.done.size;
   appendTerminal(`[SetupKit] Kết thúc. Thành công: ${successCount}, lỗi: ${state.failed.size}.\n`, 'system');
@@ -1985,7 +2587,7 @@ function requestStop() {
 }
 
 // Cập nhật hoặc gỡ một ứng dụng đã cài (ngoài hàng đợi), stream qua terminal.
-async function runSingleOp(id, kind) {
+async function runSingleOp(id, kind, { view = kind === 'upgrade' ? 'updates' : 'queue' } = {}) {
   const app = appById(id);
   if (!app || !window.setupkitNative || state.running || state.scanning || state.busyId) return;
   const method = kind === 'upgrade' ? 'upgradeApp' : 'uninstallApp';
@@ -1997,7 +2599,7 @@ async function runSingleOp(id, kind) {
 
   state.busyId = id;
   closeDetail();
-  switchView('queue');
+  switchView(view);
   state.terminalOpen = true;
   state.terminalCommand = '';
   renderTerminalChrome();
@@ -2040,8 +2642,149 @@ async function runSingleOp(id, kind) {
     state.busyId = '';
     state.currentId = '';
     renderCatalog();
+    renderUpdates();
     renderQueue();
     renderStatusBar();
+  }
+}
+
+async function runUpdateAll() {
+  const pending = updateApps();
+  if (!pending.length || state.running || state.scanning || state.updatesScanning || state.busyId) return;
+  if (!window.setupkitNative?.upgradeApps) {
+    showToast('Không khả dụng', 'Cầu nối native chưa hỗ trợ cập nhật hàng loạt.', 'ph-warning-circle');
+    return;
+  }
+
+  state.running = true;
+  state.operation = 'upgrade';
+  state.stopRequested = false;
+  state.currentId = '';
+  state.done.clear();
+  state.failed.clear();
+  state.installProgress.clear();
+  state.terminalLines = [];
+  state.terminalLineCount = 0;
+  state.terminalOpen = true;
+  state.terminalCommand = '';
+  switchView('updates');
+  appendTerminal(`[SetupKit] Chuẩn bị cập nhật ${pending.length} ứng dụng.\n`, 'system');
+  addLog(`[cập nhật] Bắt đầu cập nhật hàng loạt ${pending.length} ứng dụng.`);
+  renderAll();
+
+  try {
+    const result = await window.setupkitNative.upgradeApps(pending.map((app) => app.pkg));
+    const results = result.results || {};
+    pending.forEach((app) => {
+      const item = results[app.pkg];
+      if (!item) return;
+      if (item.ok) {
+        state.done.add(app.id);
+        if (item.details) state.installed.set(app.id, item.details);
+      } else if (!item.cancelled) {
+        state.failed.add(app.id);
+      }
+    });
+
+    if (result.cancelled) {
+      showToast('Đã hủy cập nhật', 'Bạn chưa xác nhận phiên cập nhật hàng loạt.', 'ph-hand-palm');
+      addLog('[cập nhật] Người dùng hủy cập nhật hàng loạt.');
+    } else if (result.failed) {
+      showToast('Cập nhật đã chạy xong', `${result.success || 0} thành công, ${result.failed} cần kiểm tra.`, 'ph-warning-circle');
+      addLog(`[cập nhật] Hoàn tất: ${result.success || 0} thành công, ${result.failed} lỗi.`);
+    } else {
+      showToast('Đã cập nhật tất cả', `${result.success || pending.length} ứng dụng đã lên bản mới nhất.`, 'ph-check-circle');
+      addLog(`[cập nhật] Hoàn tất ${result.success || pending.length}/${pending.length} ứng dụng.`);
+    }
+  } catch (error) {
+    showToast('Cập nhật thất bại', error.message || 'Không gọi được winget upgrade.', 'ph-warning-circle');
+    addLog(`[lỗi cập nhật] ${error.message || 'Không gọi được winget upgrade.'}`);
+  } finally {
+    state.running = false;
+    state.operation = '';
+    state.currentId = '';
+    renderAll();
+    refreshUpdateAvailability();
+  }
+}
+
+async function loadPackageVersions(id = state.versionAppId) {
+  const app = appById(id);
+  if (!app || app.source !== 'winget' || !window.setupkitNative?.listPackageVersions || state.versionLoadingId || state.running || state.busyId) return;
+
+  state.versionAppId = app.id;
+  state.selectedVersion = '';
+  state.versionLoadingId = app.id;
+  renderVersions();
+  addLog(`[versions] Đang tải danh sách version của ${app.name}.`);
+
+  try {
+    const result = await window.setupkitNative.listPackageVersions(app.pkg);
+    state.versionRecords.set(app.id, result);
+    if (result.ok && result.versions?.length) {
+      const current = state.installed.get(app.id)?.version || result.currentVersion;
+      state.selectedVersion = result.versions.find((version) => version !== current) || result.versions[0];
+      addLog(`[versions] ${app.name}: tìm thấy ${result.versions.length} version.`);
+    } else {
+      addLog(`[versions] ${app.name}: ${result.error || 'không có version cũ.'}`);
+    }
+  } catch (error) {
+    state.versionRecords.set(app.id, {
+      ok: false,
+      packageId: app.pkg,
+      source: app.source,
+      error: error.message || 'Không gọi được winget show --versions.'
+    });
+    addLog(`[versions] ${app.name}: ${error.message || 'không tải được version.'}`);
+  } finally {
+    state.versionLoadingId = '';
+    renderVersions();
+  }
+}
+
+async function runInstallVersion(mode) {
+  const app = appById(state.versionAppId);
+  const version = state.selectedVersion;
+  const record = app ? state.versionRecords.get(app.id) : null;
+  if (!app || !version || !record?.ok || !window.setupkitNative?.installVersion || state.running || state.scanning || state.busyId) return;
+
+  state.busyId = app.id;
+  state.operation = mode === 'reinstall' ? 'rollback' : 'version';
+  state.currentId = app.id;
+  state.installProgress.delete(app.id);
+  state.terminalOpen = true;
+  state.terminalCommand = '';
+  switchView('versions');
+  appendTerminal(`[SetupKit] ${mode === 'reinstall' ? 'Rollback' : 'Cài version'}: ${app.name} -> ${version}.\n`, 'system');
+  addLog(`[versions] ${app.name}: bắt đầu ${mode === 'reinstall' ? 'gỡ rồi cài' : 'cài'} version ${version}.`);
+  renderAll();
+
+  try {
+    const result = await window.setupkitNative.installVersion(app.pkg, version, mode);
+    if (result.cancelled) {
+      showToast(app.name, 'Đã hủy cài version.', 'ph-hand-palm');
+      addLog(`[versions] ${app.name}: người dùng hủy.`);
+    } else if (result.ok) {
+      if (result.details) state.installed.set(app.id, result.details);
+      state.done.add(app.id);
+      showToast(app.name, `Đã cài version ${version}.`, 'ph-check-circle');
+      addLog(`[versions] ${app.name}: đã cài version ${version}.`);
+      state.versionRecords.delete(app.id);
+      await scanInstalled({ showFeedback: false, pruneSelection: true });
+    } else {
+      state.failed.add(app.id);
+      showToast('Cài version thất bại', result.error || `winget exitCode=${result.code}`, 'ph-warning-circle');
+      addLog(`[versions] ${app.name}: ${result.error || 'cài version thất bại.'}`);
+    }
+  } catch (error) {
+    state.failed.add(app.id);
+    showToast('Cài version thất bại', error.message || 'Không gọi được winget.', 'ph-warning-circle');
+    addLog(`[versions] ${app.name}: ${error.message || 'không gọi được winget.'}`);
+  } finally {
+    state.busyId = '';
+    state.operation = '';
+    state.currentId = '';
+    renderAll();
   }
 }
 
@@ -2258,6 +3001,45 @@ function bindEvents() {
     }
   });
 
+  els.updatesList?.addEventListener('click', (event) => {
+    const single = event.target.closest('[data-update-single]');
+    const detail = event.target.closest('[data-detail]');
+    const scan = event.target.closest('#emptyScanUpdatesBtn');
+    if (single && !single.disabled) runSingleOp(single.dataset.updateSingle, 'upgrade', { view: 'updates' });
+    if (detail) openDetail(detail.dataset.detail);
+    if (scan && !scan.disabled) refreshUpdateAvailability();
+  });
+  els.updatesSearch?.addEventListener('input', (event) => {
+    state.updateQuery = event.target.value;
+    renderUpdates();
+  });
+
+  els.versionSearch?.addEventListener('input', (event) => {
+    state.versionQuery = event.target.value;
+    renderVersions();
+  });
+  els.versionScope?.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-version-scope]');
+    if (!button) return;
+    state.versionScope = button.dataset.versionScope;
+    state.versionAppId = '';
+    state.selectedVersion = '';
+    renderVersions();
+  });
+  els.versionAppList?.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-version-app]');
+    if (!button) return;
+    state.versionAppId = button.dataset.versionApp;
+    state.selectedVersion = '';
+    renderVersions();
+  });
+  els.versionList?.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-version]');
+    if (!button) return;
+    state.selectedVersion = button.dataset.version;
+    renderVersions();
+  });
+
   els.queue.addEventListener('click', (event) => {
     const remove = event.target.closest('[data-remove]');
     const location = event.target.closest('[data-location]');
@@ -2270,7 +3052,7 @@ function bindEvents() {
 
   els.search.addEventListener('input', (event) => {
     state.query = event.target.value;
-    els.searchClear.classList.toggle('visible', Boolean(state.query));
+    updateSearchAffordance();
     scheduleSearchRender();
   });
   els.search.addEventListener('keydown', (event) => {
@@ -2278,6 +3060,7 @@ function bindEvents() {
       event.stopPropagation();
       state.query = '';
       els.search.value = '';
+      updateSearchAffordance();
       renderCatalog();
     }
   });
@@ -2285,10 +3068,11 @@ function bindEvents() {
     state.query = '';
     els.search.value = '';
     els.search.focus();
+    updateSearchAffordance();
     renderCatalog();
   });
   categoryDropdown = createDropdown(els.categoryDropdown, {
-    options: [{ value: 'all', label: 'Tất cả danh mục' }],
+    options: [{ value: 'all', label: 'Tất cả danh mục', icon: 'ph-squares-four', tone: 'neutral' }],
     value: state.category,
     onChange: (value) => {
       state.category = value;
@@ -2297,9 +3081,9 @@ function bindEvents() {
   });
   sourceDropdown = createDropdown(els.sourceDropdown, {
     options: [
-      { value: 'all', label: 'Tất cả nguồn' },
-      { value: 'winget', label: 'Chỉ winget' },
-      { value: 'msstore', label: 'Chỉ Microsoft Store' }
+      { value: 'all', label: 'Tất cả nguồn', icon: 'ph-stack', tone: 'neutral' },
+      { value: 'winget', label: 'Chỉ winget', icon: 'ph-terminal-window', tone: 'accent' },
+      { value: 'msstore', label: 'Chỉ Microsoft Store', icon: 'ph-storefront', tone: 'store' }
     ],
     value: state.source,
     onChange: (value) => {
@@ -2309,16 +3093,31 @@ function bindEvents() {
   });
   statusDropdown = createDropdown(els.statusDropdown, {
     options: [
-      { value: 'all', label: 'Mọi tình trạng' },
-      { value: 'installed', label: 'Đã cài trên máy' },
-      { value: 'available', label: 'Chưa cài' },
-      { value: 'selected', label: 'Đang chọn' }
+      { value: 'all', label: 'Mọi tình trạng', icon: 'ph-circles-three', tone: 'neutral' },
+      { value: 'installed', label: 'Đã cài trên máy', icon: 'ph-check-circle', tone: 'success' },
+      { value: 'available', label: 'Chưa cài', icon: 'ph-download-simple', tone: 'muted' },
+      { value: 'selected', label: 'Đang chọn', icon: 'ph-stack', tone: 'accent' }
     ],
     value: state.status,
+    statusDot: true,
     onChange: (value) => {
       state.status = value;
       renderCatalog();
     }
+  });
+  sortDropdown = createDropdown(els.sortDropdown, {
+    options: [
+      { value: 'smart', label: 'Thông minh', icon: 'ph-sparkle', tone: 'accent' },
+      { value: 'installOrder', label: 'Thứ tự cài', icon: 'ph-sort-ascending', tone: 'neutral' },
+      { value: 'name', label: 'Tên A-Z', icon: 'ph-text-aa', tone: 'neutral' },
+      { value: 'category', label: 'Danh mục', icon: 'ph-folders', tone: 'accent' },
+      { value: 'status', label: 'Tình trạng', icon: 'ph-traffic-signal', tone: 'success' },
+      { value: 'source', label: 'Nguồn cài', icon: 'ph-git-branch', tone: 'store' },
+      { value: 'size', label: 'App lớn trước', icon: 'ph-hard-drives', tone: 'warning' },
+      { value: 'pending', label: 'Chưa cài trước', icon: 'ph-download-simple', tone: 'muted' }
+    ],
+    value: state.sort,
+    onChange: (value) => setSortMode(value)
   });
   els.tagFilterBar.addEventListener('click', (event) => {
     const button = event.target.closest('[data-tag]');
@@ -2359,6 +3158,11 @@ function bindEvents() {
   els.wingetRecheck?.addEventListener('click', recheckWinget);
   els.wingetInstall?.addEventListener('click', installAppInstaller);
   els.rescan.addEventListener('click', () => scanInstalled({ showFeedback: true, pruneSelection: false }));
+  els.scanUpdates?.addEventListener('click', refreshUpdateAvailability);
+  els.updateAll?.addEventListener('click', runUpdateAll);
+  els.loadVersions?.addEventListener('click', () => loadPackageVersions());
+  els.installVersion?.addEventListener('click', () => runInstallVersion('install'));
+  els.reinstallVersion?.addEventListener('click', () => runInstallVersion('reinstall'));
   els.terminalToggle.addEventListener('click', () => setTerminalOpen(!state.terminalOpen));
   els.terminalClose.addEventListener('click', () => setTerminalOpen(false));
   els.terminalClear.addEventListener('click', () => {
@@ -2486,6 +3290,9 @@ function subscribeToProgress() {
   window.setupkitNative.onInstallProgress((payload) => {
     const app = appByPackage(payload.packageId);
     if (!app) return;
+    if (state.running && Number(payload.percent || 0) < 100) {
+      state.currentId = app.id;
+    }
     setProgress(app, payload.percent, payload.phase, payload.message, Boolean(payload.error));
   });
 }
@@ -2560,6 +3367,7 @@ async function initializeNative() {
 async function boot() {
   initializeTheme();
   initViewMode();
+  initSortMode();
   bindEvents();
   try {
     await loadCatalog();

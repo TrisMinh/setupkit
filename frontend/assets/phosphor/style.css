@@ -1,7 +1,7 @@
 /*
  * File này được tạo tự động bởi scripts/build-phosphor-subset.js.
  * Đừng sửa tay — hãy sửa scripts/phosphor-full/style.css rồi chạy lại script.
- * 85 / 1530 icon được giữ lại.
+ * 93 / 1530 icon được giữ lại.
  */
 @font-face {
   font-family: "Phosphor";
@@ -93,6 +93,15 @@
 .ph.ph-circle:before {
   content: "\e18a";
 }
+.ph.ph-circles-three:before {
+  content: "\e192";
+}
+.ph.ph-clock:before {
+  content: "\e19a";
+}
+.ph.ph-clock-counter-clockwise:before {
+  content: "\e1a0";
+}
 .ph.ph-cloud:before {
   content: "\e1aa";
 }
@@ -144,6 +153,9 @@
 .ph.ph-floppy-disk:before {
   content: "\e248";
 }
+.ph.ph-folder:before {
+  content: "\e24a";
+}
 .ph.ph-folder-notch:before {
   content: "\e24a";
 }
@@ -152,6 +164,9 @@
 }
 .ph.ph-folder-plus:before {
   content: "\e258";
+}
+.ph.ph-folders:before {
+  content: "\e260";
 }
 .ph.ph-game-controller:before {
   content: "\e26e";
@@ -246,6 +261,9 @@
 .ph.ph-shield-check:before {
   content: "\e40c";
 }
+.ph.ph-sort-ascending:before {
+  content: "\e444";
+}
 .ph.ph-sparkle:before {
   content: "\e6a2";
 }
@@ -270,8 +288,14 @@
 .ph.ph-terminal-window:before {
   content: "\eae8";
 }
+.ph.ph-text-aa:before {
+  content: "\e6ee";
+}
 .ph.ph-toolbox:before {
   content: "\eca0";
+}
+.ph.ph-traffic-signal:before {
+  content: "\e9aa";
 }
 .ph.ph-trash:before {
   content: "\e4a6";

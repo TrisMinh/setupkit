@@ -22,11 +22,12 @@ import (
 )
 
 var (
-	ansiPattern        = regexp.MustCompile(`\x1b\[[0-?]*[ -/]*[@-~]`)
-	bracketPattern     = regexp.MustCompile(`\([^)]*\)`)
-	terminalBarPattern = regexp.MustCompile(`[█▒▉▊▋▌▍▎▏]+`)
-	multiLinePattern   = regexp.MustCompile(`\n{3,}`)
-	downloadPattern    = regexp.MustCompile(`(?i)([\d.]+)\s*(B|KB|MB|GB)\s*/\s*([\d.]+)\s*(B|KB|MB|GB)`)
+	ansiPattern         = regexp.MustCompile(`\x1b\[[0-?]*[ -/]*[@-~]`)
+	bracketPattern      = regexp.MustCompile(`\([^)]*\)`)
+	terminalBarPattern  = regexp.MustCompile(`[█▒▉▊▋▌▍▎▏]+`)
+	multiLinePattern    = regexp.MustCompile(`\n{3,}`)
+	downloadPattern     = regexp.MustCompile(`(?i)([\d.]+)\s*(B|KB|MB|GB)\s*/\s*([\d.]+)\s*(B|KB|MB|GB)`)
+	versionTokenPattern = regexp.MustCompile(`^[vV]?\d[0-9A-Za-z.+_:-]*$`)
 )
 
 type processResult struct {
@@ -309,6 +310,45 @@ func packageSetHas(packages map[string]struct{}, packageID string) bool {
 	return exists
 }
 
+func safeWingetVersion(version string) bool {
+	version = strings.TrimSpace(version)
+	return version != "" && len(version) <= 96 && versionTokenPattern.MatchString(version)
+}
+
+func parseWingetVersions(output string) []string {
+	clean := stripTerminalNoise(output)
+	versions := make([]string, 0, 64)
+	seen := make(map[string]struct{})
+	for _, line := range strings.Split(clean, "\n") {
+		line = strings.TrimSpace(line)
+		if line == "" {
+			continue
+		}
+		lower := strings.ToLower(line)
+		if strings.HasPrefix(lower, "found ") ||
+			strings.HasPrefix(lower, "version") ||
+			strings.HasPrefix(lower, "phiên bản") ||
+			strings.Trim(line, "- ") == "" {
+			continue
+		}
+		fields := strings.Fields(line)
+		if len(fields) == 0 {
+			continue
+		}
+		version := strings.Trim(fields[0], " ")
+		if !safeWingetVersion(version) {
+			continue
+		}
+		key := strings.ToLower(version)
+		if _, exists := seen[key]; exists {
+			continue
+		}
+		seen[key] = struct{}{}
+		versions = append(versions, version)
+	}
+	return versions
+}
+
 func parseInventoryJSON(raw string) []inventoryRecord {
 	clean := strings.TrimSpace(strings.TrimPrefix(raw, "\ufeff"))
 	if clean == "" {
@@ -521,9 +561,9 @@ type normalizedInventoryRecord struct {
 }
 
 type inventoryLookup struct {
-	records     []normalizedInventoryRecord
-	wingetIDs   map[string]struct{}
-	upgradeIDs  map[string]struct{}
+	records    []normalizedInventoryRecord
+	wingetIDs  map[string]struct{}
+	upgradeIDs map[string]struct{}
 }
 
 func newInventoryLookup(records []inventoryRecord, wingetOutput string, upgradeOutput string) inventoryLookup {

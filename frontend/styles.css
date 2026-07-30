@@ -30,8 +30,9 @@
   --radius-card: 16px;
   --sidebar-width: 224px;
   --statusbar-h: 30px;
-  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 :root[data-theme="dark"] {
@@ -799,7 +800,7 @@ select:focus-visible,
   box-shadow: var(--shadow);
   transform: translate(8px, -50%) scale(0.98);
   pointer-events: none;
-  transition: opacity 140ms var(--ease), transform 140ms var(--ease);
+  transition: opacity 180ms var(--ease), transform 180ms var(--ease);
 }
 
 .preset-button:hover .workspace-preview,
@@ -877,11 +878,11 @@ select:focus-visible,
   transform: translateY(-4px);
   pointer-events: none;
   transition:
-    max-height 180ms var(--ease),
-    min-height 180ms var(--ease),
-    opacity 140ms var(--ease),
-    border-color 140ms var(--ease),
-    transform 140ms var(--ease);
+    max-height 220ms var(--ease),
+    min-height 220ms var(--ease),
+    opacity 180ms var(--ease),
+    border-color 180ms var(--ease),
+    transform 180ms var(--ease);
 }
 
 .workspace-card:hover .workspace-preview-large,
@@ -925,15 +926,19 @@ select:focus-visible,
   border-radius: var(--radius-card);
   background: var(--surface);
   box-shadow: var(--shadow-sm);
-  animation: rise-in 220ms var(--ease-out) backwards;
-  transition: border-color 150ms var(--ease), transform 150ms var(--ease), box-shadow 150ms var(--ease);
+  animation: rise-in 260ms var(--ease-out) backwards;
+  transition:
+    background 180ms var(--ease),
+    border-color 180ms var(--ease),
+    transform 180ms var(--ease),
+    box-shadow 180ms var(--ease);
 }
 
 .workspace-card:hover,
 .workspace-card:focus-within {
   border-color: var(--border-strong);
   box-shadow: var(--shadow);
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(1.004);
 }
 
 .workspace-card.active {
@@ -988,11 +993,11 @@ select:focus-visible,
   transform: translateX(4px);
   pointer-events: none;
   transition:
-    color 140ms var(--ease),
-    border-color 140ms var(--ease),
-    background 140ms var(--ease),
-    opacity 140ms var(--ease),
-    transform 140ms var(--ease);
+    color 170ms var(--ease),
+    border-color 170ms var(--ease),
+    background 170ms var(--ease),
+    opacity 170ms var(--ease),
+    transform 170ms var(--ease);
 }
 
 .workspace-card:hover .workspace-open-button,
@@ -1048,7 +1053,7 @@ select:focus-visible,
 
 .toolbar {
   display: grid;
-  grid-template-columns: minmax(240px, 1fr) 168px 170px 166px;
+  grid-template-columns: minmax(240px, 1fr) 168px 150px 154px 168px;
   gap: 10px;
   margin-bottom: 18px;
 }
@@ -1064,6 +1069,9 @@ select:focus-visible,
   color: var(--text-tertiary);
   font-size: 19px;
   transform: translateY(-50%);
+  transition:
+    color 160ms ease,
+    transform 180ms var(--ease);
   pointer-events: none;
 }
 
@@ -1078,6 +1086,26 @@ select:focus-visible,
 
 .search-field input {
   padding: 0 42px;
+  transition:
+    border-color 160ms ease,
+    box-shadow 180ms var(--ease),
+    background 160ms ease;
+}
+
+.search-field input:focus {
+  border-color: rgba(44, 123, 108, 0.52);
+  box-shadow: 0 0 0 3px rgba(44, 123, 108, 0.12);
+  outline: none;
+}
+
+.search-field.is-active input {
+  border-color: rgba(44, 123, 108, 0.42);
+  background: color-mix(in srgb, var(--primary-soft) 42%, var(--surface));
+}
+
+.search-field.is-active .ph-magnifying-glass {
+  color: var(--primary);
+  transform: translateY(-50%) scale(1.04);
 }
 
 /* Ẩn nút xóa mặc định của Chromium - app đã có nút xóa riêng. */
@@ -1143,8 +1171,10 @@ select:focus-visible,
   color: var(--text);
   background: var(--surface);
   transition:
-    background 150ms var(--ease),
-    border-color 150ms var(--ease);
+    background 170ms var(--ease),
+    border-color 170ms var(--ease),
+    box-shadow 170ms var(--ease),
+    transform 120ms var(--ease);
 }
 
 .dropdown-toggle:hover {
@@ -1154,6 +1184,7 @@ select:focus-visible,
 
 .dropdown.open .dropdown-toggle {
   border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .dropdown-value {
@@ -1164,6 +1195,90 @@ select:focus-visible,
   text-align: left;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.dropdown-marker {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--text-tertiary);
+  background: var(--surface-soft);
+}
+
+.dropdown.has-status-dot .dropdown-marker::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 7px;
+  height: 7px;
+  border: 2px solid var(--surface);
+  border-radius: 99px;
+  background: var(--text-tertiary);
+}
+
+.dropdown-marker .ph {
+  font-size: 13px;
+}
+
+.dropdown-toggle[data-tone="accent"] .dropdown-marker,
+.dropdown-option[data-tone="accent"] .dropdown-marker {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.dropdown-toggle[data-tone="success"] .dropdown-marker,
+.dropdown-option[data-tone="success"] .dropdown-marker {
+  color: var(--success);
+  background: var(--success-soft);
+}
+
+.dropdown-toggle[data-tone="warning"] .dropdown-marker,
+.dropdown-option[data-tone="warning"] .dropdown-marker {
+  color: var(--warning);
+  background: var(--warning-soft);
+}
+
+.dropdown-toggle[data-tone="store"] .dropdown-marker,
+.dropdown-option[data-tone="store"] .dropdown-marker {
+  color: #4b65d8;
+  background: color-mix(in srgb, #4b65d8 14%, var(--surface));
+}
+
+.dropdown-toggle[data-tone="muted"] .dropdown-marker,
+.dropdown-option[data-tone="muted"] .dropdown-marker {
+  color: var(--text-secondary);
+  background: var(--surface-soft);
+}
+
+.dropdown.has-status-dot .dropdown-toggle[data-tone="accent"] .dropdown-marker::after,
+.dropdown.has-status-dot .dropdown-option[data-tone="accent"] .dropdown-marker::after {
+  background: var(--accent);
+}
+
+.dropdown.has-status-dot .dropdown-toggle[data-tone="success"] .dropdown-marker::after,
+.dropdown.has-status-dot .dropdown-option[data-tone="success"] .dropdown-marker::after {
+  background: var(--success);
+}
+
+.dropdown.has-status-dot .dropdown-toggle[data-tone="warning"] .dropdown-marker::after,
+.dropdown.has-status-dot .dropdown-option[data-tone="warning"] .dropdown-marker::after {
+  background: var(--warning);
+}
+
+.dropdown.has-status-dot .dropdown-toggle[data-tone="store"] .dropdown-marker::after,
+.dropdown.has-status-dot .dropdown-option[data-tone="store"] .dropdown-marker::after {
+  background: #4b65d8;
+}
+
+.dropdown.has-status-dot .dropdown-toggle[data-tone="muted"] .dropdown-marker::after,
+.dropdown.has-status-dot .dropdown-option[data-tone="muted"] .dropdown-marker::after {
+  background: var(--border-strong);
 }
 
 .dropdown-toggle .dropdown-caret {
@@ -1192,7 +1307,7 @@ select:focus-visible,
   background: var(--surface);
   box-shadow: var(--shadow);
   transform-origin: top center;
-  animation: dropdown-in 150ms var(--ease-out);
+  animation: dropdown-in 190ms var(--ease-out);
   scrollbar-width: thin;
   scrollbar-color: var(--border-strong) transparent;
 }
@@ -1200,7 +1315,11 @@ select:focus-visible,
 @keyframes dropdown-in {
   from {
     opacity: 0;
-    transform: translateY(-5px) scale(0.98);
+    transform: translateY(-7px) scale(0.975);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -1218,12 +1337,17 @@ select:focus-visible,
   font-size: 13px;
   text-align: left;
   white-space: nowrap;
+  transition:
+    background 150ms var(--ease),
+    color 150ms var(--ease),
+    transform 120ms var(--ease);
 }
 
 .dropdown-option:hover,
 .dropdown-option.focused {
   color: var(--text);
   background: var(--surface-hover);
+  transform: translateX(1px);
 }
 
 .dropdown-option.selected {
@@ -1236,6 +1360,12 @@ select:focus-visible,
   margin-left: auto;
   font-size: 14px;
   visibility: hidden;
+}
+
+.dropdown-option-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .dropdown-option.selected .ph-check {
@@ -1392,6 +1522,7 @@ select:focus-visible,
      min(300px, 100%) chống tràn ngang khi cửa sổ nhỏ hơn 300px. */
   grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
   gap: 10px;
+  transition: gap 180ms var(--ease);
 }
 
 /* --- Dạng danh sách: một app mỗi hàng, dùng đủ chiều ngang cho mô tả và meta. --- */
@@ -1533,12 +1664,12 @@ select:focus-visible,
   border-radius: var(--radius-card);
   background: var(--surface);
   cursor: pointer;
-  animation: rise-in 220ms var(--ease-out) backwards;
+  animation: rise-in 260ms var(--ease-out) backwards;
   transition:
-    background 150ms var(--ease),
-    border-color 150ms var(--ease),
-    box-shadow 150ms var(--ease),
-    transform 150ms var(--ease);
+    background 180ms var(--ease),
+    border-color 180ms var(--ease),
+    box-shadow 180ms var(--ease),
+    transform 180ms var(--ease);
 }
 
 /* Hiệu ứng xuất hiện lần lượt cho các card đầu tiên khi lọc/tìm. */
@@ -1555,11 +1686,11 @@ select:focus-visible,
 @keyframes rise-in {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(8px) scale(0.985);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -1567,11 +1698,11 @@ select:focus-visible,
   border-color: var(--border-strong);
   background: var(--surface-hover);
   box-shadow: var(--shadow-sm);
-  transform: translateY(-1px);
+  transform: translateY(-2px) scale(1.003);
 }
 
 .app-card:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.998);
 }
 
 .app-card.selected {
@@ -1995,6 +2126,296 @@ select:focus-visible,
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
+}
+
+.update-item {
+  align-items: start;
+}
+
+.update-command {
+  grid-column: 2 / -1;
+  max-width: 100%;
+  margin-top: -4px;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.update-list .empty-state {
+  min-height: 320px;
+  border: 0;
+  border-radius: 0;
+}
+
+.versions-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.version-browser,
+.version-detail-panel {
+  overflow: hidden;
+}
+
+.update-search,
+.version-search {
+  position: relative;
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.update-search .ph,
+.version-search .ph {
+  position: absolute;
+  top: 50%;
+  left: 26px;
+  color: var(--text-tertiary);
+  font-size: 17px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.update-search input,
+.version-search input {
+  width: 100%;
+  height: 38px;
+  padding: 0 12px 0 38px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  color: var(--text);
+  background: var(--surface-soft);
+  outline: none;
+  transition:
+    border-color 160ms ease,
+    box-shadow 180ms var(--ease),
+    background 160ms ease;
+}
+
+.update-search input:focus,
+.version-search input:focus {
+  border-color: rgba(44, 123, 108, 0.52);
+  box-shadow: 0 0 0 3px rgba(44, 123, 108, 0.12);
+  background: var(--surface);
+}
+
+.version-scope {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 12px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.version-scope-btn {
+  flex: 1 1 96px;
+  min-width: 0;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-tertiary);
+  background: var(--surface);
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition:
+    background 150ms var(--ease),
+    border-color 150ms var(--ease),
+    color 150ms ease;
+}
+
+.version-scope-btn:hover {
+  color: var(--text);
+  background: var(--surface-hover);
+}
+
+.version-scope-btn.active {
+  border-color: rgba(44, 123, 108, 0.36);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.version-scope-btn .ph {
+  flex: 0 0 auto;
+  font-size: 14px;
+}
+
+.version-app-list,
+.version-list {
+  display: grid;
+  max-height: min(620px, calc(100vh - 250px));
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+.version-app-row {
+  min-width: 0;
+  min-height: 64px;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  background: transparent;
+  text-align: left;
+  transition:
+    background 160ms var(--ease),
+    color 160ms ease;
+}
+
+.version-app-row:hover,
+.version-app-row.active {
+  background: var(--surface-hover);
+}
+
+.version-app-row.active {
+  color: var(--accent);
+}
+
+.version-app-icon,
+.version-selected-icon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+}
+
+.version-app-icon .app-logo,
+.version-selected-icon .app-logo {
+  width: 26px;
+  height: 26px;
+}
+
+.version-app-copy,
+.version-selected-copy {
+  min-width: 0;
+}
+
+.version-app-copy strong,
+.version-app-copy span,
+.version-selected-copy strong,
+.version-selected-copy span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.version-app-copy strong,
+.version-selected-copy strong {
+  color: var(--text);
+  font-size: 13px;
+}
+
+.version-app-copy span,
+.version-selected-copy span {
+  color: var(--text-tertiary);
+  font-size: 11px;
+}
+
+.version-detail-body {
+  display: grid;
+}
+
+.version-selected-card {
+  min-height: 68px;
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-soft);
+}
+
+.version-current {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.version-current .ph {
+  color: var(--success);
+}
+
+.version-row {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  background: transparent;
+  text-align: left;
+  transition:
+    background 160ms var(--ease),
+    color 160ms ease;
+}
+
+.version-row:hover {
+  background: var(--surface-hover);
+}
+
+.version-row.active {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.version-row.current {
+  color: var(--success);
+}
+
+.version-row strong,
+.version-row small {
+  display: block;
+}
+
+.version-row strong {
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+.version-row small {
+  margin-top: 3px;
+  color: var(--text-tertiary);
+  font-size: 11px;
+}
+
+.version-actions {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.version-empty {
+  min-height: 220px;
+  border: 0;
+  border-radius: 0;
 }
 
 .queue-progress-row {
@@ -2582,22 +3003,22 @@ dialog {
 dialog[open] {
   display: flex;
   flex-direction: column;
-  animation: dialog-in 200ms var(--ease-out);
+  animation: dialog-in 240ms var(--ease-out);
 }
 
 dialog.closing {
-  animation: dialog-out 130ms var(--ease) forwards;
+  animation: dialog-out 160ms var(--ease) forwards;
   pointer-events: none;
 }
 
 dialog.closing::backdrop {
-  animation: backdrop-out 130ms var(--ease) forwards;
+  animation: backdrop-out 160ms var(--ease) forwards;
 }
 
 @keyframes dialog-in {
   from {
     opacity: 0;
-    transform: translateY(10px) scale(0.97);
+    transform: translateY(14px) scale(0.975);
   }
   to {
     opacity: 1;
@@ -2608,7 +3029,7 @@ dialog.closing::backdrop {
 @keyframes dialog-out {
   to {
     opacity: 0;
-    transform: translateY(6px) scale(0.98);
+    transform: translateY(8px) scale(0.985);
   }
 }
 
@@ -2630,7 +3051,7 @@ dialog.closing::backdrop {
 dialog::backdrop {
   background: rgb(11 16 13 / 0.52);
   backdrop-filter: blur(3px);
-  animation: backdrop-in 200ms var(--ease);
+  animation: backdrop-in 240ms var(--ease);
 }
 
 .dialog-header {
@@ -3023,7 +3444,7 @@ dialog::backdrop {
 
 @media (max-width: 1120px) {
   .toolbar {
-    grid-template-columns: minmax(220px, 1fr) repeat(3, minmax(132px, 0.52fr));
+    grid-template-columns: minmax(220px, 1fr) repeat(4, minmax(126px, 0.52fr));
   }
 
   .review-layout,
@@ -3064,12 +3485,18 @@ dialog::backdrop {
   }
 
   .review-layout,
-  .profile-layout {
+  .profile-layout,
+  .versions-layout {
     grid-template-columns: 1fr;
   }
 
   .summary-panel {
     position: static;
+  }
+
+  .version-app-list,
+  .version-list {
+    max-height: none;
   }
 
   .mode-list .app-info {
