@@ -18,7 +18,7 @@
   <rect width="1200" height="300" fill="url(#bg)"/>
   <rect width="1200" height="300" fill="url(#glow)"/>
 
-  <!-- Icon SetupKit: khối hộp wireframe trên nền bo góc -->
+  <!-- SetupKit icon: wireframe package on a rounded tile -->
   <g transform="translate(96,66) scale(0.6563)">
     <rect x="12" y="12" width="232" height="232" rx="54" fill="url(#icon)"/>
     <g stroke="#ffffff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none">
@@ -30,18 +30,18 @@
 
   <g font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
     <text x="310" y="148" font-size="72" font-weight="700" fill="#eef5f0" letter-spacing="-1.5">SetupKit</text>
-    <text x="312" y="196" font-size="26" fill="#a7b8ad">Dựng máy Windows mới trong vài phút — chọn plan, bấm cài, xong.</text>
+    <text x="312" y="196" font-size="26" fill="#a7b8ad">Build a fresh Windows workspace in minutes — choose, review, run.</text>
 
     <!-- Chips -->
     <g font-size="18" font-weight="600">
       <rect x="312" y="222" width="176" height="38" rx="19" fill="#213829" stroke="#2f5240"/>
-      <text x="400" y="247" text-anchor="middle" fill="#8fd0b2">450 ứng dụng</text>
+      <text x="400" y="247" text-anchor="middle" fill="#8fd0b2">450 apps</text>
 
       <rect x="500" y="222" width="196" height="38" rx="19" fill="#213829" stroke="#2f5240"/>
       <text x="598" y="247" text-anchor="middle" fill="#8fd0b2">winget + Store</text>
 
       <rect x="708" y="222" width="252" height="38" rx="19" fill="#213829" stroke="#2f5240"/>
-      <text x="834" y="247" text-anchor="middle" fill="#8fd0b2">1 file EXE · không cài đặt</text>
+      <text x="834" y="247" text-anchor="middle" fill="#8fd0b2">1 EXE · no install</text>
     </g>
   </g>
 </svg>

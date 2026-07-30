@@ -1,14 +1,14 @@
 # SetupKit Verified App Catalog
 
-Xác minh: 2026-07-30T08:08:40.121Z
+Verified at: 2026-07-30T08:08:40.121Z
 
-Tổng cộng: 450 ứng dụng (448 winget + 2 Microsoft Store).
+Total: 450 apps (448 winget + 2 Microsoft Store).
 
-Mọi command đều dùng `--exact`, source cố định, chấp nhận agreement và tắt tương tác ngoài hộp thoại xác nhận của SetupKit.
+Every command uses `--exact`, a fixed source, package/source agreements, and non-interactive winget flags behind SetupKit confirmation dialogs.
 
 ## IDE & Code
 
-| Ứng dụng | Publisher | Source | Package ID | Command |
+| App | Publisher | Source | Package ID | Command |
 |---|---|---|---|---|
 | Visual Studio Code | Microsoft | winget | `Microsoft.VisualStudioCode` | `winget install --id Microsoft.VisualStudioCode --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | Visual Studio Code Insiders | Microsoft | winget | `Microsoft.VisualStudioCode.Insiders` | `winget install --id Microsoft.VisualStudioCode.Insiders --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
@@ -48,9 +48,9 @@ Mọi command đều dùng `--exact`, source cố định, chấp nhận agreeme
 | Dev-C++ | Embarcadero | winget | `Embarcadero.Dev-C++` | `winget install --id Embarcadero.Dev-C++ --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | Lapce | Lapce | winget | `Lapce.Lapce` | `winget install --id Lapce.Lapce --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 
-## Ngôn ngữ & Runtime
+## Languages & Runtime
 
-| Ứng dụng | Publisher | Source | Package ID | Command |
+| App | Publisher | Source | Package ID | Command |
 |---|---|---|---|---|
 | Node.js LTS | Open JS | winget | `OpenJS.NodeJS.LTS` | `winget install --id OpenJS.NodeJS.LTS --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | Python 3.13 | Python Software Foundation | winget | `Python.Python.3.13` | `winget install --id Python.Python.3.13 --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
@@ -96,7 +96,7 @@ Mọi command đều dùng `--exact`, source cố định, chấp nhận agreeme
 
 ## Build & Package
 
-| Ứng dụng | Publisher | Source | Package ID | Command |
+| App | Publisher | Source | Package ID | Command |
 |---|---|---|---|---|
 | LLVM | LLVM | winget | `LLVM.LLVM` | `winget install --id LLVM.LLVM --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | CMake | Kitware | winget | `Kitware.CMake` | `winget install --id Kitware.CMake --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
@@ -117,7 +117,7 @@ Mọi command đều dùng `--exact`, source cố định, chấp nhận agreeme
 
 ## Terminal & Git
 
-| Ứng dụng | Publisher | Source | Package ID | Command |
+| App | Publisher | Source | Package ID | Command |
 |---|---|---|---|---|
 | Windows Terminal | Microsoft | winget | `Microsoft.WindowsTerminal` | `winget install --id Microsoft.WindowsTerminal --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | PowerShell | Microsoft | winget | `Microsoft.PowerShell` | `winget install --id Microsoft.PowerShell --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
@@ -146,7 +146,7 @@ Mọi command đều dùng `--exact`, source cố định, chấp nhận agreeme
 
 ## CLI
 
-| Ứng dụng | Publisher | Source | Package ID | Command |
+| App | Publisher | Source | Package ID | Command |
 |---|---|---|---|---|
 | ripgrep | Burnt Sushi | winget | `BurntSushi.ripgrep.MSVC` | `winget install --id BurntSushi.ripgrep.MSVC --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | fd | sharkdp | winget | `sharkdp.fd` | `winget install --id sharkdp.fd --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
@@ -177,7 +177,7 @@ Mọi command đều dùng `--exact`, source cố định, chấp nhận agreeme
 
 ## DevOps & Cloud
 
-| Ứng dụng | Publisher | Source | Package ID | Command |
+| App | Publisher | Source | Package ID | Command |
 |---|---|---|---|---|
 | Docker Desktop | Docker | winget | `Docker.DockerDesktop` | `winget install --id Docker.DockerDesktop --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | Podman Desktop | Red Hat | winget | `RedHat.Podman-Desktop` | `winget install --id RedHat.Podman-Desktop --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
@@ -223,7 +223,7 @@ Mọi command đều dùng `--exact`, source cố định, chấp nhận agreeme
 
 ## Database & API
 
-| Ứng dụng | Publisher | Source | Package ID | Command |
+| App | Publisher | Source | Package ID | Command |
 |---|---|---|---|---|
 | Postman | Postman | winget | `Postman.Postman` | `winget install --id Postman.Postman --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | Insomnia | Insomnia | winget | `Insomnia.Insomnia` | `winget install --id Insomnia.Insomnia --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
@@ -254,9 +254,9 @@ Mọi command đều dùng `--exact`, source cố định, chấp nhận agreeme
 | SQLite CLI | SQLite | winget | `SQLite.SQLite` | `winget install --id SQLite.SQLite --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | MongoDB Shell | MongoDB | winget | `MongoDB.Shell` | `winget install --id MongoDB.Shell --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 
-## AI lập trình
+## AI Coding
 
-| Ứng dụng | Publisher | Source | Package ID | Command |
+| App | Publisher | Source | Package ID | Command |
 |---|---|---|---|---|
 | Codex CLI | OpenAI | winget | `OpenAI.Codex` | `winget install --id OpenAI.Codex --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | Ollama | Ollama | winget | `Ollama.Ollama` | `winget install --id Ollama.Ollama --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
@@ -278,9 +278,9 @@ Mọi command đều dùng `--exact`, source cố định, chấp nhận agreeme
 | Qoder | Alibaba | winget | `Alibaba.Qoder` | `winget install --id Alibaba.Qoder --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | Backyard AI | Ahoy Labs | winget | `AhoyLabs.BackyardAI` | `winget install --id AhoyLabs.BackyardAI --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 
-## Mạng & Bảo mật
+## Network & Security
 
-| Ứng dụng | Publisher | Source | Package ID | Command |
+| App | Publisher | Source | Package ID | Command |
 |---|---|---|---|---|
 | Wireshark | Wireshark Foundation | winget | `WiresharkFoundation.Wireshark` | `winget install --id WiresharkFoundation.Wireshark --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | Fiddler Classic | Telerik | winget | `Telerik.Fiddler.Classic` | `winget install --id Telerik.Fiddler.Classic --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
@@ -324,9 +324,9 @@ Mọi command đều dùng `--exact`, source cố định, chấp nhận agreeme
 | Cryptomator | Cryptomator | winget | `Cryptomator.Cryptomator` | `winget install --id Cryptomator.Cryptomator --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | Malwarebytes | Malwarebytes | winget | `Malwarebytes.Malwarebytes` | `winget install --id Malwarebytes.Malwarebytes --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 
-## Office & Công việc
+## Office & Work
 
-| Ứng dụng | Publisher | Source | Package ID | Command |
+| App | Publisher | Source | Package ID | Command |
 |---|---|---|---|---|
 | LibreOffice | The Document Foundation | winget | `TheDocumentFoundation.LibreOffice` | `winget install --id TheDocumentFoundation.LibreOffice --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | ONLYOFFICE Desktop Editors | ONLYOFFICE | winget | `ONLYOFFICE.DesktopEditors` | `winget install --id ONLYOFFICE.DesktopEditors --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
@@ -364,9 +364,9 @@ Mọi command đều dùng `--exact`, source cố định, chấp nhận agreeme
 | Freeplane | Freeplane | winget | `Freeplane.Freeplane` | `winget install --id Freeplane.Freeplane --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | XMind | Xmind | winget | `Xmind.Xmind` | `winget install --id Xmind.Xmind --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 
-## Liên lạc & Xã hội
+## Communication & Social
 
-| Ứng dụng | Publisher | Source | Package ID | Command |
+| App | Publisher | Source | Package ID | Command |
 |---|---|---|---|---|
 | Microsoft Teams | Microsoft | winget | `Microsoft.Teams` | `winget install --id Microsoft.Teams --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | Slack | Slack Technologies | winget | `SlackTechnologies.Slack` | `winget install --id SlackTechnologies.Slack --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
@@ -385,9 +385,9 @@ Mọi command đều dùng `--exact`, source cố định, chấp nhận agreeme
 | KakaoTalk | Kakao | winget | `Kakao.KakaoTalk` | `winget install --id Kakao.KakaoTalk --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | WhatsApp | WhatsApp | msstore | `9NKSQGP7F2NH` | `winget install --id 9NKSQGP7F2NH --exact --source msstore --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 
-## Trình duyệt
+## Browsers
 
-| Ứng dụng | Publisher | Source | Package ID | Command |
+| App | Publisher | Source | Package ID | Command |
 |---|---|---|---|---|
 | Google Chrome | Google | winget | `Google.Chrome` | `winget install --id Google.Chrome --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | Firefox | Mozilla | winget | `Mozilla.Firefox` | `winget install --id Mozilla.Firefox --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
@@ -409,9 +409,9 @@ Mọi command đều dùng `--exact`, source cố định, chấp nhận agreeme
 | Maxthon | Maxthon | winget | `Maxthon.Maxthon` | `winget install --id Maxthon.Maxthon --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | Ungoogled Chromium | eloston | winget | `eloston.ungoogled-chromium` | `winget install --id eloston.ungoogled-chromium --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 
-## Tiện ích
+## Utilities
 
-| Ứng dụng | Publisher | Source | Package ID | Command |
+| App | Publisher | Source | Package ID | Command |
 |---|---|---|---|---|
 | 7-Zip | 7zip | winget | `7zip.7zip` | `winget install --id 7zip.7zip --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | PowerToys | Microsoft | winget | `Microsoft.PowerToys` | `winget install --id Microsoft.PowerToys --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
@@ -465,9 +465,9 @@ Mọi command đều dùng `--exact`, source cố định, chấp nhận agreeme
 | UNIGINE Heaven Benchmark | Unigine | winget | `Unigine.HeavenBenchmark` | `winget install --id Unigine.HeavenBenchmark --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | NVIDIA App | NVIDIA | msstore | `XP8CLZL93F5Z4P` | `winget install --id XP8CLZL93F5Z4P --exact --source msstore --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 
-## Thiết kế & Media
+## Design & Media
 
-| Ứng dụng | Publisher | Source | Package ID | Command |
+| App | Publisher | Source | Package ID | Command |
 |---|---|---|---|---|
 | VLC | Video LAN | winget | `VideoLAN.VLC` | `winget install --id VideoLAN.VLC --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | HandBrake | Hand Brake | winget | `HandBrake.HandBrake` | `winget install --id HandBrake.HandBrake --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
@@ -507,7 +507,7 @@ Mọi command đều dùng `--exact`, source cố định, chấp nhận agreeme
 
 ## Game & Game Dev
 
-| Ứng dụng | Publisher | Source | Package ID | Command |
+| App | Publisher | Source | Package ID | Command |
 |---|---|---|---|---|
 | Godot | Godot Engine | winget | `GodotEngine.GodotEngine` | `winget install --id GodotEngine.GodotEngine --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |
 | Unity Hub | Unity Technologies | winget | `Unity.UnityHub` | `winget install --id Unity.UnityHub --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity` |

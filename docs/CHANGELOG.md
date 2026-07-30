@@ -1,165 +1,136 @@
 # Changelog
 
-Toàn bộ thay đổi đáng chú ý của SetupKit được ghi tại đây.
+Notable SetupKit changes are documented here.
+
+## [0.9.1] - 2026-07-30
+
+### Changed
+
+- Reworked the README, changelog, release notes, catalog documentation, and workstation documentation in English.
+- Refreshed product screenshots so the documentation presents the current English UI and updated visual states.
+- Updated catalog category, tag, description, risk, and source text to English across generated docs and the bundled catalog.
+- Updated install and publish scripts with English prompts and status messages.
+- Versioned the desktop app, landing page download links, and packaged release notes as `v0.9.1`.
+
+### Removed
+
+- Removed stale activation and Vietnamese-search screenshots from the documentation set.
 
 ## [0.9.0] - 2026-07-30
 
-### Thêm mới
+### Added
 
-- **Tab Cập nhật riêng** — gom toàn bộ app đã cài có bản mới vào một màn hình riêng, có tìm kiếm, trạng thái, lệnh `winget upgrade` preview và nút cập nhật từng app.
-- **Cập nhật tất cả chỉ một lần xác nhận** — backend thêm `UpgradeApps`, hỏi xác nhận một lần rồi chạy tuần tự đúng các package đã duyệt trong catalog, vẫn stream terminal và tiến trình từng app.
-- **Tab Versions/Rollback** — chọn app nguồn `winget`, tải danh sách version bằng `winget show --versions`, chọn version cũ và cài lại đúng version đó.
-- **Hai chế độ cài version** — hỗ trợ **Cài version này** để thử cài đè và **Gỡ rồi cài version này** cho rollback mạnh hơn, kèm cảnh báo rủi ro cấu hình.
-- **Bộ lọc trạng thái trong Versions** — lọc nhanh app `Đã cài`, `Chưa cài` hoặc `Tất cả` để không phải kéo tay trong danh sách hơn 400 app winget.
+- **Dedicated Updates tab** with search, status, `winget upgrade` command preview, and per-app update actions.
+- **Update all with one confirmation** through a reviewed package list, sequential execution, terminal streaming, and per-app progress.
+- **Versions and rollback** for winget packages using `winget show --versions`, with exact-version install support.
+- **Two rollback modes**: install a selected version directly or uninstall the current app before installing the selected version.
+- **Version filters** for Installed, Not installed, and All apps.
+- **Expanded VPN catalog** with ExpressVPN, HMA VPN, Surfshark, Private Internet Access, CyberGhost, IPVanish, TunnelBear, hide.me VPN, VPN Unlimited, AdGuard VPN, and Windscribe.
 
-### Cải thiện
+### Improved
 
-- **Không tự chọn app khi mở** — phiên mới luôn bắt đầu với gói cài đặt trống; chỉ chọn app/workspace khi người dùng bấm rõ ràng.
-- **Hộp xác nhận trong app** — thay hộp thoại hệ thống thô bằng modal có CSS, icon, command preview và tone màu theo thao tác install/update/uninstall/rollback.
-- **Gỡ VPN ổn định hơn** — lệnh `winget uninstall` không còn ép `--silent`/`--disable-interactivity`, giúp uninstaller của VPN như ExpressVPN có thể hiện xác nhận, đóng service hoặc driver nếu cần.
-- **Tìm kiếm và sắp xếp catalog tốt hơn** — thêm dropdown Sort có icon, ghi nhớ lựa chọn, hỗ trợ sắp theo thông minh, thứ tự cài, tên, danh mục, tình trạng, nguồn, app lớn và app chưa cài.
-- **Search thông minh hơn** — mở rộng alias cho các từ khóa quen thuộc như `vscode`, `ai`, `docker`, `vpn`, `db`, `browser`, `office`, giúp tìm app nhanh hơn.
-- **Catalog VPN đầy đủ hơn** — bổ sung các VPN phổ biến như ExpressVPN, HMA VPN, Surfshark, Private Internet Access, CyberGhost, IPVanish, TunnelBear, hide.me VPN, VPN Unlimited, AdGuard VPN và Windscribe.
-- **Bộ lọc rõ hơn** — dropdown danh mục/nguồn/tình trạng/sort có icon; dot màu chỉ còn dùng cho tình trạng để tránh rối thị giác.
-- **Motion mượt hơn** — tinh chỉnh hover, dropdown, dialog và card transition để UI phản hồi mềm hơn mà vẫn tôn trọng reduced motion.
-- **Versions UI gọn hơn** — search, segmented filter và danh sách version co giãn tốt hơn trên panel hẹp.
+- New sessions start with an empty queue instead of restoring an old selection automatically.
+- Install, update, uninstall, and rollback confirmations now use a styled in-app modal with command preview.
+- VPN uninstall commands no longer force `--silent` or `--disable-interactivity`, allowing vendor uninstallers to request service or driver cleanup.
+- Catalog sorting adds smart order, install order, name, category, status, source, large apps, and not-installed apps.
+- Search aliases cover common terms such as `vscode`, `ai`, `docker`, `vpn`, `db`, `browser`, and `office`.
+- Filter UI uses clearer icons, with colored dots reserved for status only.
+- Hover, dropdown, dialog, and card motion was smoothed while respecting reduced-motion settings.
+- Versions UI gained search, segmented filters, and better narrow-panel behavior.
 
-### Kiểm thử
+### Tested
 
-- Thêm unit test cho parser `winget show --versions` và command cài version cụ thể bằng `--version`.
-- Thêm unit test đảm bảo lệnh gỡ ExpressVPN không ép silent/non-interactive.
-- `npm run validate`, `npm test` và build package Windows đều đi qua bộ kiểm tra catalog, icon subset, DOM reference và Go tests.
+- Added unit tests for `winget show --versions`, exact-version install commands, and VPN uninstall command flags.
+- `npm run validate`, `npm test`, and the Windows package build run catalog, icon subset, DOM reference, and Go tests.
 
 ## [0.8.0] - 2026-07-30
 
-### Thêm mới
+### Added
 
-- **Trang Workspaces riêng** — thêm tab Workspaces để duyệt toàn bộ 24 bộ công cụ theo vai trò/lĩnh vực thay vì chỉ xem vài plan nổi bật ở trang chính.
-- **Chi tiết workspace kiểu package detail** — mỗi workspace có dialog riêng với tổng số app, số app cần cài, app đã có, nguồn WinGet/Store, danh sách app compact và preview các lệnh sẽ chạy.
-- **Preview logo khi hover** — workspace/preset chỉ bung preview logo 2 dòng khi hover hoặc focus, giữ màn hình gọn khi không tương tác.
+- Separate Workspaces tab for browsing all 24 role-based toolsets.
+- Workspace detail dialog with app counts, installed state, source summary, compact app list, and command preview.
+- Two-row logo preview on workspace hover or focus.
 
-### Cải thiện
+### Improved
 
-- **Workspace cards gọn hơn** — rail logo trong card tự dàn đều theo chiều ngang, bỏ caret thừa và chỉ hiện nút chi tiết khi người dùng đang focus vào card.
-- **Danh sách app trong workspace detail dày hơn** — app trong dialog xếp 2-3 item mỗi hàng trên desktop, giảm cuộn dọc khi xem bộ lớn.
-- **Chế độ biểu tượng cân hàng nút** — các nút chọn/chi tiết trong icon view thẳng hàng dù tên app dài 1 hay 2 dòng.
-- **Chế độ danh sách tận dụng khoảng trống** — list view hiển thị thêm mô tả, type/tag và trạng thái thay vì để phần giữa row trống.
-- **Validation seed hệ sinh thái** — thêm dữ liệu seed và bước kiểm tra `validate-ecosystem-seeds.js` vào `npm run validate`.
+- Workspace cards became denser and the detail button appears only on active hover/focus states.
+- Workspace detail app lists use two to three columns on desktop.
+- Icon view aligns select/detail buttons even when names wrap.
+- List view now uses available row space for descriptions, type/source, and status.
+- Ecosystem seed validation was added to `npm run validate`.
 
 ## [0.7.0] - 2026-07-26
 
-### Thêm mới
+### Added
 
-- **Cập nhật ứng dụng đã cài** — SetupKit tự phát hiện app có bản mới (qua `winget upgrade` khi quét máy), gắn nhãn "Có bản cập nhật mới" trên thẻ và thêm nút **Cập nhật** trong hộp thoại chi tiết. Bấm là chạy `winget upgrade` cho đúng ứng dụng đó, có terminal và tiến trình như khi cài.
-- **Gỡ cài đặt** — nút **Gỡ cài đặt** trong hộp thoại chi tiết chạy `winget uninstall`, hỏi xác nhận trước khi xóa và cập nhật lại trạng thái ngay sau khi xong.
-- **Nhập hồ sơ JSON** — trang Hồ sơ có thêm nút Nhập: chọn tệp hồ sơ đã xuất để áp lại đúng bộ ứng dụng, tự bỏ qua app đã cài và chỉ nhận package ID có trong danh mục đã duyệt.
-- **Chọn nhanh hàng loạt** — nút "Chọn hết" thêm toàn bộ ứng dụng đang lọc mà chưa cài (kèm công cụ nên có trước), nút "Bỏ chọn" làm trống gói trong một bấm.
-- **Ghi nhớ danh sách đang chọn** — gói cài đặt được lưu lại và khôi phục nguyên vẹn ở lần mở app sau.
-- **Cài lại ứng dụng lỗi** — sau khi chạy gói, nút "Cài lại ứng dụng lỗi" thử lại đúng những app thất bại.
-- **Dừng giữa chừng** — nút "Dừng sau ứng dụng hiện tại" dừng hàng đợi một cách an toàn sau khi app đang chạy hoàn tất, không cắt ngang giữa lúc cài.
-- **Máy chưa có winget** — nếu không tìm thấy Windows Package Manager, SetupKit hiện banner mời cài **App Installer** từ Microsoft Store chỉ với một bấm, kèm nút Kiểm tra lại, thay vì báo lỗi cụt.
-- **Tự động build & phát hành (CI)** — thêm GitHub Actions tự build `SetupKit.exe` và tạo Release khi đẩy tag `v*`.
+- Installed-app update detection through `winget upgrade`, with update badges and app-detail update actions.
+- Uninstall action in app details, with confirmation and status refresh.
+- JSON profile import to reapply exported app sets while ignoring unknown package IDs.
+- Bulk select and clear actions for filtered apps.
+- Failed-app retry and safe stop-after-current controls for install queues.
+- App Installer recovery flow when winget is missing.
+- GitHub Actions release workflow for tags matching `v*`.
 
-### Gỡ bỏ
+### Removed
 
-- **Gỡ bỏ hoàn toàn trang Kích hoạt Windows** — bỏ cả giao diện (tab Kích hoạt, console lệnh) lẫn phần backend liên quan. SetupKit tập trung vào cài, cập nhật và gỡ ứng dụng.
+- Removed the Windows activation page and backend logic so SetupKit stays focused on app install, update, and uninstall workflows.
 
-### Cải thiện
+### Improved
 
-- Ba thao tác winget (cài, cập nhật, gỡ) dùng chung một luồng thực thi: cùng cách stream terminal, suy luận tiến trình và làm mới trạng thái sau khi xong.
+- Install, update, and uninstall share one execution pipeline with terminal streaming, progress inference, and post-run status refresh.
 
-### Lưu ý
+### Notes
 
-- File `SetupKit.exe` chưa được ký số (code signing) vì cần chứng chỉ trả phí, nên Windows SmartScreen có thể cảnh báo lần đầu (chọn "More info" rồi "Run anyway"). Bản build CI cũng chưa ký; có thể thêm bước ký khi có chứng chỉ.
+- `SetupKit.exe` is not code-signed yet, so SmartScreen may warn on first launch.
 
 ## [0.6.0] - 2026-07-26
 
-### Thêm mới
+### Added
 
-- **Ba kiểu hiển thị danh mục** — Lưới (mặc định), Danh sách (gọn, một app mỗi hàng) và Biểu tượng (ô nhỏ tập trung vào logo). Có nút chuyển ngay trên thanh danh mục và lựa chọn được ghi nhớ cho lần mở sau.
-- **Hộp thoại chi tiết hiển thị logo ứng dụng** ngay cạnh tên.
+- Three catalog view modes: grid, list, and icon.
+- App detail dialogs now show app logos beside names.
 
-### Sửa lỗi
+### Fixed
 
-- Icon ở khối "ứng dụng đã chọn" và thanh trạng thái đổi từ `ph-package` (có nét chĩa lên trông như lỗi) sang `ph-stack` cho sạch
-- Khối "ứng dụng đã chọn" bỏ nền kính mờ (`backdrop-filter`) gây vạch góc và lộ nội dung phía sau trên WebView2; nay dùng nền đục
+- Replaced confusing package icons with stack icons in selected-app and status areas.
+- Removed translucent selected-app backgrounds that caused visual artifacts in WebView2.
 
 ## [0.5.0] - 2026-07-26
 
-### Sửa lỗi
+### Fixed
 
-- **Không quét được ứng dụng trên máy** — sau đợt tái cấu trúc, Wails phơi cầu nối native dưới package `kit` (`window.go.kit.App`) nhưng frontend vẫn tìm `window.go.main.App`, khiến mọi lời gọi native (quét máy, cài thật, mở app) đều thất bại. Cầu nối giờ tự dò `App` ở mọi package nên không vỡ khi đổi cấu trúc Go.
+- Native scanning worked again after the Wails bridge moved from `window.go.main.App` to package-specific namespaces.
 
-### Thêm mới
+### Added
 
-- **Thanh trạng thái cố định dưới cùng** kiểu IDE, hiện ở mọi tab: trạng thái winget, số ứng dụng đã cài, số đang chọn, và nút mở terminal nhanh kèm số dòng đầu ra
-- Đưa gói **Office & Remote Work** (Microsoft 365 / Word, Excel, PowerPoint, Outlook, Teams...) lên vị trí thứ hai để dễ thấy
+- Persistent IDE-style status bar with winget state, installed count, selected count, and terminal shortcut.
+- Office & Remote Work was promoted near the top of workspace presets.
 
-### Cải thiện
+### Improved
 
-- **Lưới ứng dụng dày hơn** — tự xếp 3-4 ứng dụng trên một hàng ở màn hình rộng thay vì cố định 2, co giãn mượt theo kích thước cửa sổ, tận dụng tối đa không gian
+- App grid density increased to three or four columns on wide screens.
 
 ## [0.4.1] - 2026-07-26
 
-### Thay đổi
+### Changed
 
-- Tái cấu trúc dự án theo bố cục chuẩn Wails + Go: giao diện web vào `frontend/`, toàn bộ logic Go vào `internal/kit/` — gốc dự án chỉ còn `main.go` bootstrap và file cấu hình
-- Catalog chỉ còn nhúng một bản duy nhất trong exe (trước đây nhúng trùng hai lần) — file build nhẹ hơn ~300 KB
-- Xóa `package-lock.json` rỗng; `CHANGELOG.md` chuyển vào `docs/`, `install.ps1` chuyển vào `scripts/`
-- Ba dropdown lọc (danh mục, nguồn, tình trạng) chuyển từ `<select>` hệ điều hành sang component tùy chỉnh: đồng bộ theme sáng/tối, đánh dấu mục đang chọn, điều khiển đầy đủ bằng bàn phím (mũi tên, Enter, Esc, Home/End)
-- Thêm `install.ps1` - cài SetupKit bằng một dòng lệnh PowerShell, tự tải bản mới nhất từ GitHub Releases và tạo shortcut
-- README viết lại với banner, tập trung vào tính năng; mô tả About của repo dùng tiếng Việt có dấu kèm topics
+- Reorganized the project into a cleaner Wails + Go layout.
+- Embedded a single catalog copy in the executable.
+- Moved changelog and install scripts into `docs/` and `scripts/`.
+- Replaced native select dropdowns with custom theme-aware, keyboard-friendly controls.
+- Added `install.ps1` for one-command GitHub release installation.
+- Rewrote README around the product experience.
 
-### Sửa lỗi
+### Fixed
 
-- Ô tìm kiếm hiển thị hai nút xóa (nút xóa mặc định của WebView2 trùng với nút của app)
+- Search no longer shows duplicate clear buttons in WebView2.
 
 ## [0.4.0] - 2026-07-26
 
-Bản tối ưu lớn: sửa 10 lỗi giao diện/hành vi, render thông minh hơn, thêm animation nhẹ toàn CSS và cải thiện trải nghiệm — exe vẫn ~12 MB, không thêm thư viện nào.
+### Added
 
-### Sửa lỗi
+- Safety-focused first release with a verified app catalog, role-based presets, dry-run mode, command preview, and live terminal output.
 
-- Icon nhóm và tag "CLI" hiển thị trống (catalog dùng `ph-prompt` không tồn tại trong Phosphor → `ph-terminal`)
-- Dialog chi tiết bị che mất hàng nút khi nội dung dài — phần thân giờ tự cuộn, footer luôn hiện
-- Thanh tiến trình giật/nhấp nháy khi winget đổ log (trước đây rebuild toàn bộ DOM mỗi tick)
-- Chớp trắng khi mở app lúc đang dùng theme tối — theme áp trước khi render (`theme-init.js`), màu nền cửa sổ đọc theo dark mode Windows ngay từ khởi tạo
-- Nút "Mở ứng dụng" có thể chạy nhầm file `.ico` khi Registry `DisplayIcon` không trỏ tới file thực thi
-- Ứng dụng đã cài nhưng còn nằm trong gói không thể bỏ ra khỏi gói
-- Nhấn Enter/Space vào nút bên trong dialog làm dialog tự đóng ngoài ý muốn
-- Double-click nhanh "Thêm vào gói" tự hủy ngược lựa chọn vừa thêm
-- Gõ tìm kiếm trước khi catalog tải xong làm app rơi vào màn hình lỗi
-- Icon xoay (spinner) bị reset giật mỗi tick tiến trình
+### Fixed
 
-### Hiệu năng
-
-- Chọn/bỏ ứng dụng chỉ cập nhật đúng card đó thay vì vẽ lại cả lưới 440 card
-- Tra cứu app/package chuyển sang Map O(1); số đếm tag tính một lần khi tải catalog
-- Tìm kiếm có debounce 90ms; chỉ mục tìm kiếm dựng khi máy rảnh (requestIdleCallback)
-- CSS icon Phosphor cắt từ 78 KB (1530 icon) còn ~4.6 KB (72 icon thật sự dùng)
-- Giới hạn bộ nhớ nhật ký (400 dòng) và terminal (120 KB)
-- Terminal chỉ tự cuộn khi đang ở cuối; render log/terminal gom theo frame (rAF)
-
-### Trải nghiệm & giao diện
-
-- Tìm kiếm không cần gõ dấu tiếng Việt ("trinh duyet" khớp "trình duyệt")
-- Phím tắt `/` hoặc `Ctrl+K` để tìm nhanh; Esc xóa từ khóa
-- Nhấn vào thân card để mở chi tiết
-- Animation vào/ra cho card, hàng đợi, preset, dialog, dock chọn ứng dụng và toast (CSS thuần, tự tắt khi Windows bật giảm chuyển động)
-- Toast bấm để đóng, tối đa 4, có màu theo loại thông báo
-- Ánh sáng chạy trên thanh tiến trình của app đang cài; vạch xanh đánh dấu mục nav đang chọn; nút theme xoay khi đổi giao diện
-- Cuộn dải Workstation plans bằng con lăn chuột hoặc hai nút mũi tên
-- Skeleton hiển thị trong lúc khởi động; ảnh logo không bị kéo-thả như ảnh web; chỉ vùng lệnh/đường dẫn/log cho phép bôi đen copy
-
-### Build & công cụ
-
-- `scripts/build-phosphor-subset.js`: tự cắt bộ icon theo đúng phần đang dùng, fail ngay lúc build nếu catalog tham chiếu icon không tồn tại (đã nối vào `build-native.ps1` và `npm run validate`)
-- `BUILD-SETUPKIT.cmd`: build một cú double-click
-- `scripts/publish-github.ps1` + `PUBLISH-GITHUB.cmd`: tự cài công cụ, tạo repo, push và tạo GitHub Release kèm exe
-
-## [0.3.0]
-
-- Bản WebView2 native đầu tiên (Wails v2) thay thế bản Electron — exe độc lập ~12 MB
-- Catalog 440 ứng dụng, 24 workstation plan, 15 nhóm, 34 tag, 309 logo
-- Quét app đã cài qua winget, Registry, Start Menu, shortcut
-- Chế độ chạy thử mặc định, xác nhận từng lệnh khi cài thật, allowlist nhúng trong binary
+- Improved dialog layout, selection behavior, search stability, spinner behavior, and card rendering performance.

@@ -1,227 +1,177 @@
 # SetupKit Developer Workstation Build Plan
 
-Ngày xác minh: 2026-07-26  
-Nguồn kiểm tra: Windows Package Manager `winget`  
-Kết quả: 448 package winget hợp lệ, 2 package Microsoft Store, tổng cộng 450 ứng dụng.
+Verification date: 2026-07-26
+Source checked: Windows Package Manager `winget`
+Result: 448 valid winget packages, 2 Microsoft Store packages, 450 apps total.
 
-## 1. Mục tiêu
+## 1. Goal
 
-SetupKit sẽ chuyển từ catalog ứng dụng phổ thông sang trình dựng workstation cho:
+SetupKit turns a broad Windows app catalog into a role-based workstation builder for:
 
-- Lập trình viên web frontend và backend.
-- Lập trình viên .NET, Java, Python, Go, Rust và mobile.
-- Data, AI, database, DevOps, cloud và hạ tầng.
-- Product, design, office, họp và làm việc từ xa.
-- Tiện ích, bảo mật, mạng, media, game và game development.
+- Frontend and backend web developers.
+- .NET, Java, Python, Go, Rust, and mobile developers.
+- Data, AI, database, DevOps, cloud, and infrastructure work.
+- Product, design, office, meetings, and remote collaboration.
+- Utilities, security, networking, media, gaming, and game development.
 
-Mỗi ứng dụng phải có package ID, nguồn, command preview, mô tả, tag, lưu ý,
-trạng thái đã cài, phiên bản, vị trí cài và hành động mở ứng dụng/thư mục khi
-Windows cung cấp dữ liệu.
+Each app needs a package ID, source, command preview, description, tags, risk notes, installed state, version, install path, and app/folder open actions when Windows exposes that data.
 
 ## 2. Taxonomy
 
-| Nhóm chính | Số package winget | Tag tiêu biểu |
+| Group | Winget packages | Example tags |
 |---|---:|---|
 | IDE & Code | 37 | `ide`, `code`, `editor`, `ai-editor`, `mobile` |
-| Ngôn ngữ & Runtime | 41 | `runtime`, `language`, `javascript`, `python`, `dotnet`, `java`, `go`, `rust` |
+| Languages & Runtime | 41 | `runtime`, `language`, `javascript`, `python`, `dotnet`, `java`, `go`, `rust` |
 | Build & Package | 16 | `build`, `package-manager`, `node`, `python`, `cpp` |
 | Terminal & Git | 24 | `terminal`, `shell`, `git`, `version-control`, `diff` |
 | CLI | 26 | `cli`, `search`, `json`, `download`, `automation` |
 | DevOps & Cloud | 41 | `devops`, `cloud`, `container`, `kubernetes`, `iac`, `virtualization` |
 | Database & API | 28 | `database`, `sql`, `nosql`, `api`, `testing` |
-| AI lập trình | 19 | `ai`, `local-ai`, `llm`, `assistant` |
-| Mạng & Bảo mật | 41 | `network`, `vpn`, `ssh`, `remote`, `password`, `security` |
-| Office & Công việc | 35 | `office`, `docs`, `notes`, `meeting`, `sync`, `productivity` |
-| Liên lạc & Xã hội | 16 | `chat`, `meeting`, `social`, `work` |
-| Trình duyệt | 19 | `browser`, `web`, `privacy`, `testing` |
-| Tiện ích | 51 | `utility`, `windows`, `archive`, `search`, `screenshot`, `disk` |
-| Thiết kế & Media | 35 | `design`, `ui`, `3d`, `image`, `audio`, `video`, `streaming` |
+| AI Coding | 19 | `ai`, `local-ai`, `llm`, `assistant` |
+| Network & Security | 41 | `network`, `vpn`, `ssh`, `remote`, `password`, `security` |
+| Office & Work | 35 | `office`, `docs`, `notes`, `meeting`, `sync`, `productivity` |
+| Communication & Social | 16 | `chat`, `meeting`, `social`, `work` |
+| Browsers | 19 | `browser`, `web`, `privacy`, `testing` |
+| Utilities | 51 | `utility`, `windows`, `archive`, `search`, `screenshot`, `disk` |
+| Design & Media | 35 | `design`, `ui`, `3d`, `image`, `audio`, `video`, `streaming` |
 | Game & Game Dev | 21 | `game`, `game-dev`, `engine`, `launcher` |
 
-Danh sách nền và danh sách mở rộng nằm trong `docs/package-candidates.json` và
-`docs/package-expansion-candidates.json`. Tổng cộng 450 ứng dụng được đưa vào catalog
-đã vượt qua:
+Base and expansion candidates live in `docs/package-candidates.json` and `docs/package-expansion-candidates.json`. All 450 catalog apps passed:
 
 ```powershell
 winget show --id <PACKAGE_ID> --exact --source winget --accept-source-agreements --disable-interactivity
 ```
 
-## 3. Workstation plans
+## 3. Workstation Plans
 
 ### Developer Core
 
-Git, GitHub CLI, VS Code, Windows Terminal, PowerShell, Chrome, 7-Zip,
-PowerToys, Everything, Bitwarden và ShareX.
+Git, GitHub CLI, VS Code, Windows Terminal, PowerShell, Chrome, 7-Zip, PowerToys, Everything, Bitwarden, and ShareX.
 
 ### Web Frontend
 
-Node.js LTS, pnpm, Git, GitHub CLI, VS Code, Chrome, Firefox, Postman,
-Docker Desktop, DBeaver và Figma.
+Node.js LTS, pnpm, Git, GitHub CLI, VS Code, Chrome, Firefox, Postman, Docker Desktop, DBeaver, and Figma.
 
 ### Node.js Backend
 
-Node.js LTS, pnpm, Git, VS Code, Docker Desktop, Postman, Bruno,
-DBeaver, PostgreSQL 17, Redis Insight và MongoDB Compass.
+Node.js LTS, pnpm, Git, VS Code, Docker Desktop, Postman, Bruno, DBeaver, PostgreSQL 17, Redis Insight, and MongoDB Compass.
 
 ### Python, Data & AI
 
-Python 3.14, uv, Miniconda, VS Code, Git, Docker Desktop, DBeaver,
-Postman, Power BI Desktop, Ollama và LM Studio.
+Python 3.14, uv, Miniconda, VS Code, Git, Docker Desktop, DBeaver, Postman, Power BI Desktop, Ollama, and LM Studio.
 
 ### .NET Developer
 
-Visual Studio 2022 Community, .NET SDK 10, Git, PowerShell,
-SQL Server 2022 Developer, SQL Server Management Studio, Docker Desktop
-và Postman.
+Visual Studio 2022 Community, .NET SDK 10, Git, PowerShell, SQL Server 2022 Developer, SQL Server Management Studio, Docker Desktop, and Postman.
 
 ### Java Developer
 
-IntelliJ IDEA Community, Temurin JDK 21, Git, Windows Terminal,
-Docker Desktop, Postman, DBeaver và Redis Insight.
+IntelliJ IDEA Community, Temurin JDK 21, Git, Windows Terminal, Docker Desktop, Postman, DBeaver, and Redis Insight.
 
 ### Mobile Developer
 
-Android Studio, Temurin JDK 21, Dart SDK, VS Code, Git, Postman,
-Docker Desktop, Figma và draw.io.
+Android Studio, Temurin JDK 21, Dart SDK, VS Code, Git, Postman, Docker Desktop, Figma, and draw.io.
 
-Flutter SDK không có package cài đặt trong source WinGet ở thời điểm kiểm tra,
-vì vậy không thể đưa vào lệnh tự động.
+Flutter SDK did not have a valid winget package source during verification, so it is not included in automatic commands.
 
 ### Go & Rust Systems
 
-Go, Rustup, VS Code, Git, CMake, LLVM, Ninja, PowerShell, Docker Desktop,
-ripgrep, fd, bat, fzf, jq và Just.
+Go, Rustup, VS Code, Git, CMake, LLVM, Ninja, PowerShell, Docker Desktop, ripgrep, fd, bat, fzf, jq, and Just.
 
 ### DevOps & Cloud
 
-WSL, Docker Desktop, Windows Terminal, PowerShell, Git, GitHub CLI,
-Azure CLI, AWS CLI, Google Cloud CLI, kubectl, Helm, Terraform,
-OpenTofu, Pulumi, k9s, cloudflared, Vault và WinSCP.
+WSL, Docker Desktop, Windows Terminal, PowerShell, Git, GitHub CLI, Azure CLI, AWS CLI, Google Cloud CLI, kubectl, Helm, Terraform, OpenTofu, Pulumi, k9s, cloudflared, Vault, and WinSCP.
 
 ### Database & API
 
-Postman, Insomnia, Bruno, DBeaver, DataGrip, MongoDB Compass, pgAdmin,
-MySQL Workbench, Redis Insight, SQL Server Management Studio,
-DB Browser for SQLite, TablePlus và Beekeeper Studio.
+Postman, Insomnia, Bruno, DBeaver, DataGrip, MongoDB Compass, pgAdmin, MySQL Workbench, Redis Insight, SQL Server Management Studio, DB Browser for SQLite, TablePlus, and Beekeeper Studio.
 
 ### Office & Remote Work
 
-Microsoft 365 Apps, Teams, Slack, Zoom, Notion, Obsidian, Todoist,
-Google Drive, OneDrive, Adobe Acrobat Reader, draw.io, Miro,
-Bitwarden và Tailscale.
+Microsoft 365 Apps, Teams, Slack, Zoom, Notion, Obsidian, Todoist, Google Drive, OneDrive, Adobe Acrobat Reader, draw.io, Miro, Bitwarden, and Tailscale.
 
 ### Product & Design
 
-Figma, Blender, GIMP, Inkscape, Krita, OBS Studio, Audacity, HandBrake,
-VLC, Notion, Miro và ShareX.
+Figma, Blender, GIMP, Inkscape, Krita, OBS Studio, Audacity, HandBrake, VLC, Notion, Miro, and ShareX.
 
 ### Game Development
 
-Unity Hub, Godot, Blender, Visual Studio Code, Git, CMake, Discord,
-Steam và Epic Games Launcher.
+Unity Hub, Godot, Blender, VS Code, Git, CMake, Discord, Steam, and Epic Games Launcher.
 
-### Các plan mở rộng
+### C/C++ Desktop
 
-- C/C++ Desktop
-- PHP Web
-- QA & Automation
-- Security & Network
-- Sysadmin & IT Support
-- Creator & Streaming
-- Open-source Desktop
-- Gaming PC
-- Terminal Power User
-- Data Analyst
-- AI Coding & Local LLM
+Visual Studio 2022 Community, CLion, VS Code, Code::Blocks, LLVM, CMake, Ninja, and Git.
 
-## 4. Nguồn và command
+### PHP Web
 
-Nguồn chính thức:
+PHP 8.4, Laragon, PhpStorm, VS Code, Git, Node.js LTS, MariaDB, DBeaver, and Postman.
 
-- Tài liệu WinGet: <https://learn.microsoft.com/windows/package-manager/winget/>
-- Danh sách source mặc định: <https://learn.microsoft.com/windows/package-manager/winget/source>
-- Manifest cộng đồng: <https://github.com/microsoft/winget-pkgs>
+### QA & Automation
 
-Microsoft xác định `winget` là WinGet Community Repository và `msstore` là
-Microsoft Store catalog. SetupKit chỉ dùng đúng hai source mặc định này.
+Postman, Bruno, Insomnia, Chrome, Firefox, Edge, Python 3.14, Node.js LTS, Android Studio, Docker Desktop, and Git.
 
-Command nguồn winget:
+### Security & Network
 
-```powershell
-winget install --id <PACKAGE_ID> --exact --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity
-```
+Nmap, Wireshark, Burp Suite Community, OWASP ZAP, mitmproxy, WireGuard, Tailscale, VeraCrypt, KeePassXC, and Bitwarden.
 
-Nguồn Microsoft Store:
+### Sysadmin & IT Support
 
-```powershell
-winget install --id <STORE_PRODUCT_ID> --exact --source msstore --accept-package-agreements --accept-source-agreements --disable-interactivity
-```
+PowerShell, Windows Terminal, WSL, Sysinternals Suite, PuTTY, WinSCP, Nmap, AnyDesk, TeamViewer, Wireshark, Rufus, Ventoy, HWiNFO, and Display Driver Uninstaller.
 
-Nếu người dùng chọn thư mục và package hỗ trợ:
+### Creator & Streaming
 
-```powershell
-winget install --id <PACKAGE_ID> --exact --source winget --silent --location "<INSTALL_DIRECTORY>" --accept-package-agreements --accept-source-agreements --disable-interactivity
-```
+OBS Studio, Kdenlive, Shotcut, Audacity, FFmpeg, HandBrake, VLC, GIMP, Krita, Canva, and ScreenToGif.
 
-SetupKit chỉ dựng command từ package ID nằm trong allowlist. URL và script cài
-đặt tùy ý tiếp tục bị chặn.
+### Open-source Desktop
 
-## 5. Kiến trúc dữ liệu
+VSCodium, LibreWolf, Thunderbird, LibreOffice, Joplin, KeePassXC, GIMP, Inkscape, VLC, PeaZip, CopyQ, LocalSend, and Syncthing.
 
-Một file `catalog.json` sẽ là nguồn dữ liệu duy nhất cho:
+### Gaming PC
 
-- Catalog hiển thị trong renderer.
-- Allowlist của Go backend.
-- Match name dùng khi quét Registry, Start Menu và shortcut.
-- Workstation plans.
-- Category, tag, publisher, mô tả và lưu ý.
-- Tài liệu package/source/command được sinh tự động.
+Steam, Epic Games Launcher, GOG Galaxy, EA App, Ubisoft Connect, Heroic Games Launcher, Playnite, Prism Launcher, CurseForge, Discord, and Spotify.
 
-Việc này loại bỏ tình trạng catalog JavaScript và allowlist Go không đồng bộ.
+### Terminal Power User
 
-## 6. Thay đổi giao diện
+Windows Terminal, PowerShell, Nushell, Alacritty, WezTerm, Oh My Posh, Starship, Git, GitHub CLI, ripgrep, fd, bat, fzf, eza, dust, bottom, jq, yq, zoxide, and lazygit.
 
-- Thay 5 preset chung bằng workstation plan theo vai trò.
-- Thêm thanh tag bấm được, cho phép kết hợp category, tag, source và status.
-- Hiển thị tag quan trọng ngay trên card nhưng giới hạn số lượng để tránh rối.
-- Thêm phần publisher, loại công cụ, nguồn, package ID, command và dependency
-  trong màn chi tiết.
-- Thêm bộ đếm kết quả, bộ lọc đang dùng và nút xóa từng tag.
-- Thêm fallback icon theo category nếu logo chưa có, không hiển thị ảnh lỗi.
-- Giữ layout hai cột, dark mode, keyboard focus và progress/terminal hiện tại.
+### Data Analyst
 
-## 7. Thứ tự cài
+Python 3.14, Miniconda, R, RStudio, Julia, Power BI, DBeaver, PostgreSQL 17, Microsoft 365 Apps, VS Code, and Git.
 
-Plan sẽ được sắp xếp theo lớp:
+### AI Coding & Local LLM
 
-1. Hệ thống, terminal và công cụ nền.
-2. Git và CLI.
-3. Ngôn ngữ/runtime.
-4. Build/package manager.
-5. IDE/editor.
-6. Container, cloud và database.
-7. Công cụ công việc, design và ứng dụng tùy chọn.
+Codex, GitHub Copilot CLI, Claude Code, AI Shell, Ollama, LM Studio, Jan, GPT4All, Chatbox, Msty, Python 3.14, VS Code, and Docker Desktop.
 
-Ứng dụng đã cài bị bỏ qua. SetupKit vẫn yêu cầu xác nhận trước từng command.
+## 4. Execution Order
 
-## 8. Package chưa có trong WinGet
+SetupKit sorts queue execution by:
 
-Các công cụ sau không có package cài đặt trong WinGet ở lần kiểm tra này:
-Flutter SDK, Kotlin Compiler độc lập, Poetry,
-Maven, Gradle, Composer, RustDesk, FileZilla, Dev Home và AnythingLLM Desktop.
+1. Foundational tooling: Git, terminal, PowerShell, WSL.
+2. Runtimes and SDKs: Node, Python, Go, Rust, .NET, Java.
+3. Build tools and package managers.
+4. Containers, virtualization, and database engines.
+5. IDEs and editors.
+6. API clients, database GUIs, browsers, and test tools.
+7. Office, design, media, and optional apps.
 
-SetupKit không giả một package ID hoặc âm thầm thay bằng URL khác. Người dùng
-vẫn có thể cài thủ công từ website hợp pháp của sản phẩm.
+Already installed apps are skipped. SetupKit still asks for confirmation before every real command.
 
-## 9. Tiêu chí hoàn thành
+## 5. Safety Rules
 
-- Catalog và backend đọc cùng một nguồn dữ liệu.
-- 450 ứng dụng có package/source/command rõ ràng.
-- Không có package winget chưa xác minh trong allowlist.
-- Search hỗ trợ tên, package ID, category, tag và publisher.
-- Tag, category, source và status kết hợp được.
-- 24 workstation plan áp dụng đúng và không thêm lại ứng dụng đã cài.
-- Logo có fallback, không có ảnh vỡ.
-- Progress không lùi, terminal stream đúng, vị trí cài được hiển thị.
-- Giao diện không overflow ở 860x680 và hoạt động ở light/dark mode.
-- EXE native vẫn ở mức vài chục MB trở xuống.
+- Only package IDs present in `catalog.json` can be executed.
+- Commands are generated by the backend, not by user input.
+- `--exact` and fixed source flags prevent ambiguous package resolution.
+- Dry run mode is the default.
+- Real install/update/uninstall/rollback operations require explicit confirmation.
+- Store apps use `msstore`; winget apps use `winget`.
+- Large, privileged, commercial, or login-required apps are tagged with risk notes.
+- External URLs and arbitrary scripts are intentionally unsupported.
+
+## 6. Validation Gates
+
+- 450 apps have explicit package/source/command metadata.
+- Every app has a category, tags, type, publisher, description, and risk note.
+- Every role-based plan references existing catalog app IDs.
+- No duplicate app IDs, package IDs, category IDs, tag IDs, or plan IDs.
+- Generated commands use reviewed package IDs and fixed sources.
+- Installed apps are not re-added to work queues.

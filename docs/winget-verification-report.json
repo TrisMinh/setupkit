@@ -133,7 +133,7 @@
     {
       "name": "Node.js LTS",
       "pkg": "OpenJS.NodeJS.LTS",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -141,7 +141,7 @@
     {
       "name": "Python 3.13",
       "pkg": "Python.Python.3.13",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -149,7 +149,7 @@
     {
       "name": "Python 3.14",
       "pkg": "Python.Python.3.14",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -157,7 +157,7 @@
     {
       "name": "Go",
       "pkg": "GoLang.Go",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -165,7 +165,7 @@
     {
       "name": "Rustup",
       "pkg": "Rustlang.Rustup",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -173,7 +173,7 @@
     {
       "name": ".NET SDK 8",
       "pkg": "Microsoft.DotNet.SDK.8",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -181,7 +181,7 @@
     {
       "name": ".NET SDK 10",
       "pkg": "Microsoft.DotNet.SDK.10",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -189,7 +189,7 @@
     {
       "name": "Temurin JDK 21",
       "pkg": "EclipseAdoptium.Temurin.21.JDK",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -197,7 +197,7 @@
     {
       "name": "PHP 8.4",
       "pkg": "PHP.PHP.8.4",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -205,7 +205,7 @@
     {
       "name": "Ruby with DevKit 3.4",
       "pkg": "RubyInstallerTeam.RubyWithDevKit.3.4",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -213,7 +213,7 @@
     {
       "name": "Deno",
       "pkg": "DenoLand.Deno",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -221,7 +221,7 @@
     {
       "name": "Bun",
       "pkg": "Oven-sh.Bun",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -229,7 +229,7 @@
     {
       "name": "Dart SDK",
       "pkg": "Google.DartSDK",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -237,7 +237,7 @@
     {
       "name": "Miniconda",
       "pkg": "Anaconda.Miniconda3",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -245,7 +245,7 @@
     {
       "name": "R",
       "pkg": "RProject.R",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -253,7 +253,7 @@
     {
       "name": "Julia",
       "pkg": "Julialang.Julia",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -269,7 +269,7 @@
     {
       "name": "Zig",
       "pkg": "zig.zig",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -845,7 +845,7 @@
     {
       "name": "Wireshark",
       "pkg": "WiresharkFoundation.Wireshark",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -853,7 +853,7 @@
     {
       "name": "Fiddler Classic",
       "pkg": "Telerik.Fiddler.Classic",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -861,7 +861,7 @@
     {
       "name": "mitmproxy",
       "pkg": "mitmproxy.mitmproxy",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -869,7 +869,7 @@
     {
       "name": "WinSCP",
       "pkg": "WinSCP.WinSCP",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -877,7 +877,7 @@
     {
       "name": "PuTTY",
       "pkg": "PuTTY.PuTTY",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -885,7 +885,7 @@
     {
       "name": "Tailscale",
       "pkg": "Tailscale.Tailscale",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -893,7 +893,7 @@
     {
       "name": "OpenVPN Connect",
       "pkg": "OpenVPNTechnologies.OpenVPNConnect",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -901,7 +901,7 @@
     {
       "name": "Cloudflare WARP",
       "pkg": "Cloudflare.Warp",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -909,7 +909,7 @@
     {
       "name": "Bitwarden",
       "pkg": "Bitwarden.Bitwarden",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -917,7 +917,7 @@
     {
       "name": "1Password",
       "pkg": "AgileBits.1Password",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -925,7 +925,7 @@
     {
       "name": "KeePassXC",
       "pkg": "KeePassXCTeam.KeePassXC",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -933,7 +933,7 @@
     {
       "name": "Gpg4win",
       "pkg": "GnuPG.Gpg4win",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -941,7 +941,7 @@
     {
       "name": "AnyDesk",
       "pkg": "AnyDesk.AnyDesk",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -949,7 +949,7 @@
     {
       "name": "TeamViewer",
       "pkg": "TeamViewer.TeamViewer",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -957,7 +957,7 @@
     {
       "name": "LocalSend",
       "pkg": "LocalSend.LocalSend",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -965,7 +965,7 @@
     {
       "name": "Syncthing",
       "pkg": "Syncthing.Syncthing",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -973,7 +973,7 @@
     {
       "name": "LibreOffice",
       "pkg": "TheDocumentFoundation.LibreOffice",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -981,7 +981,7 @@
     {
       "name": "ONLYOFFICE Desktop Editors",
       "pkg": "ONLYOFFICE.DesktopEditors",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -989,7 +989,7 @@
     {
       "name": "Microsoft 365 Apps",
       "pkg": "Microsoft.Office",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -997,7 +997,7 @@
     {
       "name": "Notion",
       "pkg": "Notion.Notion",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1005,7 +1005,7 @@
     {
       "name": "Obsidian",
       "pkg": "Obsidian.Obsidian",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1013,7 +1013,7 @@
     {
       "name": "Logseq",
       "pkg": "Logseq.Logseq",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1021,7 +1021,7 @@
     {
       "name": "Todoist",
       "pkg": "Doist.Todoist",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1029,7 +1029,7 @@
     {
       "name": "Zoom",
       "pkg": "Zoom.Zoom",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1037,7 +1037,7 @@
     {
       "name": "Microsoft Teams",
       "pkg": "Microsoft.Teams",
-      "category": "Liên lạc & Xã hội",
+      "category": "Communication & Social",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1045,7 +1045,7 @@
     {
       "name": "Slack",
       "pkg": "SlackTechnologies.Slack",
-      "category": "Liên lạc & Xã hội",
+      "category": "Communication & Social",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1053,7 +1053,7 @@
     {
       "name": "Discord",
       "pkg": "Discord.Discord",
-      "category": "Liên lạc & Xã hội",
+      "category": "Communication & Social",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1061,7 +1061,7 @@
     {
       "name": "Telegram Desktop",
       "pkg": "Telegram.TelegramDesktop",
-      "category": "Liên lạc & Xã hội",
+      "category": "Communication & Social",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1069,7 +1069,7 @@
     {
       "name": "Signal",
       "pkg": "OpenWhisperSystems.Signal",
-      "category": "Liên lạc & Xã hội",
+      "category": "Communication & Social",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1077,7 +1077,7 @@
     {
       "name": "Google Drive",
       "pkg": "Google.GoogleDrive",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1085,7 +1085,7 @@
     {
       "name": "Dropbox",
       "pkg": "Dropbox.Dropbox",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1093,7 +1093,7 @@
     {
       "name": "OneDrive",
       "pkg": "Microsoft.OneDrive",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1101,7 +1101,7 @@
     {
       "name": "Adobe Acrobat Reader",
       "pkg": "Adobe.Acrobat.Reader.64-bit",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1109,7 +1109,7 @@
     {
       "name": "Power BI Desktop",
       "pkg": "Microsoft.PowerBI",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1117,7 +1117,7 @@
     {
       "name": "draw.io",
       "pkg": "JGraph.Draw",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1125,7 +1125,7 @@
     {
       "name": "Miro",
       "pkg": "Miro.Miro",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1133,7 +1133,7 @@
     {
       "name": "Google Chrome",
       "pkg": "Google.Chrome",
-      "category": "Trình duyệt",
+      "category": "Browsers",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1141,7 +1141,7 @@
     {
       "name": "Firefox",
       "pkg": "Mozilla.Firefox",
-      "category": "Trình duyệt",
+      "category": "Browsers",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1149,7 +1149,7 @@
     {
       "name": "Brave",
       "pkg": "Brave.Brave",
-      "category": "Trình duyệt",
+      "category": "Browsers",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1157,7 +1157,7 @@
     {
       "name": "Vivaldi",
       "pkg": "Vivaldi.Vivaldi",
-      "category": "Trình duyệt",
+      "category": "Browsers",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1165,7 +1165,7 @@
     {
       "name": "Opera",
       "pkg": "Opera.Opera",
-      "category": "Trình duyệt",
+      "category": "Browsers",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1173,7 +1173,7 @@
     {
       "name": "Arc",
       "pkg": "TheBrowserCompany.Arc",
-      "category": "Trình duyệt",
+      "category": "Browsers",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1181,7 +1181,7 @@
     {
       "name": "Zen Browser",
       "pkg": "Zen-Team.Zen-Browser",
-      "category": "Trình duyệt",
+      "category": "Browsers",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1189,7 +1189,7 @@
     {
       "name": "Tor Browser",
       "pkg": "TorProject.TorBrowser",
-      "category": "Trình duyệt",
+      "category": "Browsers",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1197,7 +1197,7 @@
     {
       "name": "7-Zip",
       "pkg": "7zip.7zip",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1205,7 +1205,7 @@
     {
       "name": "PowerToys",
       "pkg": "Microsoft.PowerToys",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1213,7 +1213,7 @@
     {
       "name": "Everything",
       "pkg": "voidtools.Everything",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1221,7 +1221,7 @@
     {
       "name": "ShareX",
       "pkg": "ShareX.ShareX",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1229,7 +1229,7 @@
     {
       "name": "Greenshot",
       "pkg": "Greenshot.Greenshot",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1237,7 +1237,7 @@
     {
       "name": "Flameshot",
       "pkg": "Flameshot.Flameshot",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1245,7 +1245,7 @@
     {
       "name": "Rufus",
       "pkg": "Rufus.Rufus",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1253,7 +1253,7 @@
     {
       "name": "WinDirStat",
       "pkg": "WinDirStat.WinDirStat",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1261,7 +1261,7 @@
     {
       "name": "WizTree",
       "pkg": "AntibodySoftware.WizTree",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1269,7 +1269,7 @@
     {
       "name": "CrystalDiskInfo",
       "pkg": "CrystalDewWorld.CrystalDiskInfo",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1277,7 +1277,7 @@
     {
       "name": "EarTrumpet",
       "pkg": "File-New-Project.EarTrumpet",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1285,7 +1285,7 @@
     {
       "name": "Sysinternals Suite",
       "pkg": "Microsoft.Sysinternals.Suite",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1293,7 +1293,7 @@
     {
       "name": "qBittorrent",
       "pkg": "qBittorrent.qBittorrent",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1301,7 +1301,7 @@
     {
       "name": "VLC",
       "pkg": "VideoLAN.VLC",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1309,7 +1309,7 @@
     {
       "name": "HandBrake",
       "pkg": "HandBrake.HandBrake",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1317,7 +1317,7 @@
     {
       "name": "OBS Studio",
       "pkg": "OBSProject.OBSStudio",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1325,7 +1325,7 @@
     {
       "name": "Audacity",
       "pkg": "Audacity.Audacity",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1333,7 +1333,7 @@
     {
       "name": "Bulk Rename Utility",
       "pkg": "TGRMNSoftware.BulkRenameUtility",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1341,7 +1341,7 @@
     {
       "name": "Bulk Crap Uninstaller",
       "pkg": "Klocman.BulkCrapUninstaller",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1349,7 +1349,7 @@
     {
       "name": "QuickLook",
       "pkg": "QL-Win.QuickLook",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1357,7 +1357,7 @@
     {
       "name": "Flow Launcher",
       "pkg": "Flow-Launcher.Flow-Launcher",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1365,7 +1365,7 @@
     {
       "name": "AutoHotkey",
       "pkg": "AutoHotkey.AutoHotkey",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1373,7 +1373,7 @@
     {
       "name": "Codex CLI",
       "pkg": "OpenAI.Codex",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1381,7 +1381,7 @@
     {
       "name": "Ollama",
       "pkg": "Ollama.Ollama",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1389,7 +1389,7 @@
     {
       "name": "LM Studio",
       "pkg": "ElementLabs.LMStudio",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1397,7 +1397,7 @@
     {
       "name": "Jan",
       "pkg": "Jan.Jan",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1405,7 +1405,7 @@
     {
       "name": "Figma",
       "pkg": "Figma.Figma",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1413,7 +1413,7 @@
     {
       "name": "Blender",
       "pkg": "BlenderFoundation.Blender",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1421,7 +1421,7 @@
     {
       "name": "GIMP",
       "pkg": "GIMP.GIMP.3",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1429,7 +1429,7 @@
     {
       "name": "Inkscape",
       "pkg": "Inkscape.Inkscape",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1437,7 +1437,7 @@
     {
       "name": "Krita",
       "pkg": "KDE.Krita",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1493,7 +1493,7 @@
     {
       "name": "Spotify",
       "pkg": "Spotify.Spotify",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""

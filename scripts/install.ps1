@@ -1,9 +1,9 @@
-# SetupKit - trình cài một dòng lệnh
+# SetupKit - one-command installer
 #
-# Cài đặt / cập nhật:
+# Install / update:
 #   irm https://raw.githubusercontent.com/TrisMinh/setupkit/main/scripts/install.ps1 | iex
 #
-# Gỡ cài đặt:
+# Uninstall:
 #   & ([scriptblock]::Create((irm https://raw.githubusercontent.com/TrisMinh/setupkit/main/scripts/install.ps1))) -Uninstall
 param(
   [switch]$Uninstall,
@@ -26,49 +26,49 @@ function Write-Step([string]$message) {
 }
 
 if ($Uninstall) {
-  Write-Step 'Đang gỡ cài đặt...'
+  Write-Step 'Uninstalling...'
   Get-Process -Name $appName -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
   Start-Sleep -Milliseconds 400
   Remove-Item -LiteralPath $installDir -Recurse -Force -ErrorAction SilentlyContinue
   Remove-Item -LiteralPath $startMenuShortcut, $desktopShortcut -Force -ErrorAction SilentlyContinue
-  Write-Step "Đã gỡ $appName khỏi máy. Tạm biệt!"
+  Write-Step "Removed $appName from this machine. Goodbye!"
   return
 }
 
-Write-Step 'Đang tìm bản phát hành mới nhất trên GitHub...'
+Write-Step 'Finding the latest GitHub release...'
 $release = Invoke-RestMethod -Uri "https://api.github.com/repos/$repo/releases/latest" `
   -Headers @{ 'User-Agent' = "$appName-installer" }
 $asset = $release.assets | Where-Object { $_.name -eq "$appName.exe" } | Select-Object -First 1
 if (-not $asset) {
-  throw "Không tìm thấy $appName.exe trong bản phát hành $($release.tag_name)."
+  throw "Could not find $appName.exe in release $($release.tag_name)."
 }
-Write-Step "Bản mới nhất: $($release.tag_name) ($([math]::Round($asset.size / 1MB, 1)) MB)"
+Write-Step "Latest version: $($release.tag_name) ($([math]::Round($asset.size / 1MB, 1)) MB)"
 
 New-Item -ItemType Directory -Path $installDir -Force | Out-Null
 
-# Nếu app đang mở thì đóng lại để thay file.
+# Close the app if it is running so the executable can be replaced.
 Get-Process -Name $appName -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 Start-Sleep -Milliseconds 400
 
-Write-Step 'Đang tải về...'
+Write-Step 'Downloading...'
 $downloadPath = "$exePath.download"
 Invoke-WebRequest -Uri $asset.browser_download_url -OutFile $downloadPath `
   -Headers @{ 'User-Agent' = "$appName-installer" }
 Move-Item -LiteralPath $downloadPath -Destination $exePath -Force
 
-Write-Step 'Đang tạo shortcut Start Menu và Desktop...'
+Write-Step 'Creating Start Menu and Desktop shortcuts...'
 $shell = New-Object -ComObject WScript.Shell
 foreach ($shortcutPath in @($startMenuShortcut, $desktopShortcut)) {
   $shortcut = $shell.CreateShortcut($shortcutPath)
   $shortcut.TargetPath = $exePath
   $shortcut.WorkingDirectory = $installDir
-  $shortcut.Description = 'Dựng máy Windows mới với catalog ứng dụng đã xác minh'
+  $shortcut.Description = 'Build a fresh Windows workspace with a verified app catalog'
   $shortcut.Save()
 }
 
-Write-Step "Đã cài vào: $exePath"
+Write-Step "Installed to: $exePath"
 if (-not $NoLaunch) {
-  Write-Step 'Đang mở SetupKit...'
+  Write-Step 'Launching SetupKit...'
   Start-Process -FilePath $exePath -WorkingDirectory $installDir
 }
-Write-Step 'Hoàn tất! Lần sau chỉ cần mở từ Start Menu.'
+Write-Step 'Done. Next time, open SetupKit from the Start Menu.'

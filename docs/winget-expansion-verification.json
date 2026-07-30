@@ -174,7 +174,7 @@
     {
       "name": "Node.js Current",
       "pkg": "OpenJS.NodeJS",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -182,7 +182,7 @@
     {
       "name": "Python 3.12",
       "pkg": "Python.Python.3.12",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -190,7 +190,7 @@
     {
       "name": "Python 3.11",
       "pkg": "Python.Python.3.11",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -198,7 +198,7 @@
     {
       "name": "Python 3.10",
       "pkg": "Python.Python.3.10",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -206,7 +206,7 @@
     {
       "name": "Temurin JDK 17",
       "pkg": "EclipseAdoptium.Temurin.17.JDK",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -214,7 +214,7 @@
     {
       "name": "Temurin JDK 11",
       "pkg": "EclipseAdoptium.Temurin.11.JDK",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -222,7 +222,7 @@
     {
       "name": "Temurin JDK 8",
       "pkg": "EclipseAdoptium.Temurin.8.JDK",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -230,7 +230,7 @@
     {
       "name": "Microsoft OpenJDK 21",
       "pkg": "Microsoft.OpenJDK.21",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -238,7 +238,7 @@
     {
       "name": "Amazon Corretto JDK 21",
       "pkg": "Amazon.Corretto.21.JDK",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -246,7 +246,7 @@
     {
       "name": "Azul Zulu JDK 21",
       "pkg": "Azul.Zulu.21.JDK",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -254,7 +254,7 @@
     {
       "name": "PHP 8.3",
       "pkg": "PHP.PHP.8.3",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -262,7 +262,7 @@
     {
       "name": "PHP 8.2",
       "pkg": "PHP.PHP.8.2",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -270,7 +270,7 @@
     {
       "name": "Ruby with DevKit 3.3",
       "pkg": "RubyInstallerTeam.RubyWithDevKit.3.3",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -278,7 +278,7 @@
     {
       "name": "Erlang OTP",
       "pkg": "Erlang.ErlangOTP",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -286,7 +286,7 @@
     {
       "name": "Lua",
       "pkg": "DEVCOM.Lua",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -294,7 +294,7 @@
     {
       "name": "Strawberry Perl",
       "pkg": "StrawberryPerl.StrawberryPerl",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -302,7 +302,7 @@
     {
       "name": "Scala",
       "pkg": "VirtusLab.ScalaCLI",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -310,7 +310,7 @@
     {
       "name": ".NET Runtime 8",
       "pkg": "Microsoft.DotNet.Runtime.8",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -318,7 +318,7 @@
     {
       "name": ".NET Desktop Runtime 8",
       "pkg": "Microsoft.DotNet.DesktopRuntime.8",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -326,7 +326,7 @@
     {
       "name": "ASP.NET Core Runtime 8",
       "pkg": "Microsoft.DotNet.AspNetCore.8",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -334,7 +334,7 @@
     {
       "name": "Visual C++ Redistributable x64",
       "pkg": "Microsoft.VCRedist.2015+.x64",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -342,7 +342,7 @@
     {
       "name": "Visual C++ Redistributable x86",
       "pkg": "Microsoft.VCRedist.2015+.x86",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -350,7 +350,7 @@
     {
       "name": "Juliaup",
       "pkg": "Julialang.Juliaup",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -358,7 +358,7 @@
     {
       "name": "Rtools",
       "pkg": "RProject.Rtools",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": true,
       "code": 0,
       "error": ""
@@ -870,7 +870,7 @@
     {
       "name": "Claude",
       "pkg": "Anthropic.Claude",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": true,
       "code": 0,
       "error": ""
@@ -878,7 +878,7 @@
     {
       "name": "Perplexity",
       "pkg": "Perplexity.Perplexity",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": true,
       "code": 0,
       "error": ""
@@ -886,7 +886,7 @@
     {
       "name": "Claude Code",
       "pkg": "Anthropic.ClaudeCode",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": true,
       "code": 0,
       "error": ""
@@ -894,7 +894,7 @@
     {
       "name": "GitHub Copilot CLI",
       "pkg": "GitHub.Copilot",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": true,
       "code": 0,
       "error": ""
@@ -902,7 +902,7 @@
     {
       "name": "Microsoft AI Shell",
       "pkg": "Microsoft.AIShell",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": true,
       "code": 0,
       "error": ""
@@ -910,7 +910,7 @@
     {
       "name": "Chatbox",
       "pkg": "Bin-Huang.Chatbox",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": true,
       "code": 0,
       "error": ""
@@ -918,7 +918,7 @@
     {
       "name": "Chatbox Community Edition",
       "pkg": "Bin-Huang.Chatbox.CommunityEdition",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": true,
       "code": 0,
       "error": ""
@@ -926,7 +926,7 @@
     {
       "name": "Msty",
       "pkg": "CloudStack.Msty",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": true,
       "code": 0,
       "error": ""
@@ -934,7 +934,7 @@
     {
       "name": "Msty CPU",
       "pkg": "CloudStack.Msty.CPU",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": true,
       "code": 0,
       "error": ""
@@ -942,7 +942,7 @@
     {
       "name": "GPT4All",
       "pkg": "nomic.gpt4all",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": true,
       "code": 0,
       "error": ""
@@ -950,7 +950,7 @@
     {
       "name": "Cherry Studio",
       "pkg": "kangfenmao.CherryStudio",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": true,
       "code": 0,
       "error": ""
@@ -958,7 +958,7 @@
     {
       "name": "ChatALL",
       "pkg": "AI-Shifu.ChatALL",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": true,
       "code": 0,
       "error": ""
@@ -966,7 +966,7 @@
     {
       "name": "Lemonade Server",
       "pkg": "AMD.LemonadeServer",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": true,
       "code": 0,
       "error": ""
@@ -974,7 +974,7 @@
     {
       "name": "Qoder",
       "pkg": "Alibaba.Qoder",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": true,
       "code": 0,
       "error": ""
@@ -982,7 +982,7 @@
     {
       "name": "Backyard AI",
       "pkg": "AhoyLabs.BackyardAI",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": true,
       "code": 0,
       "error": ""
@@ -990,7 +990,7 @@
     {
       "name": "Nmap",
       "pkg": "Insecure.Nmap",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -998,7 +998,7 @@
     {
       "name": "WireGuard",
       "pkg": "WireGuard.WireGuard",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1006,7 +1006,7 @@
     {
       "name": "Proton VPN",
       "pkg": "Proton.ProtonVPN",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1014,7 +1014,7 @@
     {
       "name": "Mullvad VPN",
       "pkg": "MullvadVPN.MullvadVPN",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1022,7 +1022,7 @@
     {
       "name": "NordVPN",
       "pkg": "NordSecurity.NordVPN",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1030,7 +1030,7 @@
     {
       "name": "Windscribe",
       "pkg": "Windscribe.Windscribe",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1038,7 +1038,7 @@
     {
       "name": "ExpressVPN",
       "pkg": "ExpressVPN.ExpressVPN",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1046,7 +1046,7 @@
     {
       "name": "HMA VPN",
       "pkg": "Privax.HMAVPN",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1054,7 +1054,7 @@
     {
       "name": "Surfshark",
       "pkg": "Surfshark.Surfshark",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1062,7 +1062,7 @@
     {
       "name": "Private Internet Access",
       "pkg": "PrivateInternetAccess.PrivateInternetAccess",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1070,7 +1070,7 @@
     {
       "name": "CyberGhost",
       "pkg": "CyberGhost.CyberGhost",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1078,7 +1078,7 @@
     {
       "name": "IPVanish",
       "pkg": "IPVanish.IPVanish",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1086,7 +1086,7 @@
     {
       "name": "TunnelBear",
       "pkg": "TunnelBear.TunnelBear",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1094,7 +1094,7 @@
     {
       "name": "hide.me VPN",
       "pkg": "eVenture.HideMe",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1102,7 +1102,7 @@
     {
       "name": "VPN Unlimited",
       "pkg": "KeepSolid.VPNUnlimited",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1110,7 +1110,7 @@
     {
       "name": "AdGuard VPN",
       "pkg": "AdGuard.AdGuardVPN",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1118,7 +1118,7 @@
     {
       "name": "ZeroTier One",
       "pkg": "ZeroTier.ZeroTierOne",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1126,7 +1126,7 @@
     {
       "name": "Termius",
       "pkg": "Termius.Termius",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1134,7 +1134,7 @@
     {
       "name": "Angry IP Scanner",
       "pkg": "angryziber.AngryIPScanner",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1142,7 +1142,7 @@
     {
       "name": "Advanced IP Scanner",
       "pkg": "Famatech.AdvancedIPScanner",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1150,7 +1150,7 @@
     {
       "name": "Burp Suite Community",
       "pkg": "PortSwigger.BurpSuite.Community",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1158,7 +1158,7 @@
     {
       "name": "OWASP ZAP",
       "pkg": "ZAP.ZAP",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1166,7 +1166,7 @@
     {
       "name": "VeraCrypt",
       "pkg": "IDRIX.VeraCrypt",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1174,7 +1174,7 @@
     {
       "name": "Cryptomator",
       "pkg": "Cryptomator.Cryptomator",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1182,7 +1182,7 @@
     {
       "name": "Malwarebytes",
       "pkg": "Malwarebytes.Malwarebytes",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1190,7 +1190,7 @@
     {
       "name": "Mozilla Thunderbird",
       "pkg": "Mozilla.Thunderbird",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1198,7 +1198,7 @@
     {
       "name": "Joplin",
       "pkg": "Joplin.Joplin",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1206,7 +1206,7 @@
     {
       "name": "Standard Notes",
       "pkg": "StandardNotes.StandardNotes",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1214,7 +1214,7 @@
     {
       "name": "Simplenote",
       "pkg": "Automattic.Simplenote",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1222,7 +1222,7 @@
     {
       "name": "Anytype",
       "pkg": "AnyAssociation.Anytype",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1230,7 +1230,7 @@
     {
       "name": "AppFlowy",
       "pkg": "AppFlowy.AppFlowy",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1238,7 +1238,7 @@
     {
       "name": "Zettlr",
       "pkg": "Zettlr.Zettlr",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1246,7 +1246,7 @@
     {
       "name": "MarkText",
       "pkg": "MarkText.MarkText",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1254,7 +1254,7 @@
     {
       "name": "Zotero",
       "pkg": "DigitalScholar.Zotero",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1262,7 +1262,7 @@
     {
       "name": "calibre",
       "pkg": "calibre.calibre",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1270,7 +1270,7 @@
     {
       "name": "SumatraPDF",
       "pkg": "SumatraPDF.SumatraPDF",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1278,7 +1278,7 @@
     {
       "name": "Foxit PDF Reader",
       "pkg": "Foxit.FoxitReader",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1286,7 +1286,7 @@
     {
       "name": "PDFgear",
       "pkg": "PDFgear.PDFgear",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1294,7 +1294,7 @@
     {
       "name": "Okular",
       "pkg": "KDE.Okular",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1302,7 +1302,7 @@
     {
       "name": "Xournal++",
       "pkg": "Xournal++.Xournal++",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1310,7 +1310,7 @@
     {
       "name": "Mendeley Reference Manager",
       "pkg": "Elsevier.MendeleyReferenceManager",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1318,7 +1318,7 @@
     {
       "name": "ClickUp",
       "pkg": "ClickUp.ClickUp",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1326,7 +1326,7 @@
     {
       "name": "Evernote",
       "pkg": "Evernote.Evernote",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1334,7 +1334,7 @@
     {
       "name": "Freeplane",
       "pkg": "Freeplane.Freeplane",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1342,7 +1342,7 @@
     {
       "name": "XMind",
       "pkg": "Xmind.Xmind",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1350,7 +1350,7 @@
     {
       "name": "Element",
       "pkg": "Element.Element",
-      "category": "Liên lạc & Xã hội",
+      "category": "Communication & Social",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1358,7 +1358,7 @@
     {
       "name": "WeChat",
       "pkg": "Tencent.WeChat",
-      "category": "Liên lạc & Xã hội",
+      "category": "Communication & Social",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1366,7 +1366,7 @@
     {
       "name": "Mattermost",
       "pkg": "Mattermost.MattermostDesktop",
-      "category": "Liên lạc & Xã hội",
+      "category": "Communication & Social",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1374,7 +1374,7 @@
     {
       "name": "Zulip",
       "pkg": "Zulip.Zulip",
-      "category": "Liên lạc & Xã hội",
+      "category": "Communication & Social",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1382,7 +1382,7 @@
     {
       "name": "Rocket.Chat",
       "pkg": "RocketChat.RocketChat",
-      "category": "Liên lạc & Xã hội",
+      "category": "Communication & Social",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1390,7 +1390,7 @@
     {
       "name": "Guilded",
       "pkg": "Guilded.Guilded",
-      "category": "Liên lạc & Xã hội",
+      "category": "Communication & Social",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1398,7 +1398,7 @@
     {
       "name": "Cisco Webex",
       "pkg": "Cisco.Webex",
-      "category": "Liên lạc & Xã hội",
+      "category": "Communication & Social",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1406,7 +1406,7 @@
     {
       "name": "Ferdium",
       "pkg": "Ferdium.Ferdium",
-      "category": "Liên lạc & Xã hội",
+      "category": "Communication & Social",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1414,7 +1414,7 @@
     {
       "name": "Rambox",
       "pkg": "Rambox.Rambox",
-      "category": "Liên lạc & Xã hội",
+      "category": "Communication & Social",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1422,7 +1422,7 @@
     {
       "name": "KakaoTalk",
       "pkg": "Kakao.KakaoTalk",
-      "category": "Liên lạc & Xã hội",
+      "category": "Communication & Social",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1430,7 +1430,7 @@
     {
       "name": "Microsoft Edge",
       "pkg": "Microsoft.Edge",
-      "category": "Trình duyệt",
+      "category": "Browsers",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1438,7 +1438,7 @@
     {
       "name": "Chromium",
       "pkg": "Hibbiki.Chromium",
-      "category": "Trình duyệt",
+      "category": "Browsers",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1446,7 +1446,7 @@
     {
       "name": "LibreWolf",
       "pkg": "LibreWolf.LibreWolf",
-      "category": "Trình duyệt",
+      "category": "Browsers",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1454,7 +1454,7 @@
     {
       "name": "Waterfox",
       "pkg": "Waterfox.Waterfox",
-      "category": "Trình duyệt",
+      "category": "Browsers",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1462,7 +1462,7 @@
     {
       "name": "Floorp",
       "pkg": "Ablaze.Floorp",
-      "category": "Trình duyệt",
+      "category": "Browsers",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1470,7 +1470,7 @@
     {
       "name": "Mullvad Browser",
       "pkg": "MullvadVPN.MullvadBrowser",
-      "category": "Trình duyệt",
+      "category": "Browsers",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1478,7 +1478,7 @@
     {
       "name": "Pale Moon",
       "pkg": "MoonchildProductions.PaleMoon",
-      "category": "Trình duyệt",
+      "category": "Browsers",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1486,7 +1486,7 @@
     {
       "name": "Yandex Browser",
       "pkg": "Yandex.Browser",
-      "category": "Trình duyệt",
+      "category": "Browsers",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1494,7 +1494,7 @@
     {
       "name": "DuckDuckGo Browser",
       "pkg": "DuckDuckGo.DesktopBrowser",
-      "category": "Trình duyệt",
+      "category": "Browsers",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1502,7 +1502,7 @@
     {
       "name": "Maxthon",
       "pkg": "Maxthon.Maxthon",
-      "category": "Trình duyệt",
+      "category": "Browsers",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1510,7 +1510,7 @@
     {
       "name": "Ungoogled Chromium",
       "pkg": "eloston.ungoogled-chromium",
-      "category": "Trình duyệt",
+      "category": "Browsers",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1518,7 +1518,7 @@
     {
       "name": "WinRAR",
       "pkg": "RARLab.WinRAR",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1526,7 +1526,7 @@
     {
       "name": "PeaZip",
       "pkg": "Giorgiotani.Peazip",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1534,7 +1534,7 @@
     {
       "name": "NanaZip",
       "pkg": "M2Team.NanaZip",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1542,7 +1542,7 @@
     {
       "name": "Bandizip",
       "pkg": "Bandisoft.Bandizip",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1550,7 +1550,7 @@
     {
       "name": "Files",
       "pkg": "FilesCommunity.Files",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1558,7 +1558,7 @@
     {
       "name": "Directory Opus",
       "pkg": "GPSoftware.DirectoryOpus",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1566,7 +1566,7 @@
     {
       "name": "FreeCommander XE",
       "pkg": "MarekJasinski.FreeCommanderXE",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1574,7 +1574,7 @@
     {
       "name": "Ditto",
       "pkg": "Ditto.Ditto",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1582,7 +1582,7 @@
     {
       "name": "CopyQ",
       "pkg": "hluk.CopyQ",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1590,7 +1590,7 @@
     {
       "name": "GlazeWM",
       "pkg": "glzr-io.glazewm",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1598,7 +1598,7 @@
     {
       "name": "Lively Wallpaper",
       "pkg": "rocksdanister.LivelyWallpaper",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1606,7 +1606,7 @@
     {
       "name": "TranslucentTB",
       "pkg": "CharlesMilette.TranslucentTB",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1614,7 +1614,7 @@
     {
       "name": "Twinkle Tray",
       "pkg": "xanderfrangos.twinkletray",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1622,7 +1622,7 @@
     {
       "name": "Monitorian",
       "pkg": "emoacht.Monitorian",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1630,7 +1630,7 @@
     {
       "name": "HWiNFO",
       "pkg": "REALiX.HWiNFO",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1638,7 +1638,7 @@
     {
       "name": "CPU-Z",
       "pkg": "CPUID.CPU-Z",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1646,7 +1646,7 @@
     {
       "name": "GPU-Z",
       "pkg": "TechPowerUp.GPU-Z",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1654,7 +1654,7 @@
     {
       "name": "HWMonitor",
       "pkg": "CPUID.HWMonitor",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1662,7 +1662,7 @@
     {
       "name": "CrystalDiskMark",
       "pkg": "CrystalDewWorld.CrystalDiskMark",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1670,7 +1670,7 @@
     {
       "name": "Ventoy",
       "pkg": "Ventoy.Ventoy",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1678,7 +1678,7 @@
     {
       "name": "balenaEtcher",
       "pkg": "Balena.Etcher",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1686,7 +1686,7 @@
     {
       "name": "Raspberry Pi Imager",
       "pkg": "RaspberryPiFoundation.RaspberryPiImager",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1694,7 +1694,7 @@
     {
       "name": "DevToys",
       "pkg": "DevToys-app.DevToys",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1702,7 +1702,7 @@
     {
       "name": "ScreenToGif",
       "pkg": "NickeManarin.ScreenToGif",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1710,7 +1710,7 @@
     {
       "name": "PicPick",
       "pkg": "NGWIN.PicPick",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1718,7 +1718,7 @@
     {
       "name": "Revo Uninstaller",
       "pkg": "RevoUninstaller.RevoUninstaller",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1726,7 +1726,7 @@
     {
       "name": "Geek Uninstaller",
       "pkg": "GeekUninstaller.GeekUninstaller",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1734,7 +1734,7 @@
     {
       "name": "TeraCopy",
       "pkg": "CodeSector.TeraCopy",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1742,7 +1742,7 @@
     {
       "name": "WPD",
       "pkg": "WPD.WPD",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1750,7 +1750,7 @@
     {
       "name": "Display Driver Uninstaller",
       "pkg": "Wagnardsoft.DisplayDriverUninstaller",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1758,7 +1758,7 @@
     {
       "name": "Fan Control",
       "pkg": "Rem0o.FanControl",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1766,7 +1766,7 @@
     {
       "name": "UNIGINE Heaven Benchmark",
       "pkg": "Unigine.HeavenBenchmark",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1774,7 +1774,7 @@
     {
       "name": "Adobe Creative Cloud",
       "pkg": "Adobe.CreativeCloud",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1782,7 +1782,7 @@
     {
       "name": "Paint.NET",
       "pkg": "dotPDN.PaintDotNet",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1790,7 +1790,7 @@
     {
       "name": "ImageMagick",
       "pkg": "ImageMagick.ImageMagick",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1798,7 +1798,7 @@
     {
       "name": "FFmpeg",
       "pkg": "Gyan.FFmpeg",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1806,7 +1806,7 @@
     {
       "name": "Kdenlive",
       "pkg": "KDE.Kdenlive",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1814,7 +1814,7 @@
     {
       "name": "Shotcut",
       "pkg": "Meltytech.Shotcut",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1822,7 +1822,7 @@
     {
       "name": "OpenShot",
       "pkg": "OpenShot.OpenShot",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1830,7 +1830,7 @@
     {
       "name": "Canva",
       "pkg": "Canva.Canva",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1838,7 +1838,7 @@
     {
       "name": "darktable",
       "pkg": "darktable.darktable",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1846,7 +1846,7 @@
     {
       "name": "RawTherapee",
       "pkg": "RawTherapee.RawTherapee",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1854,7 +1854,7 @@
     {
       "name": "LMMS",
       "pkg": "LMMS.LMMS",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1862,7 +1862,7 @@
     {
       "name": "REAPER",
       "pkg": "Cockos.REAPER",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1870,7 +1870,7 @@
     {
       "name": "MKVToolNix",
       "pkg": "MoritzBunkus.MKVToolNix",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1878,7 +1878,7 @@
     {
       "name": "MediaInfo",
       "pkg": "MediaArea.MediaInfo.GUI",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1886,7 +1886,7 @@
     {
       "name": "Kodi",
       "pkg": "XBMCFoundation.Kodi",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1894,7 +1894,7 @@
     {
       "name": "MPC-HC",
       "pkg": "clsid2.mpc-hc",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1902,7 +1902,7 @@
     {
       "name": "PotPlayer",
       "pkg": "Daum.PotPlayer",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1910,7 +1910,7 @@
     {
       "name": "foobar2000",
       "pkg": "PeterPawlowski.foobar2000",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1918,7 +1918,7 @@
     {
       "name": "Plex",
       "pkg": "Plex.Plex",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1926,7 +1926,7 @@
     {
       "name": "Apple iTunes",
       "pkg": "Apple.iTunes",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1934,7 +1934,7 @@
     {
       "name": "TIDAL",
       "pkg": "TIDALMusicAS.TIDAL",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1942,7 +1942,7 @@
     {
       "name": "Deezer",
       "pkg": "Deezer.Deezer",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1950,7 +1950,7 @@
     {
       "name": "AIMP",
       "pkg": "AIMP.AIMP",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1958,7 +1958,7 @@
     {
       "name": "Audacious",
       "pkg": "Audacious.MediaPlayer",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -1966,7 +1966,7 @@
     {
       "name": "Screenpresso",
       "pkg": "Learnpulse.Screenpresso",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": true,
       "code": 0,
       "error": ""
@@ -2136,7 +2136,7 @@
     {
       "name": "Elixir",
       "pkg": "Elixir.Elixir",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2144,7 +2144,7 @@
     {
       "name": "Nim",
       "pkg": "Nim.Nim",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2152,7 +2152,7 @@
     {
       "name": "GHCup",
       "pkg": "GHCup.GHCup",
-      "category": "Ngôn ngữ & Runtime",
+      "category": "Languages & Runtime",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2400,7 +2400,7 @@
     {
       "name": "GPT4All",
       "pkg": "Nomic.GPT4All",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2408,7 +2408,7 @@
     {
       "name": "Msty",
       "pkg": "Msty.Msty",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2416,7 +2416,7 @@
     {
       "name": "Cherry Studio",
       "pkg": "CherryHQ.CherryStudio",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2424,7 +2424,7 @@
     {
       "name": "Pinokio",
       "pkg": "Pinokio.Pinokio",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2432,7 +2432,7 @@
     {
       "name": "Stability Matrix",
       "pkg": "LykosAI.StabilityMatrix",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2440,7 +2440,7 @@
     {
       "name": "Chatbox",
       "pkg": "ChatboxAI.Chatbox",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2448,7 +2448,7 @@
     {
       "name": "Pieces for Developers",
       "pkg": "MeshIntelligentTechnologies.PiecesOS",
-      "category": "AI lập trình",
+      "category": "AI Coding",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2456,7 +2456,7 @@
     {
       "name": "SoftEther VPN",
       "pkg": "SoftEtherVPN.SoftEtherVPN",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2464,7 +2464,7 @@
     {
       "name": "Royal TS",
       "pkg": "RoyalApps.RoyalTS",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2472,7 +2472,7 @@
     {
       "name": "Ghidra",
       "pkg": "Ghidra.Ghidra",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2480,7 +2480,7 @@
     {
       "name": "Hashcat",
       "pkg": "Hashcat.Hashcat",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2488,7 +2488,7 @@
     {
       "name": "Proxifier",
       "pkg": "Initex.Proxifier",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2496,7 +2496,7 @@
     {
       "name": "RustDesk",
       "pkg": "RustDesk.RustDesk",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2504,7 +2504,7 @@
     {
       "name": "OpenSSH Beta",
       "pkg": "Microsoft.OpenSSH.Beta",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2512,7 +2512,7 @@
     {
       "name": "Cyberduck",
       "pkg": "iterate.Cyberduck",
-      "category": "Mạng & Bảo mật",
+      "category": "Network & Security",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2520,7 +2520,7 @@
     {
       "name": "AFFiNE",
       "pkg": "toeverything.AFFiNE",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2528,7 +2528,7 @@
     {
       "name": "Typora",
       "pkg": "Typora.Typora",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2536,7 +2536,7 @@
     {
       "name": "Linear",
       "pkg": "Linear.Linear",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2544,7 +2544,7 @@
     {
       "name": "Trello",
       "pkg": "Trello.Trello",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2552,7 +2552,7 @@
     {
       "name": "Microsoft To Do",
       "pkg": "Microsoft.ToDo",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2560,7 +2560,7 @@
     {
       "name": "MindManager",
       "pkg": "Corel.MindManager",
-      "category": "Office & Công việc",
+      "category": "Office & Work",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2568,7 +2568,7 @@
     {
       "name": "Viber",
       "pkg": "Viber.Viber",
-      "category": "Liên lạc & Xã hội",
+      "category": "Communication & Social",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2576,7 +2576,7 @@
     {
       "name": "LINE",
       "pkg": "LINE.LINE",
-      "category": "Liên lạc & Xã hội",
+      "category": "Communication & Social",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2584,7 +2584,7 @@
     {
       "name": "Franz",
       "pkg": "Franz.Franz",
-      "category": "Liên lạc & Xã hội",
+      "category": "Communication & Social",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2592,7 +2592,7 @@
     {
       "name": "UniGetUI",
       "pkg": "MartiCliment.UniGetUI",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2600,7 +2600,7 @@
     {
       "name": "Double Commander",
       "pkg": "Alexx2000.DoubleCommander",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2608,7 +2608,7 @@
     {
       "name": "OneCommander",
       "pkg": "OneCommander.OneCommander",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2616,7 +2616,7 @@
     {
       "name": "ueli",
       "pkg": "oliverschwendener.ueli",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2624,7 +2624,7 @@
     {
       "name": "Keypirinha",
       "pkg": "Keypirinha.Keypirinha",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2632,7 +2632,7 @@
     {
       "name": "Microsoft PC Manager",
       "pkg": "Microsoft.PCManager",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2640,7 +2640,7 @@
     {
       "name": "Winaero Tweaker",
       "pkg": "Winaero.WinaeroTweaker",
-      "category": "Tiện ích",
+      "category": "Utilities",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2648,7 +2648,7 @@
     {
       "name": "LosslessCut",
       "pkg": "mifi.lossless-cut",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2656,7 +2656,7 @@
     {
       "name": "DaVinci Resolve",
       "pkg": "BlackmagicDesign.DaVinciResolve",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2664,7 +2664,7 @@
     {
       "name": "Amazon Music",
       "pkg": "Amazon.AmazonMusic",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."
@@ -2672,7 +2672,7 @@
     {
       "name": "MusicBee",
       "pkg": "MusicBee.MusicBee",
-      "category": "Thiết kế & Media",
+      "category": "Design & Media",
       "ok": false,
       "code": 2316632084,
       "error": "No package found matching input criteria."

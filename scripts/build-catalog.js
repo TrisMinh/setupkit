@@ -26,29 +26,43 @@ if (unverified.length) {
 
 const categories = [
   { id: 'ide-code', name: 'IDE & Code', icon: 'ph-code' },
-  { id: 'languages-runtime', name: 'Ngôn ngữ & Runtime', icon: 'ph-brackets-curly' },
+  { id: 'languages-runtime', name: 'Languages & Runtime', icon: 'ph-brackets-curly' },
   { id: 'build-package', name: 'Build & Package', icon: 'ph-package' },
   { id: 'terminal-git', name: 'Terminal & Git', icon: 'ph-terminal-window' },
   { id: 'cli', name: 'CLI', icon: 'ph-terminal' },
   { id: 'devops-cloud', name: 'DevOps & Cloud', icon: 'ph-cloud' },
   { id: 'database-api', name: 'Database & API', icon: 'ph-database' },
-  { id: 'ai-code', name: 'AI lập trình', icon: 'ph-sparkle' },
-  { id: 'network-security', name: 'Mạng & Bảo mật', icon: 'ph-shield-check' },
-  { id: 'office-work', name: 'Office & Công việc', icon: 'ph-briefcase' },
-  { id: 'communication-social', name: 'Liên lạc & Xã hội', icon: 'ph-chats-circle' },
-  { id: 'browser', name: 'Trình duyệt', icon: 'ph-browser' },
-  { id: 'utilities', name: 'Tiện ích', icon: 'ph-toolbox' },
-  { id: 'design-media', name: 'Thiết kế & Media', icon: 'ph-paint-brush' },
+  { id: 'ai-code', name: 'AI Coding', icon: 'ph-sparkle' },
+  { id: 'network-security', name: 'Network & Security', icon: 'ph-shield-check' },
+  { id: 'office-work', name: 'Office & Work', icon: 'ph-briefcase' },
+  { id: 'communication-social', name: 'Communication & Social', icon: 'ph-chats-circle' },
+  { id: 'browser', name: 'Browsers', icon: 'ph-browser' },
+  { id: 'utilities', name: 'Utilities', icon: 'ph-toolbox' },
+  { id: 'design-media', name: 'Design & Media', icon: 'ph-paint-brush' },
   { id: 'game-dev', name: 'Game & Game Dev', icon: 'ph-game-controller' }
 ];
 
-const categoryByName = new Map(categories.map((category) => [category.name, category]));
+const categoryAliases = {
+  'Languages & Runtime': 'languages-runtime',
+  'AI Coding': 'ai-code',
+  'Network & Security': 'network-security',
+  'Office & Work': 'office-work',
+  'Communication & Social': 'communication-social',
+  'Browsers': 'browser',
+  'Utilities': 'utilities',
+  'Design & Media': 'design-media'
+};
+const categoryByName = new Map(categories.flatMap((category) => [[category.name, category]]));
+Object.entries(categoryAliases).forEach(([legacyName, id]) => {
+  const category = categories.find((item) => item.id === id);
+  if (category) categoryByName.set(legacyName, category);
+});
 
 const tags = [
   { id: 'code', label: 'Code', icon: 'ph-code' },
   { id: 'ide', label: 'IDE', icon: 'ph-app-window' },
   { id: 'cli', label: 'CLI', icon: 'ph-terminal' },
-  { id: 'language', label: 'Ngôn ngữ', icon: 'ph-brackets-curly' },
+  { id: 'language', label: 'Language', icon: 'ph-brackets-curly' },
   { id: 'runtime', label: 'Runtime', icon: 'ph-cpu' },
   { id: 'git', label: 'Git', icon: 'ph-git-branch' },
   { id: 'package-manager', label: 'Package', icon: 'ph-package' },
@@ -58,16 +72,16 @@ const tags = [
   { id: 'database', label: 'Database', icon: 'ph-database' },
   { id: 'api', label: 'API', icon: 'ph-plugs-connected' },
   { id: 'ai', label: 'AI', icon: 'ph-sparkle' },
-  { id: 'network', label: 'Mạng', icon: 'ph-globe' },
+  { id: 'network', label: 'Network', icon: 'ph-globe' },
   { id: 'vpn', label: 'VPN', icon: 'ph-lock-key' },
-  { id: 'security', label: 'Bảo mật', icon: 'ph-shield-check' },
+  { id: 'security', label: 'Security', icon: 'ph-shield-check' },
   { id: 'remote', label: 'Remote', icon: 'ph-monitor-arrow-up' },
   { id: 'office', label: 'Office', icon: 'ph-briefcase' },
-  { id: 'productivity', label: 'Năng suất', icon: 'ph-check-square' },
-  { id: 'social', label: 'Xã hội', icon: 'ph-chats-circle' },
-  { id: 'browser', label: 'Trình duyệt', icon: 'ph-browser' },
-  { id: 'utility', label: 'Tiện ích', icon: 'ph-toolbox' },
-  { id: 'design', label: 'Thiết kế', icon: 'ph-paint-brush' },
+  { id: 'productivity', label: 'Productivity', icon: 'ph-check-square' },
+  { id: 'social', label: 'Social', icon: 'ph-chats-circle' },
+  { id: 'browser', label: 'Browser', icon: 'ph-browser' },
+  { id: 'utility', label: 'Utility', icon: 'ph-toolbox' },
+  { id: 'design', label: 'Design', icon: 'ph-paint-brush' },
   { id: 'media', label: 'Media', icon: 'ph-play-circle' },
   { id: 'game', label: 'Game', icon: 'ph-game-controller' },
   { id: 'mobile', label: 'Mobile', icon: 'ph-device-mobile' },
@@ -157,65 +171,65 @@ Object.assign(publisherPrefixes, {
 });
 
 const defaultDescriptions = {
-  'IDE & Code': (name) => `${name} dùng để viết, đọc, debug và quản lý mã nguồn.`,
-  'Ngôn ngữ & Runtime': (name) => `${name} cung cấp SDK hoặc runtime để xây dựng và chạy dự án.`,
-  'Build & Package': (name) => `${name} hỗ trợ build, dependency hoặc quản lý phiên bản công cụ.`,
-  'Terminal & Git': (name) => `${name} hỗ trợ terminal, Git hoặc quy trình quản lý mã nguồn.`,
-  CLI: (name) => `${name} là tiện ích dòng lệnh cho quy trình phát triển hằng ngày.`,
-  'DevOps & Cloud': (name) => `${name} hỗ trợ container, cloud hoặc tự động hóa hạ tầng.`,
-  'Database & API': (name) => `${name} dùng để làm việc với database hoặc kiểm thử API.`,
-  'AI lập trình': (name) => `${name} hỗ trợ lập trình với AI hoặc chạy mô hình cục bộ.`,
-  'Mạng & Bảo mật': (name) => `${name} hỗ trợ mạng, bảo mật hoặc truy cập máy từ xa.`,
-  'Office & Công việc': (name) => `${name} hỗ trợ tài liệu, cộng tác và công việc văn phòng.`,
-  'Liên lạc & Xã hội': (name) => `${name} dùng để nhắn tin, họp hoặc phối hợp nhóm.`,
-  'Trình duyệt': (name) => `${name} là trình duyệt cho công việc, phát triển và kiểm thử web.`,
-  'Tiện ích': (name) => `${name} là tiện ích Windows cho công việc hằng ngày.`,
-  'Thiết kế & Media': (name) => `${name} hỗ trợ thiết kế, nội dung hoặc xử lý media.`,
-  'Game & Game Dev': (name) => `${name} là nền tảng game hoặc công cụ phát triển trò chơi.`
+  'IDE & Code': (name) => `${name} helps you write, review, debug, and manage source code.`,
+  'Languages & Runtime': (name) => `${name} provides an SDK or runtime for building and running projects.`,
+  'Build & Package': (name) => `${name} supports builds, dependencies, or toolchain version management.`,
+  'Terminal & Git': (name) => `${name} supports terminal, Git, or source-control workflows.`,
+  CLI: (name) => `${name} is a command-line utility for daily development work.`,
+  'DevOps & Cloud': (name) => `${name} supports containers, cloud platforms, or infrastructure automation.`,
+  'Database & API': (name) => `${name} helps you work with databases or test APIs.`,
+  'AI Coding': (name) => `${name} supports AI-assisted coding or local model workflows.`,
+  'Network & Security': (name) => `${name} supports networking, security, VPN, or remote access.`,
+  'Office & Work': (name) => `${name} supports documents, collaboration, and office work.`,
+  'Communication & Social': (name) => `${name} is used for messaging, meetings, or team coordination.`,
+  'Browsers': (name) => `${name} is a browser for work, development, and web testing.`,
+  'Utilities': (name) => `${name} is a Windows utility for everyday workflows.`,
+  'Design & Media': (name) => `${name} supports design, content creation, or media processing.`,
+  'Game & Game Dev': (name) => `${name} is a game platform or game development tool.`
 };
 
 const descriptionOverrides = {
-  'Microsoft.VisualStudioCode': 'Trình soạn thảo code nhẹ, kho extension lớn và tích hợp terminal.',
-  'Microsoft.VisualStudio.2022.Community': 'IDE Windows đầy đủ cho .NET, C++, desktop, web và cloud.',
-  'JetBrains.Toolbox': 'Quản lý và cập nhật tập trung các IDE JetBrains.',
-  'Google.AndroidStudio': 'IDE chính thức để phát triển, debug và đóng gói ứng dụng Android.',
-  'Anysphere.Cursor': 'Trình soạn thảo code tích hợp trợ lý AI theo ngữ cảnh dự án.',
-  'Codeium.Windsurf': 'IDE tích hợp AI cho chỉnh sửa và điều hướng codebase.',
-  'OpenJS.NodeJS.LTS': 'Runtime JavaScript ổn định cho web, backend và công cụ build.',
-  'Python.Python.3.14': 'Python 3.14 cho automation, backend, data và AI.',
-  'GoLang.Go': 'Toolchain Go chính thức gồm compiler, formatter, test và module tooling.',
-  'Rustlang.Rustup': 'Trình quản lý toolchain Rust, Cargo và các target biên dịch.',
-  'Microsoft.DotNet.SDK.10': '.NET SDK 10 cho web, API, desktop, cloud và tooling.',
-  'EclipseAdoptium.Temurin.21.JDK': 'OpenJDK 21 LTS từ Eclipse Adoptium cho Java và Kotlin.',
-  'pnpm.pnpm': 'Package manager Node.js tiết kiệm dung lượng và hỗ trợ workspace tốt.',
-  'astral-sh.uv': 'Package và environment manager Python tốc độ cao từ Astral.',
-  'Microsoft.WindowsTerminal': 'Terminal hiện đại cho PowerShell, Command Prompt, WSL và SSH.',
-  'Git.Git': 'Công cụ quản lý phiên bản nền tảng cho hầu hết dự án phần mềm.',
-  'GitHub.cli': 'Làm việc với repository, issue, pull request và workflow GitHub từ terminal.',
-  'Docker.DockerDesktop': 'Chạy container, Docker Compose và Kubernetes local trên Windows.',
-  'Microsoft.WSL': 'Chạy môi trường Linux tích hợp trực tiếp trong Windows.',
-  'Kubernetes.kubectl': 'CLI chính thức để quản lý cluster và workload Kubernetes.',
-  'Hashicorp.Terraform': 'Infrastructure as Code để quản lý cloud và tài nguyên hạ tầng.',
-  'Postman.Postman': 'Thiết kế, gửi, kiểm thử và tài liệu hóa HTTP API.',
-  'Bruno.Bruno': 'API client lưu collection dạng file, phù hợp Git và làm việc offline.',
-  'DBeaver.DBeaver.Community': 'Database client đa nền tảng cho SQL và nhiều hệ quản trị.',
-  'Microsoft.SQLServerManagementStudio': 'Công cụ quản trị, query và debug SQL Server.',
-  'WiresharkFoundation.Wireshark': 'Phân tích packet và chẩn đoán lưu lượng mạng.',
-  'Bitwarden.Bitwarden': 'Quản lý mật khẩu và thông tin đăng nhập đa nền tảng.',
-  'Microsoft.Office': 'Bộ Microsoft 365 Apps cho tài liệu, bảng tính và thuyết trình.',
-  'Notion.Notion': 'Ghi chú, tài liệu, wiki và quản lý công việc theo nhóm.',
-  'Obsidian.Obsidian': 'Ghi chú Markdown cục bộ với liên kết và hệ plugin mở rộng.',
-  'Google.Chrome': 'Trình duyệt Chromium phổ biến cho công việc và web development.',
-  'Mozilla.Firefox': 'Trình duyệt mã nguồn mở và công cụ kiểm thử engine Gecko.',
-  'Microsoft.PowerToys': 'Bộ tiện ích nâng cao cho cửa sổ, bàn phím, file và automation.',
-  'voidtools.Everything': 'Tìm file theo tên gần như tức thời trên Windows.',
-  'OpenAI.Codex': 'Trợ lý lập trình chạy trong terminal, làm việc trực tiếp với codebase.',
-  'Ollama.Ollama': 'Tải và chạy mô hình ngôn ngữ cục bộ qua CLI và API.',
-  'ElementLabs.LMStudio': 'Giao diện tải, chạy và phục vụ mô hình AI cục bộ.',
-  'Figma.Figma': 'Thiết kế giao diện, prototype và cộng tác sản phẩm.',
-  'BlenderFoundation.Blender': 'Bộ công cụ 3D cho modeling, animation, rendering và compositing.',
-  'GodotEngine.GodotEngine': 'Game engine mã nguồn mở cho game 2D và 3D.',
-  'Unity.UnityHub': 'Quản lý phiên bản Unity Editor, project và module build.'
+  'Microsoft.VisualStudioCode': 'A lightweight code editor with a deep extension ecosystem and integrated terminal.',
+  'Microsoft.VisualStudio.2022.Community': 'A full Windows IDE for .NET, C++, desktop, web, and cloud projects.',
+  'JetBrains.Toolbox': 'Centralized install and update management for JetBrains IDEs.',
+  'Google.AndroidStudio': 'The official IDE for building, debugging, and packaging Android apps.',
+  'Anysphere.Cursor': 'An AI-native code editor with project-aware assistance.',
+  'Codeium.Windsurf': 'An AI-powered IDE for editing and navigating large codebases.',
+  'OpenJS.NodeJS.LTS': 'A stable JavaScript runtime for web, backend, and build tooling.',
+  'Python.Python.3.14': 'Python 3.14 for automation, backend services, data work, and AI.',
+  'GoLang.Go': 'The official Go toolchain with compiler, formatter, tests, and module tooling.',
+  'Rustlang.Rustup': 'The Rust toolchain manager for Cargo, compilers, and build targets.',
+  'Microsoft.DotNet.SDK.10': '.NET SDK 10 for web, API, desktop, cloud, and tooling.',
+  'EclipseAdoptium.Temurin.21.JDK': 'OpenJDK 21 LTS from Eclipse Adoptium for Java and Kotlin.',
+  'pnpm.pnpm': 'A space-efficient Node.js package manager with strong workspace support.',
+  'astral-sh.uv': 'A fast Python package and environment manager from Astral.',
+  'Microsoft.WindowsTerminal': 'A modern terminal for PowerShell, Command Prompt, WSL, and SSH.',
+  'Git.Git': 'The foundational version-control tool for most software projects.',
+  'GitHub.cli': 'Work with repositories, issues, pull requests, and GitHub workflows from the terminal.',
+  'Docker.DockerDesktop': 'Run containers, Docker Compose, and local Kubernetes on Windows.',
+  'Microsoft.WSL': 'Run integrated Linux environments directly inside Windows.',
+  'Kubernetes.kubectl': 'The official CLI for managing Kubernetes clusters and workloads.',
+  'Hashicorp.Terraform': 'Infrastructure as Code for managing cloud and platform resources.',
+  'Postman.Postman': 'Design, send, test, and document HTTP APIs.',
+  'Bruno.Bruno': 'A Git-friendly API client that stores collections as files and works offline.',
+  'DBeaver.DBeaver.Community': 'A cross-platform database client for SQL and many database engines.',
+  'Microsoft.SQLServerManagementStudio': 'Administer, query, and debug SQL Server instances.',
+  'WiresharkFoundation.Wireshark': 'Analyze packets and diagnose network traffic.',
+  'Bitwarden.Bitwarden': 'Cross-platform password and credential management.',
+  'Microsoft.Office': 'Microsoft 365 Apps for documents, spreadsheets, and presentations.',
+  'Notion.Notion': 'Notes, docs, wikis, and team project tracking.',
+  'Obsidian.Obsidian': 'Local Markdown notes with backlinks and an extensible plugin system.',
+  'Google.Chrome': 'A Chromium browser for daily work and web development.',
+  'Mozilla.Firefox': 'An open-source browser and Gecko testing target.',
+  'Microsoft.PowerToys': 'Advanced Windows utilities for windows, keyboard, files, and automation.',
+  'voidtools.Everything': 'Near-instant file search by name on Windows.',
+  'OpenAI.Codex': 'A terminal coding assistant that works directly inside your codebase.',
+  'Ollama.Ollama': 'Download and run local language models through CLI and API workflows.',
+  'ElementLabs.LMStudio': 'A desktop interface for downloading, running, and serving local AI models.',
+  'Figma.Figma': 'Interface design, prototyping, and product collaboration.',
+  'BlenderFoundation.Blender': 'A 3D suite for modeling, animation, rendering, and compositing.',
+  'GodotEngine.GodotEngine': 'An open-source game engine for 2D and 3D games.',
+  'Unity.UnityHub': 'Manage Unity Editor versions, projects, and build modules.'
 };
 
 const largePackages = new Set([
@@ -397,19 +411,19 @@ const tagRules = [
 
 const categoryTags = {
   'IDE & Code': ['code', 'ide'],
-  'Ngôn ngữ & Runtime': ['code', 'language', 'runtime'],
+  'Languages & Runtime': ['code', 'language', 'runtime'],
   'Build & Package': ['code', 'package-manager', 'cli'],
   'Terminal & Git': ['code', 'git', 'cli'],
   CLI: ['code', 'cli', 'utility'],
   'DevOps & Cloud': ['code', 'devops', 'cloud'],
   'Database & API': ['code', 'database'],
-  'AI lập trình': ['code', 'ai'],
-  'Mạng & Bảo mật': ['network', 'security'],
-  'Office & Công việc': ['office', 'productivity'],
-  'Liên lạc & Xã hội': ['social'],
-  'Trình duyệt': ['browser', 'network'],
-  'Tiện ích': ['utility'],
-  'Thiết kế & Media': ['design', 'media'],
+  'AI Coding': ['code', 'ai'],
+  'Network & Security': ['network', 'security'],
+  'Office & Work': ['office', 'productivity'],
+  'Communication & Social': ['social'],
+  'Browsers': ['browser', 'network'],
+  'Utilities': ['utility'],
+  'Design & Media': ['design', 'media'],
   'Game & Game Dev': ['game']
 };
 
@@ -476,7 +490,7 @@ function tagsFor(candidate) {
 
 function typeFor(candidate) {
   if (candidate.category === 'IDE & Code') return 'IDE / Editor';
-  if (candidate.category === 'Ngôn ngữ & Runtime') return 'SDK / Runtime';
+  if (candidate.category === 'Languages & Runtime') return 'SDK / Runtime';
   if (candidate.category === 'Build & Package') return 'Build / Package';
   if (candidate.category === 'CLI') return 'CLI';
   if (candidate.category === 'Terminal & Git') return /terminal|powershell|nushell|wezterm|warp|ohmyposh/i.test(candidate.pkg)
@@ -489,20 +503,20 @@ function typeFor(candidate) {
 
 function installOrderFor(candidate) {
   const order = {
-    'Tiện ích': 10,
+    'Utilities': 10,
     'Terminal & Git': 20,
     CLI: 25,
-    'Ngôn ngữ & Runtime': 30,
+    'Languages & Runtime': 30,
     'Build & Package': 40,
     'IDE & Code': 50,
     'DevOps & Cloud': 60,
     'Database & API': 70,
-    'Mạng & Bảo mật': 75,
-    'AI lập trình': 80,
-    'Trình duyệt': 85,
-    'Office & Công việc': 90,
-    'Liên lạc & Xã hội': 92,
-    'Thiết kế & Media': 95,
+    'Network & Security': 75,
+    'AI Coding': 80,
+    'Browsers': 85,
+    'Office & Work': 90,
+    'Communication & Social': 92,
+    'Design & Media': 95,
     'Game & Game Dev': 100
   };
   return order[candidate.category] || 80;
@@ -511,18 +525,18 @@ function installOrderFor(candidate) {
 function riskFor(candidate) {
   const notes = [];
   if (largePackages.has(candidate.pkg)) {
-    notes.push('Tải xuống lớn và có thể cần nhiều dung lượng.');
+    notes.push('Large download and may require significant disk space.');
   }
   if (privilegedPackages.has(candidate.pkg)) {
-    notes.push('Có thể cần quyền quản trị, driver hoặc khởi động lại Windows.');
+    notes.push('May require administrator rights, drivers, or a Windows restart.');
   } else if (commercialPackages.has(candidate.pkg)) {
-    notes.push('Có thể cần tài khoản hoặc giấy phép trả phí.');
+    notes.push('May require an account or paid license.');
   } else if (loginPackages.has(candidate.pkg)) {
-    notes.push('Cần đăng nhập hoặc cấu hình tài khoản sau khi cài.');
-  } else if (['Ngôn ngữ & Runtime', 'Build & Package', 'CLI', 'Terminal & Git', 'DevOps & Cloud'].includes(candidate.category)) {
-    notes.push('Có thể cập nhật PATH; nên mở terminal mới sau khi cài.');
+    notes.push('Requires sign-in or account setup after install.');
+  } else if (['Languages & Runtime', 'Build & Package', 'CLI', 'Terminal & Git', 'DevOps & Cloud'].includes(candidate.category)) {
+    notes.push('May update PATH; open a new terminal after install.');
   }
-  return notes.join(' ') || 'Không có lưu ý đặc biệt.';
+  return notes.join(' ') || 'No special notes.';
 }
 
 function logoFor(id) {
@@ -542,7 +556,7 @@ const apps = candidates.map((candidate, index) => {
   return {
     id,
     name: candidate.name,
-    cat: candidate.category,
+    cat: category.name,
     categoryId: category.id,
     pkg: candidate.pkg,
     source: 'winget',
@@ -564,14 +578,14 @@ const storeApps = [
   {
     id: 'whatsapp',
     name: 'WhatsApp',
-    cat: 'Liên lạc & Xã hội',
+    cat: 'Communication & Social',
     categoryId: 'communication-social',
     pkg: '9NKSQGP7F2NH',
     source: 'msstore',
     publisher: 'WhatsApp',
     type: 'Desktop app',
-    desc: 'Nhắn tin và gọi điện bằng ứng dụng WhatsApp từ Microsoft Store.',
-    risk: 'Microsoft Store quản lý vị trí cài đặt. Cần đăng nhập sau khi cài.',
+    desc: 'Message and call with the Microsoft Store version of WhatsApp.',
+    risk: 'Microsoft Store manages the install location. Sign-in is required after install.',
     tags: ['social'],
     matchNames: ['WhatsApp'],
     size: 'standard',
@@ -583,14 +597,14 @@ const storeApps = [
   {
     id: 'nvidia-app',
     name: 'NVIDIA App',
-    cat: 'Tiện ích',
+    cat: 'Utilities',
     categoryId: 'utilities',
     pkg: 'XP8CLZL93F5Z4P',
     source: 'msstore',
     publisher: 'NVIDIA',
     type: 'Desktop app',
-    desc: 'Quản lý tính năng NVIDIA, tối ưu game và cập nhật driver.',
-    risk: 'Chỉ phù hợp máy dùng GPU NVIDIA. Microsoft Store quản lý vị trí cài đặt.',
+    desc: 'Manage NVIDIA features, optimize games, and update drivers.',
+    risk: 'Only relevant for machines with NVIDIA GPUs. Microsoft Store manages the install location.',
     tags: ['utility', 'game'],
     matchNames: ['NVIDIA App'],
     size: 'standard',
@@ -638,7 +652,7 @@ const planDefinitions = [
     id: 'developer-core',
     name: 'Developer Core',
     icon: 'ph-code',
-    desc: 'Nền tảng dùng chung cho hầu hết công việc lập trình.',
+    desc: 'The shared foundation for most programming workflows.',
     packages: [
       'Git.Git', 'GitHub.cli', 'Microsoft.VisualStudioCode', 'Microsoft.WindowsTerminal',
       'Microsoft.PowerShell', 'Google.Chrome', '7zip.7zip', 'Microsoft.PowerToys',
@@ -649,7 +663,7 @@ const planDefinitions = [
     id: 'office-remote',
     name: 'Office & Remote Work',
     icon: 'ph-briefcase',
-    desc: 'Tài liệu, họp, đồng bộ, cộng tác và truy cập từ xa.',
+    desc: 'Documents, meetings, sync, collaboration, and remote access.',
     packages: [
       'Microsoft.Office', 'Microsoft.Teams', 'SlackTechnologies.Slack', 'Zoom.Zoom',
       'Notion.Notion', 'Obsidian.Obsidian', 'Doist.Todoist', 'Google.GoogleDrive',
@@ -661,7 +675,7 @@ const planDefinitions = [
     id: 'web-frontend',
     name: 'Web Frontend',
     icon: 'ph-browser',
-    desc: 'JavaScript, browser testing, API, container và design handoff.',
+    desc: 'JavaScript, browser testing, APIs, containers, and design handoff.',
     packages: [
       'OpenJS.NodeJS.LTS', 'pnpm.pnpm', 'Git.Git', 'GitHub.cli',
       'Microsoft.VisualStudioCode', 'Google.Chrome', 'Mozilla.Firefox',
@@ -673,7 +687,7 @@ const planDefinitions = [
     id: 'node-backend',
     name: 'Node.js Backend',
     icon: 'ph-brackets-curly',
-    desc: 'Backend JavaScript với API, container và database local.',
+    desc: 'Backend JavaScript with APIs, containers, and local databases.',
     packages: [
       'OpenJS.NodeJS.LTS', 'pnpm.pnpm', 'Git.Git', 'Microsoft.VisualStudioCode',
       'Docker.DockerDesktop', 'Postman.Postman', 'Bruno.Bruno',
@@ -685,7 +699,7 @@ const planDefinitions = [
     id: 'python-data-ai',
     name: 'Python, Data & AI',
     icon: 'ph-chart-bar',
-    desc: 'Python, environment, data tooling và local AI.',
+    desc: 'Python, environments, data tooling, and local AI.',
     packages: [
       'Python.Python.3.14', 'astral-sh.uv', 'Anaconda.Miniconda3',
       'Microsoft.VisualStudioCode', 'Git.Git', 'Docker.DockerDesktop',
@@ -697,7 +711,7 @@ const planDefinitions = [
     id: 'dotnet',
     name: '.NET Developer',
     icon: 'ph-desktop-tower',
-    desc: '.NET 10, Visual Studio, SQL Server và API testing.',
+    desc: '.NET 10, Visual Studio, SQL Server, and API testing.',
     packages: [
       'Microsoft.VisualStudio.2022.Community', 'Microsoft.DotNet.SDK.10',
       'Git.Git', 'Microsoft.PowerShell', 'Microsoft.SQLServer.2022.Developer',
@@ -708,7 +722,7 @@ const planDefinitions = [
     id: 'java',
     name: 'Java Developer',
     icon: 'ph-coffee',
-    desc: 'Java 21 LTS, IntelliJ, container và database.',
+    desc: 'Java 21 LTS, IntelliJ, containers, and databases.',
     packages: [
       'JetBrains.IntelliJIDEA.Community', 'EclipseAdoptium.Temurin.21.JDK',
       'Git.Git', 'Microsoft.WindowsTerminal', 'Docker.DockerDesktop',
@@ -719,7 +733,7 @@ const planDefinitions = [
     id: 'mobile',
     name: 'Mobile Developer',
     icon: 'ph-device-mobile',
-    desc: 'Android, Dart, API testing và product design.',
+    desc: 'Android, Dart, API testing, and product design.',
     packages: [
       'Google.AndroidStudio', 'EclipseAdoptium.Temurin.21.JDK', 'Google.DartSDK',
       'Microsoft.VisualStudioCode', 'Git.Git', 'Postman.Postman',
@@ -730,7 +744,7 @@ const planDefinitions = [
     id: 'systems',
     name: 'Go & Rust Systems',
     icon: 'ph-cpu',
-    desc: 'Toolchain systems, compiler và CLI hiện đại.',
+    desc: 'Systems toolchains, compilers, and modern CLI utilities.',
     packages: [
       'GoLang.Go', 'Rustlang.Rustup', 'Microsoft.VisualStudioCode', 'Git.Git',
       'Kitware.CMake', 'LLVM.LLVM', 'Ninja-build.Ninja', 'Microsoft.PowerShell',
@@ -742,7 +756,7 @@ const planDefinitions = [
     id: 'devops-cloud',
     name: 'DevOps & Cloud',
     icon: 'ph-cloud',
-    desc: 'WSL, container, Kubernetes, IaC và ba cloud lớn.',
+    desc: 'WSL, containers, Kubernetes, IaC, and the major cloud CLIs.',
     packages: [
       'Microsoft.WSL', 'Docker.DockerDesktop', 'Microsoft.WindowsTerminal',
       'Microsoft.PowerShell', 'Git.Git', 'GitHub.cli', 'Microsoft.AzureCLI',
@@ -755,7 +769,7 @@ const planDefinitions = [
     id: 'database-api',
     name: 'Database & API',
     icon: 'ph-database',
-    desc: 'API clients và database GUI cho nhiều hệ quản trị.',
+    desc: 'API clients and database GUIs for many engines.',
     packages: [
       'Postman.Postman', 'Insomnia.Insomnia', 'Bruno.Bruno',
       'DBeaver.DBeaver.Community', 'JetBrains.DataGrip', 'MongoDB.Compass.Full',
@@ -768,7 +782,7 @@ const planDefinitions = [
     id: 'product-design',
     name: 'Product & Design',
     icon: 'ph-paint-brush',
-    desc: 'UI, 3D, ảnh, video, audio và tài liệu sản phẩm.',
+    desc: 'UI, 3D, images, video, audio, and product documentation.',
     packages: [
       'Figma.Figma', 'BlenderFoundation.Blender', 'GIMP.GIMP.3',
       'Inkscape.Inkscape', 'KDE.Krita', 'OBSProject.OBSStudio',
@@ -780,7 +794,7 @@ const planDefinitions = [
     id: 'game-development',
     name: 'Game Development',
     icon: 'ph-game-controller',
-    desc: 'Game engine, 3D, code, source control và launcher.',
+    desc: 'Game engines, 3D tools, code, source control, and launchers.',
     packages: [
       'Unity.UnityHub', 'GodotEngine.GodotEngine', 'BlenderFoundation.Blender',
       'Microsoft.VisualStudioCode', 'Git.Git', 'Kitware.CMake',
@@ -791,7 +805,7 @@ const planDefinitions = [
     id: 'cpp-desktop',
     name: 'C/C++ Desktop',
     icon: 'ph-file-cpp',
-    desc: 'Compiler, build system và IDE cho ứng dụng native Windows.',
+    desc: 'Compilers, build systems, and IDEs for native Windows apps.',
     packages: [
       'Microsoft.VisualStudio.2022.Community', 'JetBrains.CLion',
       'Microsoft.VisualStudioCode', 'CodeBlocks.CodeBlocks', 'LLVM.LLVM',
@@ -802,7 +816,7 @@ const planDefinitions = [
     id: 'php-web',
     name: 'PHP Web',
     icon: 'ph-globe',
-    desc: 'PHP, local web stack, database, frontend và API tooling.',
+    desc: 'PHP, local web stack, databases, frontend tools, and API tooling.',
     packages: [
       'PHP.PHP.8.4', 'LeNgocKhoa.Laragon', 'JetBrains.PhpStorm',
       'Microsoft.VisualStudioCode', 'Git.Git', 'OpenJS.NodeJS.LTS',
@@ -813,7 +827,7 @@ const planDefinitions = [
     id: 'qa-automation',
     name: 'QA & Automation',
     icon: 'ph-check-square',
-    desc: 'Browser, API, mobile, script và container cho kiểm thử.',
+    desc: 'Browsers, APIs, mobile, scripts, and containers for testing.',
     packages: [
       'Postman.Postman', 'Bruno.Bruno', 'Insomnia.Insomnia',
       'Google.Chrome', 'Mozilla.Firefox', 'Microsoft.Edge',
@@ -825,7 +839,7 @@ const planDefinitions = [
     id: 'security-network',
     name: 'Security & Network',
     icon: 'ph-shield-check',
-    desc: 'Phân tích mạng, web security, VPN, mã hóa và password.',
+    desc: 'Network analysis, web security, VPN, encryption, and passwords.',
     packages: [
       'Insecure.Nmap', 'WiresharkFoundation.Wireshark',
       'PortSwigger.BurpSuite.Community', 'ZAP.ZAP', 'mitmproxy.mitmproxy',
@@ -837,7 +851,7 @@ const planDefinitions = [
     id: 'sysadmin-support',
     name: 'Sysadmin & IT Support',
     icon: 'ph-monitor',
-    desc: 'Quản trị Windows, remote support, chẩn đoán và USB boot.',
+    desc: 'Windows administration, remote support, diagnostics, and USB boot tools.',
     packages: [
       'Microsoft.PowerShell', 'Microsoft.WindowsTerminal', 'Microsoft.WSL',
       'Microsoft.Sysinternals.Suite', 'PuTTY.PuTTY', 'WinSCP.WinSCP',
@@ -850,7 +864,7 @@ const planDefinitions = [
     id: 'creator-streaming',
     name: 'Creator & Streaming',
     icon: 'ph-video-camera',
-    desc: 'Quay, stream, dựng video, audio, ảnh và chuyển mã.',
+    desc: 'Recording, streaming, video editing, audio, images, and transcoding.',
     packages: [
       'OBSProject.OBSStudio', 'KDE.Kdenlive', 'Meltytech.Shotcut',
       'Audacity.Audacity', 'Gyan.FFmpeg', 'HandBrake.HandBrake',
@@ -862,7 +876,7 @@ const planDefinitions = [
     id: 'open-source-desktop',
     name: 'Open-source Desktop',
     icon: 'ph-github-logo',
-    desc: 'Bộ ứng dụng desktop mã nguồn mở cho công việc hàng ngày.',
+    desc: 'Open-source desktop apps for everyday work.',
     packages: [
       'VSCodium.VSCodium', 'LibreWolf.LibreWolf', 'Mozilla.Thunderbird',
       'TheDocumentFoundation.LibreOffice', 'Joplin.Joplin',
@@ -875,7 +889,7 @@ const planDefinitions = [
     id: 'gaming-pc',
     name: 'Gaming PC',
     icon: 'ph-game-controller',
-    desc: 'Launcher, thư viện game, mod, chat và media cho máy chơi game.',
+    desc: 'Launchers, game libraries, mods, chat, and media for a gaming PC.',
     packages: [
       'Valve.Steam', 'EpicGames.EpicGamesLauncher', 'GOG.Galaxy',
       'ElectronicArts.EADesktop', 'Ubisoft.Connect',
@@ -888,7 +902,7 @@ const planDefinitions = [
     id: 'terminal-power-user',
     name: 'Terminal Power User',
     icon: 'ph-terminal-window',
-    desc: 'Shell hiện đại và bộ CLI tốc độ cao cho công việc hàng ngày.',
+    desc: 'Modern shells and fast CLI tools for daily work.',
     packages: [
       'Microsoft.WindowsTerminal', 'Microsoft.PowerShell', 'Nushell.Nushell',
       'Alacritty.Alacritty', 'wez.wezterm', 'JanDeDobbeleer.OhMyPosh',
@@ -903,7 +917,7 @@ const planDefinitions = [
     id: 'data-analyst',
     name: 'Data Analyst',
     icon: 'ph-chart-bar',
-    desc: 'Python, R, Julia, database, BI và bảng tính.',
+    desc: 'Python, R, Julia, databases, BI, and spreadsheets.',
     packages: [
       'Python.Python.3.14', 'Anaconda.Miniconda3', 'RProject.R',
       'Posit.RStudio', 'Julialang.Julia', 'Microsoft.PowerBI',
@@ -915,7 +929,7 @@ const planDefinitions = [
     id: 'ai-coding-local',
     name: 'AI Coding & Local LLM',
     icon: 'ph-sparkle',
-    desc: 'AI coding CLI, desktop chat và mô hình chạy cục bộ.',
+    desc: 'AI coding CLIs, desktop chat, and local model runtimes.',
     packages: [
       'OpenAI.Codex', 'GitHub.Copilot', 'Anthropic.ClaudeCode',
       'Microsoft.AIShell', 'Ollama.Ollama', 'ElementLabs.LMStudio',
@@ -997,17 +1011,17 @@ fs.writeFileSync(
 const documentation = [
   '# SetupKit Verified App Catalog',
   '',
-  `Xác minh: ${catalog.verifiedAt}`,
+  `Verified at: ${catalog.verifiedAt}`,
   '',
-  `Tổng cộng: ${catalog.apps.length} ứng dụng (${apps.length - storeApps.length} winget + ${storeApps.length} Microsoft Store).`,
+  `Total: ${catalog.apps.length} apps (${apps.length - storeApps.length} winget + ${storeApps.length} Microsoft Store).`,
   '',
-  'Mọi command đều dùng `--exact`, source cố định, chấp nhận agreement và tắt tương tác ngoài hộp thoại xác nhận của SetupKit.',
+  'Every command uses `--exact`, a fixed source, package/source agreements, and non-interactive winget flags behind SetupKit confirmation dialogs.',
   ''
 ];
 
 categories.forEach((category) => {
   documentation.push(`## ${category.name}`, '');
-  documentation.push('| Ứng dụng | Publisher | Source | Package ID | Command |');
+  documentation.push('| App | Publisher | Source | Package ID | Command |');
   documentation.push('|---|---|---|---|---|');
   catalog.apps
     .filter((app) => app.categoryId === category.id)

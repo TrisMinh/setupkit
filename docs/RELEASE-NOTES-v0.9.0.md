@@ -1,38 +1,38 @@
 ## SetupKit v0.9.0
 
-Một file `SetupKit.exe` duy nhất, mở là chạy - hoặc cài bằng một dòng lệnh:
+A single `SetupKit.exe` file you can run directly, plus a one-command install option:
 
 ```powershell
 irm https://raw.githubusercontent.com/TrisMinh/setupkit/main/scripts/install.ps1 | iex
 ```
 
-### Có gì mới
+### What's New
 
-- **Tab Cập nhật** - SetupKit gom các ứng dụng đã cài có bản mới vào một màn hình riêng, có search và nút cập nhật từng app.
-- **Cập nhật tất cả** - xác nhận một lần, sau đó SetupKit chạy tuần tự đúng những package đã duyệt qua `winget upgrade`, có terminal và tiến trình như khi cài.
-- **Tab Versions** - tải danh sách version cũ của app nguồn `winget` bằng `winget show --versions`.
-- **Rollback version** - chọn version rồi dùng **Cài version này** hoặc **Gỡ rồi cài version này**. Store app được đánh dấu không phù hợp vì Microsoft Store không cho chọn version cũ qua winget.
-- **Lọc nhanh app trong Versions** - chuyển giữa `Đã cài`, `Chưa cài`, `Tất cả` để không phải kéo trong danh sách dài.
-- **Sort catalog** - thêm sắp xếp thông minh, tên, thứ tự cài, danh mục, tình trạng, nguồn, app lớn và app chưa cài.
-- **Catalog VPN lớn hơn** - bổ sung ExpressVPN, HMA VPN, Surfshark, Private Internet Access, CyberGhost, IPVanish, TunnelBear, hide.me VPN, VPN Unlimited, AdGuard VPN và Windscribe.
-- **Không tự chọn khi mở app** - phiên mới bắt đầu với gói cài đặt trống; người dùng tự chọn app hoặc workspace khi cần.
-- **Confirm đẹp trong app** - install/update/uninstall/rollback dùng modal có command preview thay cho hộp thoại hệ thống thô.
-- **Gỡ VPN dễ hơn** - uninstall không ép silent/non-interactive để uninstaller của VPN có thể hiện cửa sổ xác nhận hoặc yêu cầu đóng service.
-- **UI filter rõ hơn** - icon trong dropdown, dot màu chỉ dùng cho tình trạng, search và motion được làm mượt lại.
+- **Updates tab** - SetupKit groups installed apps with available upgrades into a dedicated screen with search and per-app update actions.
+- **Update all** - confirm once, then SetupKit upgrades only reviewed packages through `winget upgrade`, with live terminal output and per-app progress.
+- **Versions tab** - fetch older winget package versions with `winget show --versions`.
+- **Rollback flow** - choose a version, then use **Install this version** or **Uninstall then install this version**. Microsoft Store apps are marked unsupported because winget does not expose older Store versions.
+- **Quick filters in Versions** - switch between Installed, Not installed, and All so long winget lists are easier to navigate.
+- **Catalog sorting** - sort by smart order, install order, name, category, status, source, large apps, or not-installed apps.
+- **Larger VPN catalog** - adds ExpressVPN, HMA VPN, Surfshark, Private Internet Access, CyberGhost, IPVanish, TunnelBear, hide.me VPN, VPN Unlimited, AdGuard VPN, and Windscribe.
+- **No auto-select on launch** - every session starts with an empty queue until the user explicitly selects apps or a workspace.
+- **Polished in-app confirmations** - install, update, uninstall, and rollback use a styled modal with command preview instead of rough system dialogs.
+- **More reliable VPN uninstall** - `winget uninstall` no longer forces silent/non-interactive flags, so VPN uninstallers can show confirmation, service, or driver prompts when needed.
+- **Clearer UI filters** - dropdown icons, status-only color dots, smoother search, and more refined motion.
 
-### An toàn
+### Safety
 
-- Tất cả thao tác install/update/uninstall/rollback vẫn chỉ chạy package ID nằm trong allowlist nhúng từ catalog.
-- Rollback luôn hỏi xác nhận trước khi gỡ hoặc cài version, và cảnh báo rõ rủi ro mất cấu hình nếu chọn chế độ gỡ rồi cài.
-- SetupKit không tự tải installer từ URL ngoài; version cũ đi qua manifest và cơ chế xác minh của winget.
+- Every install, update, uninstall, and rollback action is restricted to package IDs in the embedded reviewed catalog.
+- Rollback always asks for confirmation before install or uninstall flows, and warns when configuration may be removed.
+- SetupKit never downloads installers from external URLs; older versions go through winget manifests and verification.
 
-### Cài đặt
+### Install
 
-| Cách | Thao tác |
+| Method | Action |
 |---|---|
-| Một dòng lệnh | Dán lệnh PowerShell ở trên |
-| Thủ công | Tải `SetupKit.exe` bên dưới và mở |
+| One command | Paste the PowerShell command above |
+| Manual | Download `SetupKit.exe` below and run it |
 
-Windows 11 dùng ngay; Windows 10 thiếu WebView2 sẽ được app đề nghị cài tự động.
+Windows 11 works out of the box. On Windows 10, SetupKit prompts for WebView2 if it is missing.
 
-> `SetupKit.exe` chưa được ký số (cần chứng chỉ trả phí) nên SmartScreen có thể cảnh báo lần đầu: chọn "More info" rồi "Run anyway".
+> `SetupKit.exe` is not code-signed yet, so Windows SmartScreen may warn on first launch. Choose "More info" and then "Run anyway" if you trust the release.

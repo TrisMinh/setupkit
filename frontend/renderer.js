@@ -49,7 +49,9 @@ const state = {
   wingetAvailable: false,
   wingetVersion: '',
   wingetChecked: false,
-  logs: ['[sẵn sàng] Đang kiểm tra các ứng dụng đã có trên máy.']
+  logs: [currentLanguage() === 'vi'
+    ? '[sẵn sàng] Đang kiểm tra các ứng dụng đã có trên máy.'
+    : '[ready] Checking installed apps on this machine.']
 };
 
 const els = {
@@ -618,8 +620,8 @@ function uninstallCommandFor(app) {
 }
 
 function installLocationLabel(app) {
-  if (app.source === 'msstore') return 'Do Microsoft Store quản lý';
-  return state.installLocations.get(app.id) || 'Mặc định của nhà phát hành, xác nhận sau khi cài';
+  if (app.source === 'msstore') return uiText('Do Microsoft Store quản lý', 'Managed by Microsoft Store');
+  return state.installLocations.get(app.id) || uiText('Mặc định của nhà phát hành, xác nhận sau khi cài', 'Publisher default, verified after install');
 }
 
 function appById(id) {
@@ -1036,6 +1038,11 @@ function presetButtonHTML(preset) {
   const installedCount = preset.apps.length - pendingCount;
   const largeCount = preset.apps.map(appById).filter((app) => app?.size === 'large').length;
   const previewApps = preset.apps.map(appById).filter(Boolean);
+  const countParts = [
+    uiText(`${pendingCount} cần cài`, `${pendingCount} to install`),
+    installedCount ? uiText(`${installedCount} đã có`, `${installedCount} installed`) : '',
+    largeCount ? uiText(`${largeCount} app lớn`, `${largeCount} large ${largeCount === 1 ? 'app' : 'apps'}`) : ''
+  ].filter(Boolean);
   const previewMarkup = previewApps.map((app) => `
     <span class="workspace-app-tile" title="${escapeHtml(app.name)}">
       ${appIconMarkup(app)}
@@ -1047,7 +1054,7 @@ function presetButtonHTML(preset) {
       <span class="preset-copy">
         <strong>${escapeHtml(preset.name)}</strong>
         <span class="preset-description">${escapeHtml(displayPresetDescription(preset))}</span>
-        <span class="preset-count">${pendingCount} cần cài${installedCount ? `, ${installedCount} đã có` : ''}${largeCount ? `, ${largeCount} app lớn` : ''}</span>
+        <span class="preset-count">${escapeHtml(countParts.join(', '))}</span>
       </span>
       <span class="workspace-preview" aria-hidden="true">
         <span class="workspace-app-rail">${previewMarkup}</span>
@@ -1061,6 +1068,11 @@ function workspaceCardHTML(preset) {
   const installedCount = preset.apps.length - pendingCount;
   const largeCount = preset.apps.map(appById).filter((app) => app?.size === 'large').length;
   const previewApps = preset.apps.map(appById).filter(Boolean);
+  const countParts = [
+    uiText(`${pendingCount} cần cài`, `${pendingCount} to install`),
+    installedCount ? uiText(`${installedCount} đã có`, `${installedCount} installed`) : '',
+    largeCount ? uiText(`${largeCount} app lớn`, `${largeCount} large ${largeCount === 1 ? 'app' : 'apps'}`) : ''
+  ].filter(Boolean);
   const previewMarkup = previewApps.map((app) => `
     <span class="workspace-app-tile" title="${escapeHtml(app.name)}">
       ${appIconMarkup(app)}
@@ -1074,20 +1086,20 @@ function workspaceCardHTML(preset) {
           <strong>${escapeHtml(preset.name)}</strong>
           <span>${escapeHtml(displayPresetDescription(preset))}</span>
         </div>
-        <button class="workspace-open-button" data-workspace-detail="${escapeHtml(preset.id)}" type="button" aria-label="Xem chi tiết ${escapeHtml(preset.name)}" title="Xem chi tiết workspace">
+        <button class="workspace-open-button" data-workspace-detail="${escapeHtml(preset.id)}" type="button" aria-label="${escapeHtml(uiText(`Xem chi tiết ${preset.name}`, `View ${preset.name} details`))}" title="${escapeHtml(uiText('Xem chi tiết workspace', 'View workspace details'))}">
           <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
         </button>
       </div>
-      <div class="workspace-preview workspace-preview-large" aria-label="Các ứng dụng trong workspace">
+      <div class="workspace-preview workspace-preview-large" aria-label="${escapeHtml(uiText('Các ứng dụng trong workspace', 'Apps in this workspace'))}">
         <div class="workspace-app-rail" tabindex="0">${previewMarkup}</div>
       </div>
       <div class="workspace-card-footer">
-        <span><strong>${previewApps.length}</strong> ứng dụng</span>
-        <span>${pendingCount} cần cài${installedCount ? ` · ${installedCount} đã có` : ''}${largeCount ? ` · ${largeCount} app lớn` : ''}</span>
+        <span><strong>${previewApps.length}</strong> ${escapeHtml(uiText('ứng dụng', previewApps.length === 1 ? 'app' : 'apps'))}</span>
+        <span>${escapeHtml(countParts.join(' · '))}</span>
       </div>
       <button class="button workspace-apply-button" data-workspace-apply="${escapeHtml(preset.id)}" type="button">
         <i class="ph ph-plus-circle" aria-hidden="true"></i>
-        Dùng workspace này
+        ${escapeHtml(uiText('Dùng workspace này', 'Use this workspace'))}
       </button>
     </article>
   `;
@@ -1126,10 +1138,10 @@ function installedActions(app) {
   const details = state.installed.get(app.id);
   const name = escapeHtml(app.name);
   return `
-    <button class="small-icon-button" data-open="${app.id}" type="button" aria-label="Mở ${name}" title="${details?.canLaunch ? 'Mở ứng dụng' : 'Windows chưa cung cấp lối tắt'}" ${details?.canLaunch ? '' : 'disabled'}>
+    <button class="small-icon-button" data-open="${app.id}" type="button" aria-label="${escapeHtml(uiText(`Mở ${app.name}`, `Open ${app.name}`))}" title="${escapeHtml(details?.canLaunch ? uiText('Mở ứng dụng', 'Open app') : uiText('Windows chưa cung cấp lối tắt', 'Windows has not exposed a shortcut'))}" ${details?.canLaunch ? '' : 'disabled'}>
       <i class="ph ph-arrow-square-out" aria-hidden="true"></i>
     </button>
-    <button class="small-icon-button" data-folder="${app.id}" type="button" aria-label="Mở thư mục ${name}" title="${details?.canOpenFolder ? 'Mở thư mục cài đặt' : 'Windows không công khai thư mục'}" ${details?.canOpenFolder ? '' : 'disabled'}>
+    <button class="small-icon-button" data-folder="${app.id}" type="button" aria-label="${escapeHtml(uiText(`Mở thư mục ${app.name}`, `Open ${app.name} folder`))}" title="${escapeHtml(details?.canOpenFolder ? uiText('Mở thư mục cài đặt', 'Open install folder') : uiText('Windows không công khai thư mục', 'Windows has not exposed a folder'))}" ${details?.canOpenFolder ? '' : 'disabled'}>
       <i class="ph ph-folder-open" aria-hidden="true"></i>
     </button>
   `;
@@ -1141,13 +1153,15 @@ function cardHTML(app) {
   const status = appStatus(app);
   const cardClass = status === 'installed' ? 'installed' : status === 'review' ? 'app-review' : '';
   const name = escapeHtml(app.name);
-  const version = details?.version ? `Phiên bản ${escapeHtml(details.version)}` : 'Đã phát hiện trên Windows';
+  const version = details?.version
+    ? uiText(`Phiên bản ${details.version}`, `Version ${details.version}`)
+    : uiText('Đã phát hiện trên Windows', 'Detected on Windows');
   const visibleTags = app.tags.slice(0, 3).map((tag) => (
     `<span class="app-tag">${escapeHtml(tagLabel(tag))}</span>`
   )).join('');
   const actions = details
     ? `${installedActions(app)}
-      <button class="small-icon-button detail-button" data-detail="${app.id}" type="button" aria-label="Xem chi tiết ${name}" title="Xem chi tiết">
+      <button class="small-icon-button detail-button" data-detail="${app.id}" type="button" aria-label="${escapeHtml(uiText(`Xem chi tiết ${app.name}`, `View ${app.name} details`))}" title="${escapeHtml(uiText('Xem chi tiết', 'View details'))}">
         <i class="ph ph-info" aria-hidden="true"></i>
       </button>`
     : `<button
@@ -1155,13 +1169,13 @@ function cardHTML(app) {
         data-toggle="${app.id}"
         type="button"
         aria-pressed="${selected}"
-        aria-label="${selected ? `Bỏ ${name} khỏi gói cài đặt` : `Thêm ${name} vào gói cài đặt`}"
-        title="${selected ? 'Bỏ khỏi gói' : 'Thêm vào gói'}"
+        aria-label="${escapeHtml(selected ? uiText(`Bỏ ${app.name} khỏi gói cài đặt`, `Remove ${app.name} from the queue`) : uiText(`Thêm ${app.name} vào gói cài đặt`, `Add ${app.name} to the queue`))}"
+        title="${escapeHtml(selected ? uiText('Bỏ khỏi gói', 'Remove from queue') : uiText('Thêm vào gói', 'Add to queue'))}"
         ${state.scanning || state.running ? 'disabled' : ''}
       >
         <i class="ph ${selected ? 'ph-check' : 'ph-plus'}" aria-hidden="true"></i>
       </button>
-      <button class="small-icon-button detail-button" data-detail="${app.id}" type="button" aria-label="Xem chi tiết ${name}" title="Xem chi tiết">
+      <button class="small-icon-button detail-button" data-detail="${app.id}" type="button" aria-label="${escapeHtml(uiText(`Xem chi tiết ${app.name}`, `View ${app.name} details`))}" title="${escapeHtml(uiText('Xem chi tiết', 'View details'))}">
         <i class="ph ph-info" aria-hidden="true"></i>
       </button>`;
 
@@ -1176,10 +1190,10 @@ function cardHTML(app) {
         <p class="app-desc">${escapeHtml(displayAppDescription(app))}</p>
         <div class="app-meta-row">
           <span class="app-type">${escapeHtml(app.type)}</span>
-          ${app.size === 'large' ? '<span class="app-size-label"><i class="ph ph-hard-drives" aria-hidden="true"></i>App lớn</span>' : ''}
+          ${app.size === 'large' ? `<span class="app-size-label"><i class="ph ph-hard-drives" aria-hidden="true"></i>${escapeHtml(uiText('App lớn', 'Large app'))}</span>` : ''}
           ${visibleTags}
         </div>
-        ${details ? `<div class="app-install-meta ${details.updateAvailable ? 'has-update' : ''}"><i class="ph ${details.updateAvailable ? 'ph-arrow-circle-up' : 'ph-check-circle'}" aria-hidden="true"></i><span>${details.updateAvailable ? 'Có bản cập nhật mới' : version}</span></div>` : ''}
+        ${details ? `<div class="app-install-meta ${details.updateAvailable ? 'has-update' : ''}"><i class="ph ${details.updateAvailable ? 'ph-arrow-circle-up' : 'ph-check-circle'}" aria-hidden="true"></i><span>${escapeHtml(details.updateAvailable ? uiText('Có bản cập nhật mới', 'Update available') : version)}</span></div>` : ''}
       </div>
       <div class="app-card-actions ${details ? 'installed-actions' : ''}">
         ${actions}
@@ -1261,10 +1275,10 @@ function updateSearchAffordance() {
 function renderCatalog() {
   applyViewMode();
   const list = filteredApps();
-  els.catalogCount.innerHTML = `<strong>${list.length}</strong> / ${apps.length} ứng dụng phù hợp`;
+  els.catalogCount.innerHTML = `<strong>${list.length}</strong> / ${apps.length} ${escapeHtml(uiText('ứng dụng phù hợp', 'matching apps'))}`;
   els.installedSummary.textContent = state.scanning
-    ? 'Đang quét Registry, Start Menu và winget'
-    : `${state.installed.size} ứng dụng đã cài trên máy`;
+    ? uiText('Đang quét Registry, Start Menu và winget', 'Scanning Registry, Start Menu, and winget')
+    : uiText(`${state.installed.size} ứng dụng đã cài trên máy`, `${state.installed.size} apps installed on this machine`);
   updateSearchAffordance();
   renderFilterSummary();
 
@@ -1304,8 +1318,8 @@ function updateCardToggle(id) {
   if (!button) return;
   button.classList.toggle('selected', selected);
   button.setAttribute('aria-pressed', String(selected));
-  button.setAttribute('aria-label', selected ? `Bỏ ${name} khỏi gói cài đặt` : `Thêm ${name} vào gói cài đặt`);
-  button.title = selected ? 'Bỏ khỏi gói' : 'Thêm vào gói';
+  button.setAttribute('aria-label', selected ? uiText(`Bỏ ${name} khỏi gói cài đặt`, `Remove ${name} from the queue`) : uiText(`Thêm ${name} vào gói cài đặt`, `Add ${name} to the queue`));
+  button.title = selected ? uiText('Bỏ khỏi gói', 'Remove from queue') : uiText('Thêm vào gói', 'Add to queue');
   const icon = button.querySelector('.ph');
   if (icon) icon.className = `ph ${selected ? 'ph-check' : 'ph-plus'}`;
 }
@@ -1336,10 +1350,10 @@ function queueProgressMarkup(app) {
   return `
     <div class="queue-progress-row ${item.error ? 'error' : ''} ${percent === 100 && !item.error ? 'complete' : ''} ${installing ? 'installing' : ''}">
       <div class="queue-progress-copy">
-        <span data-progress-phase>${escapeHtml(item.phase || 'Đang chuẩn bị')}</span>
+        <span data-progress-phase>${escapeHtml(item.phase || uiText('Đang chuẩn bị', 'Preparing'))}</span>
         <strong data-progress-percent>${percent}%</strong>
       </div>
-      <div class="queue-progress-track" role="progressbar" aria-label="Tiến trình ${escapeHtml(app.name)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percent}">
+      <div class="queue-progress-track" role="progressbar" aria-label="${escapeHtml(uiText(`Tiến trình ${app.name}`, `${app.name} progress`))}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percent}">
         <span class="queue-progress-bar" data-progress-fill="${percent}"></span>
       </div>
     </div>
@@ -1356,26 +1370,26 @@ function queueItemHTML(app) {
     <div class="queue-location-row">
       <i class="ph ph-folder-open" aria-hidden="true"></i>
       <div class="queue-location-copy">
-        <strong>Thư mục hiện tại</strong>
-        <span title="${escapeHtml(details.installDirectory || 'Windows không công khai vị trí cài đặt')}">${escapeHtml(details.installDirectory || 'Windows không công khai vị trí cài đặt')}</span>
+        <strong>${escapeHtml(uiText('Thư mục hiện tại', 'Current folder'))}</strong>
+        <span title="${escapeHtml(details.installDirectory || uiText('Windows không công khai vị trí cài đặt', 'Windows has not exposed an install path'))}">${escapeHtml(details.installDirectory || uiText('Windows không công khai vị trí cài đặt', 'Windows has not exposed an install path'))}</span>
       </div>
     </div>
   ` : `
     <div class="queue-location-row">
       <i class="ph ${app.source === 'msstore' ? 'ph-storefront' : 'ph-folder-notch'}" aria-hidden="true"></i>
       <div class="queue-location-copy">
-        <strong>Vị trí cài đặt</strong>
+        <strong>${escapeHtml(uiText('Vị trí cài đặt', 'Install location'))}</strong>
         <span title="${escapeHtml(installLocationLabel(app))}">${escapeHtml(installLocationLabel(app))}</span>
       </div>
       <div class="queue-location-actions">
         ${installLocation ? `
           <button class="button location-button" data-location-reset="${app.id}" type="button" ${state.running ? 'disabled' : ''}>
-            Mặc định
+            ${escapeHtml(uiText('Mặc định', 'Default'))}
           </button>
         ` : ''}
         ${app.source !== 'msstore' ? `
           <button class="button location-button" data-location="${app.id}" type="button" ${state.running ? 'disabled' : ''}>
-            ${installLocation ? 'Đổi' : 'Chọn thư mục'}
+            ${escapeHtml(installLocation ? uiText('Đổi', 'Change') : uiText('Chọn thư mục', 'Choose folder'))}
           </button>
         ` : ''}
       </div>
@@ -1393,10 +1407,10 @@ function queueItemHTML(app) {
           <i class="ph ${meta.icon} ${meta.spin ? 'is-spinning' : ''}" aria-hidden="true"></i>${meta.label}
         </span>
         ${details ? installedActions(app) : ''}
-        <button class="small-icon-button" data-detail="${app.id}" type="button" aria-label="Xem chi tiết ${name}" title="Xem chi tiết">
+        <button class="small-icon-button" data-detail="${app.id}" type="button" aria-label="${escapeHtml(uiText(`Xem chi tiết ${app.name}`, `View ${app.name} details`))}" title="${escapeHtml(uiText('Xem chi tiết', 'View details'))}">
           <i class="ph ph-info" aria-hidden="true"></i>
         </button>
-        <button class="small-icon-button" data-remove="${app.id}" type="button" aria-label="Bỏ ${name}" title="Bỏ khỏi gói" ${state.running ? 'disabled' : ''}>
+        <button class="small-icon-button" data-remove="${app.id}" type="button" aria-label="${escapeHtml(uiText(`Bỏ ${app.name}`, `Remove ${app.name}`))}" title="${escapeHtml(uiText('Bỏ khỏi gói', 'Remove from queue'))}" ${state.running ? 'disabled' : ''}>
           <i class="ph ph-trash" aria-hidden="true"></i>
         </button>
       </div>
@@ -1472,10 +1486,10 @@ function renderRunStatus() {
     els.retryFailed.disabled = state.scanning || Boolean(state.busyId);
   }
   const installHTML = state.running
-    ? `<i class="ph ph-arrow-clockwise is-spinning" aria-hidden="true"></i>${state.operation === 'upgrade' ? 'Đang cập nhật' : 'Đang cài đặt'}`
+    ? `<i class="ph ph-arrow-clockwise is-spinning" aria-hidden="true"></i>${state.operation === 'upgrade' ? escapeHtml(uiText('Đang cập nhật', 'Updating')) : escapeHtml(uiText('Đang cài đặt', 'Installing'))}`
     : els.realMode.checked
-      ? `<i class="ph ph-download-simple" aria-hidden="true"></i>Cài ${pending.length} ứng dụng`
-      : `<i class="ph ph-flask" aria-hidden="true"></i>Mô phỏng ${pending.length} ứng dụng`;
+      ? `<i class="ph ph-download-simple" aria-hidden="true"></i>${escapeHtml(uiText(`Cài ${pending.length} ứng dụng`, `Install ${pending.length} ${pending.length === 1 ? 'app' : 'apps'}`))}`
+      : `<i class="ph ph-flask" aria-hidden="true"></i>${escapeHtml(uiText(`Mô phỏng ${pending.length} ứng dụng`, `Dry run ${pending.length} ${pending.length === 1 ? 'app' : 'apps'}`))}`;
   // Chỉ ghi DOM khi nội dung đổi để icon xoay không bị reset mỗi tick tiến trình.
   if (els.install.dataset.html !== installHTML) {
     els.install.dataset.html = installHTML;
@@ -1486,26 +1500,26 @@ function renderRunStatus() {
   els.progressBar.classList.toggle('complete', progress === 100 && !state.running && state.failed.size === 0);
   els.progressPercent.textContent = `${progress}%`;
   els.progressText.textContent = state.running
-    ? `Đang xử lý ${Math.min(processed + 1, selected.length)} trên ${selected.length}`
+    ? uiText(`Đang xử lý ${Math.min(processed + 1, selected.length)} trên ${selected.length}`, `Processing ${Math.min(processed + 1, selected.length)} of ${selected.length}`)
     : state.simulated.size
-      ? `Đã mô phỏng ${state.simulated.size} ứng dụng, máy chưa thay đổi`
+      ? uiText(`Đã mô phỏng ${state.simulated.size} ứng dụng, máy chưa thay đổi`, `Dry-ran ${state.simulated.size} ${state.simulated.size === 1 ? 'app' : 'apps'}; this machine was not changed`)
       : state.done.size || state.failed.size
-        ? `Đã xử lý ${processed} trên ${selected.length}`
-        : 'Chưa bắt đầu';
+        ? uiText(`Đã xử lý ${processed} trên ${selected.length}`, `Processed ${processed} of ${selected.length}`)
+        : uiText('Chưa bắt đầu', 'Not started');
 
   let statusClass = 'status-label';
-  let statusHTML = '<i class="ph ph-list-checks" aria-hidden="true"></i>Sẵn sàng';
+  let statusHTML = `<i class="ph ph-list-checks" aria-hidden="true"></i>${escapeHtml(uiText('Sẵn sàng', 'Ready'))}`;
   if (state.running) {
     statusClass = 'status-label warning';
-    statusHTML = '<i class="ph ph-arrow-clockwise is-spinning" aria-hidden="true"></i>Đang chạy';
+    statusHTML = `<i class="ph ph-arrow-clockwise is-spinning" aria-hidden="true"></i>${escapeHtml(uiText('Đang chạy', 'Running'))}`;
   } else if (state.failed.size) {
     statusClass = 'status-label danger';
-    statusHTML = `<i class="ph ph-warning-circle" aria-hidden="true"></i>${state.failed.size} cần xử lý`;
+    statusHTML = `<i class="ph ph-warning-circle" aria-hidden="true"></i>${escapeHtml(uiText(`${state.failed.size} cần xử lý`, `${state.failed.size} need review`))}`;
   } else if (selected.length && pending.length === 0) {
     statusClass = 'status-label success';
-    statusHTML = '<i class="ph ph-check-circle" aria-hidden="true"></i>Đã cài';
+    statusHTML = `<i class="ph ph-check-circle" aria-hidden="true"></i>${escapeHtml(uiText('Đã cài', 'Installed'))}`;
   } else if (state.simulated.size) {
-    statusHTML = '<i class="ph ph-flask" aria-hidden="true"></i>Mô phỏng xong';
+    statusHTML = `<i class="ph ph-flask" aria-hidden="true"></i>${escapeHtml(uiText('Mô phỏng xong', 'Dry run complete'))}`;
   }
   if (els.queueStatus.dataset.html !== statusHTML) {
     els.queueStatus.dataset.html = statusHTML;
@@ -1521,15 +1535,15 @@ function renderQueue() {
   const updates = allUpdateApps();
 
   els.queueCount.textContent = selected.length;
-  els.installedCount.textContent = `${state.installed.size} ứng dụng`;
+  els.installedCount.textContent = uiText(`${state.installed.size} ứng dụng`, `${state.installed.size} ${state.installed.size === 1 ? 'app' : 'apps'}`);
   els.largeAppCount.textContent = largeCount;
   els.navQueueCount.textContent = selected.length;
   if (els.navWorkspaceCount) els.navWorkspaceCount.textContent = presets.length;
   if (els.navUpdateCount) els.navUpdateCount.textContent = updates.length;
-  els.dockCount.textContent = `${selected.length} ứng dụng đã chọn`;
+  els.dockCount.textContent = uiText(`${selected.length} ứng dụng đã chọn`, `${selected.length} ${selected.length === 1 ? 'app' : 'apps'} selected`);
   els.dockSubtext.textContent = selected.length
-    ? `${pending.length} ứng dụng còn cần cài${largeCount ? `, gồm ${largeCount} app lớn` : ''}`
-    : 'Chọn ứng dụng hoặc workstation plan';
+    ? uiText(`${pending.length} ứng dụng còn cần cài${largeCount ? `, gồm ${largeCount} app lớn` : ''}`, `${pending.length} ${pending.length === 1 ? 'app' : 'apps'} left to install${largeCount ? `, including ${largeCount} large ${largeCount === 1 ? 'app' : 'apps'}` : ''}`)
+    : uiText('Chọn ứng dụng hoặc workstation plan', 'Select apps or a workstation plan');
   els.selectionDock.hidden = selected.length === 0;
   els.exportQueue.disabled = selected.length === 0;
   els.exportProfile.disabled = selected.length === 0;
@@ -1888,21 +1902,21 @@ function renderStatusBar() {
   let text;
   if (state.scanning) {
     cls += ' scanning';
-    text = 'Đang quét ứng dụng trên máy...';
+    text = uiText('Đang quét ứng dụng trên máy...', 'Scanning installed apps...');
   } else if (!native) {
     cls += ' warn';
-    text = 'Chế độ mô phỏng - không có cầu nối native';
+    text = uiText('Chế độ mô phỏng - không có cầu nối native', 'Simulation mode - no native bridge');
   } else if (state.wingetAvailable) {
     cls += ' ok';
-    text = `winget${state.wingetVersion ? ` ${state.wingetVersion}` : ''} sẵn sàng`;
+    text = uiText(`winget${state.wingetVersion ? ` ${state.wingetVersion}` : ''} sẵn sàng`, `winget${state.wingetVersion ? ` ${state.wingetVersion}` : ''} ready`);
   } else {
     cls += ' warn';
-    text = 'Không tìm thấy winget - chỉ mô phỏng';
+    text = uiText('Không tìm thấy winget - chỉ mô phỏng', 'winget not found - simulation only');
   }
   els.statusWinget.className = cls;
   els.statusWingetText.textContent = text;
-  els.statusInstalledText.textContent = `${state.installed.size} đã cài`;
-  els.statusSelectedText.textContent = `${state.selected.size} đang chọn`;
+  els.statusInstalledText.textContent = uiText(`${state.installed.size} đã cài`, `${state.installed.size} installed`);
+  els.statusSelectedText.textContent = uiText(`${state.selected.size} đang chọn`, `${state.selected.size} selected`);
   const lineCount = state.terminalLineCount;
   els.statusTerminalCount.textContent = lineCount > 999 ? '999+' : String(lineCount);
   els.statusTerminalCount.hidden = lineCount === 0;
@@ -2045,16 +2059,16 @@ function openDetail(id) {
   els.detailName.textContent = app.name;
   els.detailDescription.textContent = displayAppDescription(app);
   els.detailState.textContent = details
-    ? (details.updateAvailable ? 'Đã cài, có bản cập nhật' : 'Đã cài trên máy')
-    : simulated ? 'Chỉ mô phỏng, chưa cài' : 'Chưa cài';
-  els.detailVersion.textContent = details?.version || (details ? 'Windows không cung cấp' : 'Chưa có');
+    ? (details.updateAvailable ? uiText('Đã cài, có bản cập nhật', 'Installed, update available') : uiText('Đã cài trên máy', 'Installed on this machine'))
+    : simulated ? uiText('Chỉ mô phỏng, chưa cài', 'Dry run only, not installed') : uiText('Chưa cài', 'Not installed');
+  els.detailVersion.textContent = details?.version || (details ? uiText('Windows không cung cấp', 'Not exposed by Windows') : uiText('Chưa có', 'None yet'));
   els.detailPackage.textContent = app.pkg;
   els.detailSource.textContent = app.source === 'msstore' ? 'Microsoft Store' : 'Windows Package Manager';
   els.detailPublisher.textContent = app.publisher;
   els.detailType.textContent = app.type;
   els.detailSize.textContent = app.size === 'large'
-    ? 'Lớn, nên kiểm tra dung lượng trống'
-    : 'Thông thường';
+    ? uiText('Lớn, nên kiểm tra dung lượng trống', 'Large, check available disk space')
+    : uiText('Thông thường', 'Standard');
   els.detailTags.innerHTML = app.tags.map((tag) => (
     `<span class="detail-tag"><i class="ph ${escapeHtml(tagMetadata.get(tag)?.icon || 'ph-tag')}" aria-hidden="true"></i>${escapeHtml(tagLabel(tag))}</span>`
   )).join('');
@@ -2063,7 +2077,7 @@ function openDetail(id) {
   els.detailRequires.textContent = requiredApps.map((item) => item.name).join(', ');
   els.detailRisk.textContent = app.risk;
   els.detailLocation.textContent = details?.installDirectory
-    || (details ? 'Windows không công khai vị trí cài đặt' : 'Chưa cài đặt');
+    || (details ? uiText('Windows không công khai vị trí cài đặt', 'Windows has not exposed an install path') : uiText('Chưa cài đặt', 'Not installed'));
   els.detailInstallTargetItem.hidden = Boolean(details);
   els.detailInstallTarget.textContent = installLocationLabel(app);
   els.commandPreview.textContent = commandFor(app);
@@ -2082,15 +2096,15 @@ function openDetail(id) {
   els.detailUpgrade.disabled = opBusy;
   els.detailOpen.disabled = Boolean(details && !details.canLaunch);
   els.detailFolder.disabled = Boolean(details && !details.canOpenFolder);
-  els.detailOpen.title = details?.canLaunch ? 'Mở ứng dụng' : 'Windows chưa cung cấp lối tắt';
-  els.detailFolder.title = details?.canOpenFolder ? 'Mở thư mục cài đặt' : 'Windows không công khai thư mục';
+  els.detailOpen.title = details?.canLaunch ? uiText('Mở ứng dụng', 'Open app') : uiText('Windows chưa cung cấp lối tắt', 'Windows has not exposed a shortcut');
+  els.detailFolder.title = details?.canOpenFolder ? uiText('Mở thư mục cài đặt', 'Open install folder') : uiText('Windows không công khai thư mục', 'Windows has not exposed a folder');
 
   if (!details) {
     const selected = state.selected.has(id);
     els.detailAction.className = `button ${selected ? 'danger' : 'primary'}`;
     els.detailAction.innerHTML = selected
-      ? '<i class="ph ph-trash" aria-hidden="true"></i>Bỏ khỏi gói'
-      : '<i class="ph ph-plus" aria-hidden="true"></i>Thêm vào gói';
+      ? `<i class="ph ph-trash" aria-hidden="true"></i>${escapeHtml(uiText('Bỏ khỏi gói', 'Remove from queue'))}`
+      : `<i class="ph ph-plus" aria-hidden="true"></i>${escapeHtml(uiText('Thêm vào gói', 'Add to queue'))}`;
   }
   if (!els.detailDialog.open) {
     dialogClosing = false;
@@ -2115,8 +2129,8 @@ function workspaceAppRowHTML(app) {
   const details = state.installed.get(app.id);
   const selected = state.selected.has(app.id);
   const status = details
-    ? (details.updateAvailable ? 'Đã cài, có cập nhật' : 'Đã cài')
-    : selected ? 'Đang trong gói' : 'Chưa cài';
+    ? (details.updateAvailable ? uiText('Đã cài, có cập nhật', 'Installed, update available') : uiText('Đã cài', 'Installed'))
+    : selected ? uiText('Đang trong gói', 'In queue') : uiText('Chưa cài', 'Not installed');
   const statusIcon = details
     ? (details.updateAvailable ? 'ph-arrow-circle-up' : 'ph-check-circle')
     : selected ? 'ph-stack' : 'ph-download-simple';
@@ -2345,7 +2359,7 @@ async function scanInstalled({ showFeedback = true, pruneSelection = false } = {
   let shouldRefreshUpdates = false;
   els.rescan.disabled = true;
   els.rescan.querySelector('.ph')?.classList.add('is-spinning');
-  setSystemStatus('scanning', 'Đang quét ứng dụng trên máy', 'ph-arrow-clockwise', true);
+  setSystemStatus('scanning', uiText('Đang quét ứng dụng trên máy', 'Scanning installed apps'), 'ph-arrow-clockwise', true);
   renderAll();
 
   try {
@@ -2354,9 +2368,9 @@ async function scanInstalled({ showFeedback = true, pruneSelection = false } = {
     shouldRefreshUpdates = Boolean(state.wingetAvailable && window.setupkitNative?.scanUpdates);
 
     const wingetNote = state.wingetAvailable
-      ? `winget${state.wingetVersion ? ` ${state.wingetVersion}` : ''} sẵn sàng`
-      : 'Chế độ cài thật không khả dụng';
-    setSystemStatus(state.wingetAvailable ? '' : 'warning', `${wingetNote}, ${nextInstalled.size} app đã cài`, state.wingetAvailable ? 'ph-check-circle' : 'ph-warning-circle');
+      ? uiText(`winget${state.wingetVersion ? ` ${state.wingetVersion}` : ''} sẵn sàng`, `winget${state.wingetVersion ? ` ${state.wingetVersion}` : ''} ready`)
+      : uiText('Chế độ cài thật không khả dụng', 'Real install mode unavailable');
+    setSystemStatus(state.wingetAvailable ? '' : 'warning', uiText(`${wingetNote}, ${nextInstalled.size} app đã cài`, `${wingetNote}, ${nextInstalled.size} ${nextInstalled.size === 1 ? 'app' : 'apps'} installed`), state.wingetAvailable ? 'ph-check-circle' : 'ph-warning-circle');
     addLog(`[quét máy] Phát hiện ${nextInstalled.size}/${apps.length} ứng dụng trong danh mục đã được cài.`);
     if (showFeedback) {
       showToast('Đã quét lại máy', `Tìm thấy ${nextInstalled.size} ứng dụng đã cài trong danh mục.`, 'ph-check-circle');
@@ -2548,15 +2562,15 @@ function setProgress(app, percent, phase, message = '', error = false) {
 
 async function simulateOne(app) {
   const stages = [
-    { percent: 10, phase: 'Kiểm tra package ID', delay: 260 },
-    { percent: 38, phase: 'Mô phỏng tìm gói', delay: 330 },
-    { percent: 66, phase: 'Mô phỏng tải xuống', delay: 360 },
-    { percent: 88, phase: 'Mô phỏng cài đặt', delay: 330 },
-    { percent: 100, phase: 'Mô phỏng hoàn tất', delay: 180 }
+    { percent: 10, phase: uiText('Kiểm tra package ID', 'Checking package ID'), delay: 260 },
+    { percent: 38, phase: uiText('Mô phỏng tìm gói', 'Finding package'), delay: 330 },
+    { percent: 66, phase: uiText('Mô phỏng tải xuống', 'Simulating download'), delay: 360 },
+    { percent: 88, phase: uiText('Mô phỏng cài đặt', 'Simulating install'), delay: 330 },
+    { percent: 100, phase: uiText('Mô phỏng hoàn tất', 'Dry run complete'), delay: 180 }
   ];
   for (const stage of stages) {
-    setProgress(app, stage.percent, stage.phase, 'Không có thay đổi nào được thực hiện trên máy.');
-    appendTerminal(`[mô phỏng] ${app.name}: ${stage.phase} (${stage.percent}%)\n`, 'system');
+    setProgress(app, stage.percent, stage.phase, uiText('Không có thay đổi nào được thực hiện trên máy.', 'No changes are made on this machine.'));
+    appendTerminal(`[${uiText('mô phỏng', 'dry run')}] ${app.name}: ${stage.phase} (${stage.percent}%)\n`, 'system');
     await wait(stage.delay);
   }
   state.simulated.add(app.id);
@@ -2581,8 +2595,8 @@ async function runInstallPlan() {
   state.terminalLineCount = 0;
   state.terminalOpen = true;
   state.terminalCommand = '';
-  appendTerminal(`[SetupKit] Bắt đầu ${realInstall ? 'cài đặt thật' : 'mô phỏng'} ${pending.length} ứng dụng.\n`, 'system');
-  addLog(`[phiên] ${realInstall ? 'Cài thật' : 'Mô phỏng'} ${pending.length} ứng dụng.`);
+  appendTerminal(`[SetupKit] ${uiText(`Bắt đầu ${realInstall ? 'cài đặt thật' : 'mô phỏng'} ${pending.length} ứng dụng.`, `Starting ${realInstall ? 'real install' : 'dry run'} for ${pending.length} ${pending.length === 1 ? 'app' : 'apps'}.`)}\n`, 'system');
+  addLog(`[${uiText('phiên', 'session')}] ${uiText(`${realInstall ? 'Cài thật' : 'Mô phỏng'} ${pending.length} ứng dụng.`, `${realInstall ? 'Real install' : 'Dry run'} ${pending.length} ${pending.length === 1 ? 'app' : 'apps'}.`)}`);
   switchView('queue');
   renderAll();
 
@@ -2596,7 +2610,7 @@ async function runInstallPlan() {
     }
     state.currentId = app.id;
     state.terminalCommand = commandFor(app);
-    if (!realInstall) appendTerminal(`> [mô phỏng] ${state.terminalCommand}\n`, 'command');
+    if (!realInstall) appendTerminal(`> [${uiText('mô phỏng', 'dry run')}] ${state.terminalCommand}\n`, 'command');
     renderTerminalChrome();
     setProgress(app, 2, realInstall ? 'Đang chuẩn bị cài đặt' : 'Đang chuẩn bị mô phỏng');
     addLog(`[kiểm tra] ${app.name}: nguồn=${app.source}; gói=${app.pkg}`);

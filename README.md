@@ -2,117 +2,118 @@
 
 <img src="docs/banner.svg" alt="SetupKit" width="1000">
 
-**Máy Windows mới tinh? Chọn một workspace theo công việc của bạn, bấm cài, và đi pha ly cà phê.**
+**Turn a fresh Windows machine into a ready workspace in minutes: choose a role, review the commands, and run only verified packages.**
 
 ![Windows 10/11](https://img.shields.io/badge/Windows%2010%2F11-x64-0078D4?logo=windows&logoColor=white)
-![Kích thước](https://img.shields.io/badge/1%20file%20EXE-~12%20MB-2ea44f)
-![Nguồn cài đặt](https://img.shields.io/badge/nguồn-winget%20%2B%20Microsoft%20Store-5c2d91)
+![Size](https://img.shields.io/badge/1%20file%20EXE-~12%20MB-2ea44f)
+![Sources](https://img.shields.io/badge/sources-winget%20%2B%20Microsoft%20Store-5c2d91)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 </div>
 
 ---
 
-## Cài đặt
+## Install
 
-**Cách 1 — một dòng lệnh** (mở PowerShell, dán vào, Enter):
+**Option 1 - one PowerShell command:**
 
 ```powershell
 irm https://raw.githubusercontent.com/TrisMinh/setupkit/main/scripts/install.ps1 | iex
 ```
 
-Lệnh này tải bản mới nhất từ Releases, đặt vào thư mục ứng dụng của bạn, tạo shortcut ở Start Menu + Desktop và mở app luôn.
+The script downloads the latest release, places it in your app directory, creates Start Menu and Desktop shortcuts, and launches SetupKit.
 
-**Cách 2 — tải thủ công:** lấy `SetupKit.exe` từ [**Releases**](../../releases/latest) và mở. Không cần cài đặt, không cần runtime nào khác.
+**Option 2 - manual download:** grab `SetupKit.exe` from [**Releases**](../../releases/latest) and run it. No installer and no extra runtime are required.
 
-> Windows 11 có sẵn WebView2. Windows 10 nếu thiếu, SetupKit sẽ tự đề nghị cài Evergreen Runtime chính thức của Microsoft.
+> Windows 11 already includes WebView2. On Windows 10, SetupKit prompts you to install the official Microsoft Evergreen Runtime if it is missing.
 
-## SetupKit làm được gì?
+## What SetupKit Does
 
-Cài lại Windows xong thường mất cả buổi mở từng trang web tải từng bộ cài. SetupKit gói toàn bộ việc đó vào một app:
+Reinstalling Windows should not mean opening dozens of websites and hunting for installers. SetupKit wraps the boring part in one reviewed app:
 
-- **450 ứng dụng hợp pháp** từ Windows Package Manager và Microsoft Store — đủ từ trình duyệt, IDE, runtime, database, VPN, DevOps tool đến app chat, game launcher; chia 15 nhóm với 35 tag lọc nhanh
-- **24 Workspaces theo vai trò** — Developer Core, Web Frontend, Node.js Backend, Python & AI, Designer, Gaming, Văn phòng... Mở chi tiết để xem logo, package, nguồn cài đặt và lệnh sẽ chạy trước khi dùng workspace đó
-- **Cài cả gói một lần** — chọn nhiều app rồi cài tuần tự, theo dõi tiến trình từng cái; có thể **dừng giữa chừng** và **cài lại đúng những app lỗi**
-- **Cập nhật ngay trong app** — SetupKit tự phát hiện app có bản mới, có tab Cập nhật riêng, tìm kiếm nhanh và **Cập nhật tất cả** sau một lần xác nhận
-- **Tải version cũ / rollback** — tab Versions tải danh sách bản cũ từ `winget show --versions`, rồi cài đúng version đã chọn hoặc gỡ bản hiện tại trước khi cài lại
-- **Gỡ app đã cài** — mở chi tiết app đã cài để gỡ bằng `winget uninstall`, luôn hỏi xác nhận trước khi thay đổi máy
-- **Tự biết máy bạn đã có gì** — quét winget, Registry, Start Menu và shortcut để đánh dấu app đã cài, kèm phiên bản, thư mục cài đặt và app nào đang có bản cập nhật; app đã có sẽ không bị cài lại
-- **Chọn nhanh nhưng không tự chọn khi mở app** — "Chọn hết" theo bộ lọc hiện tại hoặc "Bỏ chọn" chỉ một bấm; phiên mới luôn bắt đầu với gói cài đặt trống
-- **Xuất và nhập hồ sơ JSON** — lưu bộ ứng dụng đang chọn thành một hồ sơ, rồi nhập lại để dựng máy tiếp theo y hệt
-- **Ba kiểu hiển thị** — Lưới, Danh sách hoặc Biểu tượng, tùy cách bạn thích duyệt; list view hiển thị thêm mô tả/meta, icon view căn hàng nút gọn hơn
-- **Chạy thử trước, cài thật sau** — chế độ mặc định chỉ mô phỏng toàn bộ quá trình, máy không thay đổi gì; muốn cài thật phải bật công tắc riêng và xác nhận từng lệnh bằng hộp thoại trong app
-- **Minh bạch từng lệnh** — xem trước chính xác câu lệnh winget của từng app, theo dõi stdout/stderr trực tiếp trong terminal tích hợp khi cài
-- **Thanh trạng thái luôn hiện** dưới cùng: tình trạng winget, số app đã cài, số đang chọn và nút mở terminal nhanh
-- **Chưa có winget cũng không sao** — nếu máy thiếu Windows Package Manager, SetupKit mời cài App Installer từ Microsoft Store chỉ với một bấm
-- **Chọn nơi cài** cho các package hỗ trợ, mở app hoặc thư mục cài đặt ngay khi cài xong
+- **450 reviewed apps** from Windows Package Manager and Microsoft Store, covering browsers, IDEs, runtimes, databases, VPNs, DevOps tools, chat apps, game launchers, and utilities across 15 groups and 35 quick tags.
+- **24 role-based workspaces** such as Developer Core, Web Frontend, Node.js Backend, Python & AI, Product Design, Gaming PC, and Office & Remote Work.
+- **Batch install with progress** so you can select many apps, run them in order, stop safely after the current app, and retry only failed apps.
+- **Updates inside the app** with a dedicated Updates tab, search, per-app upgrade, and one-confirmation bulk update.
+- **Older versions and rollback** through `winget show --versions`, with explicit install or uninstall-then-install modes for reviewed winget packages.
+- **Uninstall support** from app details, using `winget uninstall` with a polished in-app confirmation dialog and command preview.
+- **Installed app detection** through winget, Registry, Start Menu, and shortcuts, including installed version, install path, and available update state.
+- **No auto-select on launch**: every session starts with an empty queue until the user selects apps or a workspace.
+- **Import/export profiles** as JSON so a curated app set can be reused on the next machine.
+- **Grid, list, and icon views** for browsing the catalog efficiently.
+- **Dry run by default**: real installs require enabling real mode and confirming each command.
+- **Transparent terminal output** for every winget command.
+- **Status bar always visible** with winget state, installed count, selected count, and terminal access.
+- **Winget recovery**: if Windows Package Manager is missing, SetupKit can open the Microsoft Store App Installer page.
+- **Install location picker** for packages that support custom locations.
 
-## Ảnh màn hình
+## Screenshots
 
 <div align="center">
-<img src="docs/screenshots/catalog-light.png" alt="Danh mục 450 ứng dụng với workspace preview" width="900">
+<img src="docs/screenshots/catalog-light.png" alt="SetupKit app catalog with workspace preview" width="900">
 
-*Chọn Workspace theo vai trò, hoặc tự lọc trong 450 ứng dụng*
+*Choose a role-based workspace or filter the 450-app catalog manually.*
 </div>
 
 | | |
 |:---:|:---:|
-| ![Theo dõi cài đặt](docs/screenshots/install-progress.png) | ![Chi tiết ứng dụng](docs/screenshots/app-detail.png) |
-| *Tiến trình từng app + terminal winget trực tiếp* | *Xem lệnh sẽ chạy trước khi đồng ý* |
-| ![Cập nhật và gỡ](docs/screenshots/app-detail-installed.png) | ![Kiểu biểu tượng](docs/screenshots/view-icon.png) |
-| *Cập nhật hoặc gỡ app đã cài ngay trong chi tiết* | *Kiểu hiển thị biểu tượng (còn có Lưới và Danh sách)* |
-| ![Giao diện tối](docs/screenshots/catalog-dark.png) | ![Bố cục thu gọn](docs/screenshots/compact-layout.png) |
-| *Giao diện tối theo hệ thống* | *Tự co gọn khi thu nhỏ cửa sổ* |
+| ![Install progress](docs/screenshots/install-progress.png) | ![App detail](docs/screenshots/app-detail.png) |
+| *Per-app progress with live winget output* | *Review the exact command before approving it* |
+| ![Updates and uninstall](docs/screenshots/app-detail-installed.png) | ![Icon view](docs/screenshots/view-icon.png) |
+| *Update or uninstall installed apps from details* | *Compact icon view, plus grid and list modes* |
+| ![Dark interface](docs/screenshots/catalog-dark.png) | ![Compact layout](docs/screenshots/compact-layout.png) |
+| *Dark mode remains available* | *Responsive layout for smaller windows* |
 
-## Dùng trong 3 bước
+## Three-Step Flow
 
-1. **Chọn** — bấm một Workspace hoặc tự tick từng app trong danh mục
-2. **Xem lại** — sang tab Gói cài đặt, kiểm tra danh sách và lệnh của từng app; chạy thử nếu muốn chắc chắn
-3. **Cài / cập nhật / rollback** — bật "Cài đặt thật" khi cài app mới, hoặc dùng tab Cập nhật/Versions; SetupKit luôn xác nhận trước khi chạy winget và báo tiến trình từng app
+1. **Select** a workspace or individual apps from the catalog.
+2. **Review** the install queue, package IDs, sources, and generated commands.
+3. **Install, update, or rollback** after SetupKit asks for confirmation and streams progress.
 
-## An toàn là mặc định
+## Safety Model
 
-SetupKit được thiết kế để **không thể** bị lợi dụng thành công cụ tải phần mềm lạ:
+SetupKit is designed so it cannot become a random software downloader:
 
-| Lớp bảo vệ | Cụ thể |
+| Layer | Detail |
 |---|---|
-| Allowlist nhúng trong binary | Chỉ chấp nhận package ID có trong catalog đã kiểm chứng — không URL ngoài, không script tải về, không installer thủ công |
-| Hai nguồn duy nhất | `winget` và `msstore`, đều là kho chính thức có kiểm duyệt của Microsoft |
-| Chạy thử mặc định | Mô phỏng không đụng tới máy; cài thật cần bật công tắc **và** xác nhận từng lệnh qua hộp thoại trong app |
-| Lệnh minh bạch | Mọi lệnh hiển thị đầy đủ trước khi chạy, output ghi lại nguyên văn trong terminal |
-| Xác minh sau cài | Quét lại máy để xác nhận trạng thái thật, không tin kết quả suông |
-| Rollback có kiểm soát | Chỉ áp dụng cho nguồn `winget`, không tự tải URL ngoài; chế độ gỡ rồi cài luôn cảnh báo rủi ro cấu hình |
+| Embedded allowlist | Only package IDs from the verified catalog are accepted. No arbitrary URLs, scripts, or manual installers. |
+| Two sources | `winget` and `msstore`, both official Microsoft-managed sources. |
+| Dry run by default | The default mode simulates commands. Real changes require real mode plus an in-app confirmation dialog. |
+| Transparent commands | Every command is shown before execution and terminal output is logged verbatim. |
+| Post-run verification | SetupKit scans the machine again after operations instead of trusting command output alone. |
+| Controlled rollback | Rollback is winget-only, never downloads external URLs, and warns before uninstall-then-install flows. |
 
-## Build từ mã nguồn
+## Build From Source
 
-Yêu cầu [Go 1.25+](https://go.dev/dl/) và [Node.js LTS](https://nodejs.org) (Node chỉ dùng lúc build, app chạy không cần).
+Requirements: [Go 1.25+](https://go.dev/dl/) and [Node.js LTS](https://nodejs.org). Node is only needed for build tooling; the final app does not require Node.
 
 ```powershell
 npm run package:win     # validate + test + build -> release/SetupKit.exe
-npm run validate        # chỉ kiểm tra catalog, JS, icon, DOM
+npm run validate        # catalog, JavaScript, icon subset, DOM references
 ```
 
-Hoặc double-click `BUILD-SETUPKIT.cmd` ở thư mục cha.
+You can also double-click `BUILD-SETUPKIT.cmd` from the parent folder.
 
-## Cấu trúc dự án
+## Project Structure
 
-```
+```text
 setupkit-app/
-├── main.go            # bootstrap: nhúng frontend, nạp catalog, mở cửa sổ Wails
-├── internal/kit/      # toàn bộ logic Go: chạy winget, quét máy, allowlist
-├── frontend/          # toàn bộ giao diện web (embed vào exe)
+├── main.go            # Wails bootstrap: embeds frontend, loads catalog, opens the window
+├── internal/kit/      # Go logic: winget execution, machine scan, allowlist enforcement
+├── frontend/          # Web UI embedded into the executable
 │   ├── index.html · renderer.js · styles.css
-│   ├── catalog.json   # 450 app - file SINH TỰ ĐỘNG
-│   └── assets/        # 320 logo SVG/PNG/ICO + icon Phosphor
-├── scripts/           # build catalog, icon, đóng gói, publish, install.ps1
-├── docs/              # CHANGELOG, tài liệu catalog, ảnh, release notes
-└── build/             # manifest + tài nguyên Windows
+│   ├── catalog.json   # 450 apps - generated file
+│   └── assets/        # 320 SVG/PNG/ICO app logos + Phosphor icons
+├── landing/           # Animated product landing page
+├── scripts/           # catalog build, icons, packaging, publishing, install.ps1
+├── docs/              # changelog, catalog docs, screenshots, release notes
+└── build/             # Windows manifest and resources
 ```
 
-Muốn thêm/sửa ứng dụng trong catalog: sửa `scripts/build-catalog.js` rồi chạy `npm run catalog:build` — đừng sửa tay `frontend/catalog.json`.
+To add or edit apps, update `scripts/build-catalog.js` and run `npm run catalog:build`. Do not edit `frontend/catalog.json` by hand.
 
-## Giấy phép
+## License
 
-Phát hành theo giấy phép [MIT](LICENSE). Lịch sử thay đổi ở [CHANGELOG](docs/CHANGELOG.md).
+Released under the [MIT License](LICENSE). See [CHANGELOG](docs/CHANGELOG.md) for release history.
 
-Logo các ứng dụng thuộc về chủ sở hữu tương ứng (nguồn [Simple Icons](https://simpleicons.org)); icon giao diện từ [Phosphor Icons](https://phosphoricons.com).
+App logos belong to their respective owners. UI icons come from [Phosphor Icons](https://phosphoricons.com).

@@ -1,6 +1,6 @@
 {
   "name": "setupkit",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Lightweight Windows developer workstation builder with a verified app catalog.",
   "private": true,
   "type": "commonjs",
